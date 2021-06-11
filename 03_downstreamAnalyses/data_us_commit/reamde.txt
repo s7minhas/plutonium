@@ -1,0 +1,13 @@
+us_irregular_commit.pdf from https://fas.org/sgp/crs/natsec/R42738.pdf
+troopMarch2005.xls from https://www.heritage.org/defense/report/global-us-troop-deployment-1950-2003
+DMDC_Website_Location_Report_XXXX from https://www.dmdc.osd.mil/appj/dwp/dwp_reports.jsp
+
+Kane US Troop Deployment 1950-2018 _final_ from author -- MOTHERLOAD.  NOTE: 2016-18 are interpolated b/c of missing values on Iraq / Afghanistan and 2019 = 2018
+https://data.nber.org/ens/feldstein/ economics of national security data; ENSA_Dataset_Blue
+
+ActiveDutyDeathNo from https://dcas.dmdc.osd.mil/dcas/pages/report_by_year_manner.xhtml
+
+historical_country_United_States_indicator_Employment_Rate
+and
+historical_country_United_States_indicator_GDP_Growth_Rate
+from tradingeconomics (subscription)
