@@ -5,12 +5,14 @@ source(paste0(pth, 'setup.R'))
 
 # load data
 dpth = paste0(pth, 'data/')
+dpth = "/Users/maxgallop/Dropbox/booz_allen_gdmm/data/"
 load(paste0(dpth, 'frame.rda'))
 ####
 
 ####
 # merge in scores into frame
 fpth = paste0(pth, 'results/')
+fpth = "/Users/maxgallop/Dropbox/booz_allen_gdmm/results"
 files = c(
 	'mltrScores_ML.rda',
 	'mltrScores.rda',
@@ -39,7 +41,7 @@ for(fname in files){
 ####
 # pth for downstream folder
 dapth = paste0(pth, '03_downstreamAnalyses/')
-
+dapth = "/Users/maxgallop/Dropbox/booz_allen_gdmm/03_downstreamAnalyses"
 # save
 dyadData = frame
 save(dyadData, file=paste0(dapth, 'dyadData.rda'))
