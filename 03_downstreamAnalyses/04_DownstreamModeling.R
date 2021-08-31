@@ -100,10 +100,18 @@ plot_glmnet(lasso1, xvar="dev", label = 20, lwd=2, cex=2)
 plot_glmnet(lasso2, xvar="dev", label = 20, lwd=2, cex=2)
 
 library(lme4)
+chiData$region2 = countrycode(chiData$cname1, "country.name", "region23")
 
-c1 = lmer(econDelta ~ USf1.l1 + USf2.l1 + USf3.l1 + polity.l1+log(GDP.l1)+ log(pop.l1)+scale(beijDist)+scale(washDist) + IdealPointDistance + (1 |region), data = chiData)
-c2 = lmer(econDelta_lfm ~ USf1.l1 + USf2.l1 + USf3.l1 + polity.l1+log(GDP.l1)+ log(pop.l1)+scale(beijDist)+scale(washDist) + IdealPointDistance  + (1|region), data = chiData)
-ic1 = lmer(econDelta ~ polity.l1+log(GDP.l1)+ log(pop.l1)+scale(beijDist)+scale(washDist) + IdealPointDistance + (1 + USf1.l1 + USf2.l1 + USf3.l1|region), data = chiData)
-ic2 = lmer(econDelta_lfm ~ polity.l1+log(GDP.l1)+ log(pop.l1)+scale(beijDist)+scale(washDist) + IdealPointDistance  + (1 + USf1.l1 + USf2.l1 + USf3.l1|region), data = chiData)
+library(countrycode)
+c1 = lmer(econDelta ~ USf1.l1  + polity.l1+log(GDP.l1)+ log(pop.l1)+scale(beijDist)+scale(washDist) + IdealPointDistance + (1 |region2), data = chiData)
+c2 = lmer(econDelta_lfm ~ USf1.l1 + polity.l1+log(GDP.l1)+ log(pop.l1)+scale(beijDist)+scale(washDist) + IdealPointDistance  + (1|region2), data = chiData)
+ic1 = lmer(econDelta ~ polity.l1+log(GDP.l1)+ log(pop.l1)+scale(beijDist)+scale(washDist) + IdealPointDistance + (1 + USf1.l1 |region2), data = chiData)
+ic2 = lmer(econDelta_lfm ~ polity.l1+log(GDP.l1)+ log(pop.l1)+scale(beijDist)+scale(washDist) + IdealPointDistance  + (1 + USf1.l1 |region2), data = chiData)
+
+ic2 = lmer(econDelta_lfm ~ polity.l1+log(GDP.l1)+ log(pop.l1)+scale(beijDist)+scale(washDist) + IdealPointDistance  + (1 + USf2.l1 |region2), data = chiData)
+
+
+chiData$chinaRegions = chiData$region2 %in% c("Eastern Asia", "Australia and New Zealand", "South-Eastern Asia")
+cInter2 = lm(econDelta_lfm ~ USf1.l1*chinaRegions + polity.l1+log(GDP.l1)+ log(pop.l1)+scale(washDist) + scale(beijDist) + IdealPointDistance + region2, data = chiData)
 
 save(lassoData, chiData, file = "forMD.rda")
