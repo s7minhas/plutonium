@@ -1,3 +1,8 @@
+if(Sys.info()['user'] %in% c('S7M','s7m','herme','Owner')){
+	suf = paste0('C:/Users/', Sys.info()['user'], '/')
+	pathDrop = paste0(suf, 'Dropbox/Research/plutonium/')
+}
+
 # General functions/libraries
 ## See info on package versions and other session info
 ### at bottom of script
