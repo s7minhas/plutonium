@@ -5,14 +5,14 @@ source(paste0(pth, 'setup.R'))
 
 # load data
 dpth = paste0(pth, 'data/')
-dpth = "/Users/maxgallop/Dropbox/booz_allen_gdmm/data/"
+# dpth = "/Users/maxgallop/Dropbox/booz_allen_gdmm/data/"
 load(paste0(dpth, 'frame.rda'))
 ####
 
 ####
 # merge in scores into frame
 fpth = paste0(pth, 'results/')
-fpth = "/Users/maxgallop/Dropbox/booz_allen_gdmm/results"
+# fpth = "/Users/maxgallop/Dropbox/booz_allen_gdmm/results"
 files = c(
 	'mltrScores_ML.rda',
 	'mltrScores.rda',

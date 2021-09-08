@@ -6,7 +6,7 @@ rpth = paste0(pathDrop, 'results/')
 
 #
 pkgs = c(
-  'lme4', 'rstanarm', 'ggplot2' )
+  'lme4', 'rstanarm', 'ggplot2', 'maps' )
 loadPkg(pkgs)
 
 # mod summ fns
@@ -29,67 +29,137 @@ getCoefB = function(x, vars, int = FALSE){
 ####
 # load data and results
 # modData, m1, m2, m3, m1b, m2b, m3b
-load(paste0(rpth, 'dstreamModels.rda'))
+load(paste0(rpth, 'dstreamModels_cname.rda'))
 ####
 
 ####
 ivs = c(
   '(Intercept)',
-  'USf1.l1', 'polity.l1',
+  'USf1.l1',
+  'USf2.l1',
+  'polity.l1',
   'GDP.l1', 'pop.l1',
-  'beijDist', 'washDist',
+  'beijDist',
   'IdealPointDistance' )
 ####
 
 ####
 # check convergence
-plot(bf1, 'trace', pars=ivs)
+plot(bf1, 'trace', pars=ivs[-3])
 plot(bf2, 'trace', pars=ivs[-2])
-plot(bf1HetEff, 'trace', pars=ivs[-2])
-plot(bf2HetEff, 'trace', pars=ivs[-2])
+plot(bf1HetEff, 'trace', pars=ivs[-(2:3)])
+plot(bf2HetEff, 'trace', pars=ivs[-(2:3)])
 ####
 
 ####
 # pull out mats
 bMats = lapply(
-  list(m1b, m2b, m3b, m1bZ, m2bZ, m3bZ),
+  list(bf1, bf2, bf1HetEff, bf2HetEff),
   function(x){ as.matrix(x) } )
-names(bMats) = c(
-  paste0('m',1:3,'b'),
-  paste0('m',1:3,'bZ') )
+names(bMats) = c('bf1', 'bf2', 'bf1HetEff', 'bf2HetEff')
 ####
-
-cbind(unique(modData$region2))
 
 ####
 #  quick comparison of iv effs
-getCoef(m1)
-getCoefB(bMats$'m1b', ivs)
+getCoef(mf1)
+getCoefB(bMats$'bf1', ivs[-3])
 
-plot(m1b, pars=ivs)
+getCoef(mf2)
+getCoefB(bMats$'bf2', ivs[-2])
 
-getCoef(m2)
-getCoefB(bMats$'m2b', ivs[-2])
+getCoef(mf1HetEff)
+getCoefB(bMats$'bf1HetEff', ivs[-(2:3)])
 
-plot(m2b, pars=ivs[-2])
-
-getCoef(m3)
-getCoefB(bMats$'m3b', ivs[-2])
-
-plot(m3b, pars=ivs[-2])
+getCoef(mf2HetEff)
+getCoefB(bMats$'bf2HetEff', ivs[-(2:3)])
 ####
 
 ####
 # ran effects
-effs = setdiff(colnames(bMats$'m2b'), ivs)
+effs = setdiff(colnames(bMats$'bf1HetEff'), ivs[-(2:3)])
 effs = effs[!grepl('(Intercept)', effs)]
-getCoefB(bMats$'m2b', effs, T)
+f1HetEffs = getCoefB(bMats$'bf1HetEff', effs, T)
 
-plot(m2b, pars=effs)
-
-effs = setdiff(colnames(bMats$'m3b'), ivs)
+effs = setdiff(colnames(bMats$'bf2HetEff'), ivs[-(2:3)])
 effs = effs[!grepl('(Intercept)', effs)]
-getCoefB(bMats$'m3b', effs, T)
+f2HetEffs = getCoefB(bMats$'bf2HetEff', effs, T)
+####
 
-plot(m3b, pars=effs)
+####
+# ran eff map
+hetEffs = list(f1=f1HetEffs, f2=f2HetEffs)
+hetEffs = lapply(hetEffs, function(x){
+  df = data.frame(x, row.names=NULL)
+  cntry = rownames(x)
+  cntry = gsub('b[USf1.l1 cname1:','',cntry,fixed=TRUE)
+  cntry = gsub(']', '', cntry, fixed=TRUE)
+  cntry = trim(cntry)
+  cntry = countrycode(cntry, 'country.name', 'country.name')
+  df = cbind(cntry=cntry, df)
+  df$sig = ((df$qtLo95*df$qtHi95)>0)*sign(df$mu)
+  return(df) })
+
+# bring in map data
+world = map_data("world")
+world$cname = countrycode(world$region, 'country.name', 'country.name')
+world = world[!is.na(world$cname),]
+world = world[world$cname!='Greenland',]
+
+# merge in hetEff data
+toMerge = names(hetEffs[[1]])[-1]
+mods = names(hetEffs)
+for(mod in mods){
+  slice = hetEffs[[mod]]
+  for(v in toMerge){
+    world$tmp = slice[match(world$cname, slice$cntry),v]
+    names(world)[ncol(world)] = paste0(mod,'_',v) } }
+
+# maps
+
+# f1 mu
+f1map = ggplot(world, aes(x=long, y=lat, group=group)) +
+  geom_polygon(aes(group=group, fill=f1_mu), color='grey20', size=.1) +
+  coord_map(xlim=c(-180, 180), ylim=c(-50, 80)) +
+  scale_fill_gradient2() +
+  theme_void() +
+  theme(
+    legend.position='top',
+    legend.key.width=unit(1,'cm')
+  )
+
+# f2 mu
+f2map = ggplot(world, aes(x=long, y=lat, group=group)) +
+  geom_polygon(aes(group=group, fill=f2_mu), color='grey20', size=.1) +
+  coord_map(xlim=c(-180, 180), ylim=c(-50, 80)) +
+  scale_fill_gradient2() +
+  theme_void() +
+  theme(
+    legend.position='top',
+    legend.key.width=unit(1,'cm')
+  )
+
+# f1 sig
+f1sigmap = ggplot(world, aes(x=long, y=lat, group=group)) +
+  geom_polygon(aes(group=group, fill=factor(f1_sig)), color='grey20', size=.1) +
+  coord_map(xlim=c(-180, 180), ylim=c(-50, 80)) +
+  scale_fill_manual(values=c('#e41a1c', '#f0f0f0', '#377eb8')) +
+  theme_void() +
+  theme(
+    legend.position='top'
+  )
+
+# f2 sig
+f2sigmap = ggplot(world, aes(x=long, y=lat, group=group)) +
+  geom_polygon(aes(group=group, fill=factor(f2_sig)), color='grey20', size=.1) +
+  coord_map(xlim=c(-180, 180), ylim=c(-50, 80)) +
+  scale_fill_manual(values=c('#e41a1c', '#f0f0f0', '#377eb8')) +
+  theme_void() +
+  theme(
+    legend.position='top'
+  )
+
+#
+loadPkg('patchwork')
+maps = (f1map + f2map) / (f1sigmap + f2sigmap)
+ggsave(maps, file=paste0(rpth, 'hetEffMaps.pdf'))
 ####
