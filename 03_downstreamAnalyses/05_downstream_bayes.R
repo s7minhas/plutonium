@@ -1,5 +1,4 @@
 ####
-rm(list=ls())
 pth = paste0(here::here(), '/')
 source(paste0(pth, 'setup.R'))
 source(paste0(pth, 'lagger.R'))
@@ -36,6 +35,7 @@ chiData = cbind(chiData, regionMat)
 
 # set up region codings
 chiData$region2 = countrycode(chiData$cname1, "country.name", "region23")
+chiData$region3 = countrycode(chiData$cname1, "country.name", "region")
 chiData$chinaRegions = chiData$region2 %in% c("Eastern Asia", "Australia and New Zealand", "South-Eastern Asia")
 
 # log vars
@@ -58,72 +58,70 @@ modData = chiData
 ####
 
 ####
-m1 = lmer(
+# f1 us deaths mideast
+# f2 us def spend
+# econDelta_lfm: higher values means that they are more likely to economic ties
+mf1 = lmer(
   econDelta_lfm ~
     USf1.l1 + polity.l1 + GDP.l1 + pop.l1 +
-    beijDist + washDist + IdealPointDistance + (1|region2), data = modData)
-m2 = lmer(
+    beijDist + IdealPointDistance + (1|cname1), data = modData)
+mf2 = lmer(
+  econDelta_lfm ~
+    USf2.l1 + polity.l1 + GDP.l1 + pop.l1 +
+    beijDist + IdealPointDistance + (1|cname1), data = modData)
+mf1HetEff = lmer(
   econDelta_lfm ~
     polity.l1 + GDP.l1 + pop.l1 +
-    beijDist + washDist + IdealPointDistance + (1 + USf1.l1 |region2), data = modData)
-m3 = lmer(
+    beijDist + IdealPointDistance + (1 + USf1.l1 |cname1), data = modData)
+mf2HetEff = lmer(
   econDelta_lfm ~
     polity.l1 + GDP.l1 + pop.l1 +
-    beijDist + washDist + IdealPointDistance + (1 + USf2.l1 |region2), data = modData)
+    beijDist + IdealPointDistance + (1 + USf2.l1 |cname1), data = modData)
 ####
 
 ####
 options(mc.cores = parallel::detectCores())
-m1b = stan_lmer(
+bf1 = stan_lmer(
   econDelta_lfm ~
     USf1.l1 + polity.l1 + GDP.l1 + pop.l1 +
-    beijDist + washDist + IdealPointDistance + (1|region2),
+    beijDist + IdealPointDistance + (1|cname1),
     data = modData, seed=6886)
-m2b = stan_lmer(
+bf2 = stan_lmer(
+  econDelta_lfm ~
+    USf2.l1 + polity.l1 + GDP.l1 + pop.l1 +
+    beijDist + IdealPointDistance + (1|cname1),
+    data = modData, seed=6886)
+bf1HetEff = stan_lmer(
   econDelta_lfm ~
     polity.l1 + GDP.l1 + pop.l1 +
-    beijDist + washDist + IdealPointDistance + (1 + USf1.l1 |region2),
+    beijDist + IdealPointDistance + (1 + USf1.l1 |cname1),
     data = modData, seed=6886)
-m3b = stan_lmer(
+bf2HetEff = stan_lmer(
   econDelta_lfm ~
     polity.l1 + GDP.l1 + pop.l1 +
-    beijDist + washDist + IdealPointDistance + (1 + USf2.l1 |region2),
+    beijDist + IdealPointDistance + (1 + USf2.l1 |cname1),
     data = modData, seed=6886)
 ####
 
 ####
-# stdz all vars
-modDataZ = modData
-vars = c(
-  # beijDist and washDist already scaled
-  'econDelta_lfm', 'USf1.l1', 'polity.l1',
-  'GDP.l1', 'pop.l1', 'IdealPointDistance')
-for(v in vars){ modDataZ[,v] = scale(modDataZ[,v]) }
-
-m1bZ = stan_lmer(
+# gut check: non-homogenous effects
+# basically see if those countries that are closest to china respond
+# to changes in us distraction
+chiData$chinaRegions = chiData$region2 %in% c(
+  "Eastern Asia", "Australia and New Zealand", "South-Eastern Asia")
+cInter2 = lm(
   econDelta_lfm ~
-    USf1.l1 + polity.l1 + GDP.l1 + pop.l1 +
-    beijDist + washDist + IdealPointDistance + (1|region2),
-    data = modDataZ, seed=6886)
-m2bZ = stan_lmer(
-  econDelta_lfm ~
-    polity.l1 + GDP.l1 + pop.l1 +
-    beijDist + washDist + IdealPointDistance + (1 + USf1.l1 |region2),
-    data = modDataZ, seed=6886)
-m3bZ = stan_lmer(
-  econDelta_lfm ~
-    polity.l1 + GDP.l1 + pop.l1 +
-    beijDist + washDist + IdealPointDistance + (1 + USf2.l1 |region2),
-    data = modDataZ, seed=6886)
+    USf1.l1*chinaRegions + polity.l1+GDP.l1+ pop.l1 +
+    beijDist + IdealPointDistance + region2, data = chiData)
+summary(cInter2)
 ####
 
 ####
 #
 save(
-  m1, m2, m3,
-  m1b, m2b, m3b,
-  m1bZ, m2bZ, m3bZ,
-  modData, modDataZ,
-  file=paste0(rpth, 'dstreamModels.rda')
+  mf1, mf2, mf1HetEff, mf2HetEff,
+  bf1, bf2, bf1HetEff, bf2HetEff,
+  modData,
+  file=paste0(rpth, 'dstreamModels_cname.rda')
 )
 ####

@@ -1,5 +1,4 @@
 ####
-rm(list=ls())
 pth = paste0(here::here(), '/')
 source(paste0(pth, 'setup.R'))
 dpth = paste0(pathDrop, 'data/')
@@ -35,7 +34,8 @@ load(paste0(rpth, 'dstreamModels.rda'))
 
 ####
 ivs = c(
-  '(Intercept)', 'USf1.l1', 'polity.l1',
+  '(Intercept)',
+  'USf1.l1', 'polity.l1',
   'GDP.l1', 'pop.l1',
   'beijDist', 'washDist',
   'IdealPointDistance' )
@@ -43,9 +43,10 @@ ivs = c(
 
 ####
 # check convergence
-plot(m1b, 'trace', pars=ivs)
-plot(m2b, 'trace', pars=ivs[-2])
-plot(m3b, 'trace', pars=ivs[-2])
+plot(bf1, 'trace', pars=ivs)
+plot(bf2, 'trace', pars=ivs[-2])
+plot(bf1HetEff, 'trace', pars=ivs[-2])
+plot(bf2HetEff, 'trace', pars=ivs[-2])
 ####
 
 ####
@@ -58,23 +59,37 @@ names(bMats) = c(
   paste0('m',1:3,'bZ') )
 ####
 
+cbind(unique(modData$region2))
+
 ####
 #  quick comparison of iv effs
 getCoef(m1)
 getCoefB(bMats$'m1b', ivs)
 
+plot(m1b, pars=ivs)
+
 getCoef(m2)
 getCoefB(bMats$'m2b', ivs[-2])
 
+plot(m2b, pars=ivs[-2])
+
 getCoef(m3)
 getCoefB(bMats$'m3b', ivs[-2])
+
+plot(m3b, pars=ivs[-2])
 ####
 
 ####
 # ran effects
 effs = setdiff(colnames(bMats$'m2b'), ivs)
+effs = effs[!grepl('(Intercept)', effs)]
 getCoefB(bMats$'m2b', effs, T)
 
+plot(m2b, pars=effs)
+
 effs = setdiff(colnames(bMats$'m3b'), ivs)
+effs = effs[!grepl('(Intercept)', effs)]
 getCoefB(bMats$'m3b', effs, T)
+
+plot(m3b, pars=effs)
 ####
