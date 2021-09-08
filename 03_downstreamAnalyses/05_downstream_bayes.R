@@ -3,7 +3,6 @@ rm(list=ls())
 pth = paste0(here::here(), '/')
 source(paste0(pth, 'setup.R'))
 source(paste0(pth, 'lagger.R'))
-source(paste0(pth, 'hierBayes.R'))
 dpth = paste0(pathDrop, 'data/')
 rpth = paste0(pathDrop, 'results/')
 
@@ -54,36 +53,68 @@ chiData$econDelta_lfm = chiData$econScores_tradeDepSend_lfm - chiData$econScores
 ####
 
 ####
-m1 = lmer(
-  econDelta_lfm ~
-    USf1.l1 + polity.l1 + GDP.l1 + pop.l1 +
-    beijDist + washDist + IdealPointDistance + (1|region2), data = chiData)
-m2 = lmer(
-  econDelta_lfm ~
-    polity.l1 + GDP.l1 + pop.l1 +
-    beijDist + washDist + IdealPointDistance + (1 + USf1.l1 |region2), data = chiData)
-m3 = lmer(
-  econDelta_lfm ~
-    polity.l1 + GDP.l1 + pop.l1 +
-    beijDist + washDist + IdealPointDistance + (1 + USf2.l1 |region2), data = chiData)
+# relabel as modData so we can save with models
+modData = chiData
 ####
 
 ####
-m1b = hierBayes(
+m1 = lmer(
+  econDelta_lfm ~
+    USf1.l1 + polity.l1 + GDP.l1 + pop.l1 +
+    beijDist + washDist + IdealPointDistance + (1|region2), data = modData)
+m2 = lmer(
+  econDelta_lfm ~
+    polity.l1 + GDP.l1 + pop.l1 +
+    beijDist + washDist + IdealPointDistance + (1 + USf1.l1 |region2), data = modData)
+m3 = lmer(
+  econDelta_lfm ~
+    polity.l1 + GDP.l1 + pop.l1 +
+    beijDist + washDist + IdealPointDistance + (1 + USf2.l1 |region2), data = modData)
+####
+
+####
+options(mc.cores = parallel::detectCores())
+m1b = stan_lmer(
   econDelta_lfm ~
     USf1.l1 + polity.l1 + GDP.l1 + pop.l1 +
     beijDist + washDist + IdealPointDistance + (1|region2),
-    data = chiData, seed=6886)
-m2b = hierBayes(
+    data = modData, seed=6886)
+m2b = stan_lmer(
   econDelta_lfm ~
     polity.l1 + GDP.l1 + pop.l1 +
     beijDist + washDist + IdealPointDistance + (1 + USf1.l1 |region2),
-    data = chiData, seed=6886)
-m3b = hierBayes(
+    data = modData, seed=6886)
+m3b = stan_lmer(
   econDelta_lfm ~
     polity.l1 + GDP.l1 + pop.l1 +
     beijDist + washDist + IdealPointDistance + (1 + USf2.l1 |region2),
-    data = chiData, seed=6886)
+    data = modData, seed=6886)
+####
+
+####
+# stdz all vars
+modDataZ = modData
+vars = c(
+  # beijDist and washDist already scaled
+  'econDelta_lfm', 'USf1.l1', 'polity.l1',
+  'GDP.l1', 'pop.l1', 'IdealPointDistance')
+for(v in vars){ modDataZ[,v] = scale(modDataZ[,v]) }
+
+m1bZ = stan_lmer(
+  econDelta_lfm ~
+    USf1.l1 + polity.l1 + GDP.l1 + pop.l1 +
+    beijDist + washDist + IdealPointDistance + (1|region2),
+    data = modDataZ, seed=6886)
+m2bZ = stan_lmer(
+  econDelta_lfm ~
+    polity.l1 + GDP.l1 + pop.l1 +
+    beijDist + washDist + IdealPointDistance + (1 + USf1.l1 |region2),
+    data = modDataZ, seed=6886)
+m3bZ = stan_lmer(
+  econDelta_lfm ~
+    polity.l1 + GDP.l1 + pop.l1 +
+    beijDist + washDist + IdealPointDistance + (1 + USf2.l1 |region2),
+    data = modDataZ, seed=6886)
 ####
 
 ####
@@ -91,6 +122,8 @@ m3b = hierBayes(
 save(
   m1, m2, m3,
   m1b, m2b, m3b,
+  m1bZ, m2bZ, m3bZ,
+  modData, modDataZ,
   file=paste0(rpth, 'dstreamModels.rda')
 )
 ####
