@@ -108,4 +108,5 @@ ld = chiData[,toLag]
 lags = multilagger(ld, ld$cname1, ld$year, laglength = 1)
 chiData = cbind(chiData, lags[,3:dim(lags)[2]])
 
-save(chiData, file = paste0(dapth, "chiData.rda"))
+setwd("/Users/maxgallop/Dropbox/plutonium/data/")
+save(chiData, file = "chiData.rda")
