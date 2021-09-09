@@ -6,7 +6,7 @@ rpth = paste0(pathDrop, 'results/')
 
 #
 pkgs = c(
-  'lme4', 'rstanarm', 'ggplot2', 'maps' )
+  'lme4', 'rstanarm', 'ggplot2', 'maps', 'patchwork' )
 loadPkg(pkgs)
 
 # mod summ fns
@@ -29,7 +29,7 @@ getCoefB = function(x, vars, int = FALSE){
 ####
 # load data and results
 # modData, m1, m2, m3, m1b, m2b, m3b
-load(paste0(rpth, 'dstreamModels_cname.rda'))
+load(paste0(rpth, 'dstreamModels_cname_v2.rda'))
 ####
 
 ####
@@ -39,7 +39,7 @@ ivs = c(
   'USf2.l1',
   'polity.l1',
   'GDP.l1', 'pop.l1',
-  'beijDist',
+  # 'beijDist',
   'IdealPointDistance' )
 ####
 
@@ -115,51 +115,47 @@ for(mod in mods){
     names(world)[ncol(world)] = paste0(mod,'_',v) } }
 
 # maps
+makeMap = function(dat, var, cat=FALSE){
 
-# f1 mu
-f1map = ggplot(world, aes(x=long, y=lat, group=group)) +
-  geom_polygon(aes(group=group, fill=f1_mu), color='grey20', size=.1) +
-  coord_map(xlim=c(-180, 180), ylim=c(-50, 80)) +
-  scale_fill_gradient2() +
-  theme_void() +
-  theme(
-    legend.position='top',
-    legend.key.width=unit(1,'cm')
-  )
+  # desig colVar
+  dat$colVar = dat[,var]
 
-# f2 mu
-f2map = ggplot(world, aes(x=long, y=lat, group=group)) +
-  geom_polygon(aes(group=group, fill=f2_mu), color='grey20', size=.1) +
-  coord_map(xlim=c(-180, 180), ylim=c(-50, 80)) +
-  scale_fill_gradient2() +
-  theme_void() +
-  theme(
-    legend.position='top',
-    legend.key.width=unit(1,'cm')
-  )
+  # set up gg frame
+  gg = ggplot(dat, aes(x=long, y=lat, group=group))
 
-# f1 sig
-f1sigmap = ggplot(world, aes(x=long, y=lat, group=group)) +
-  geom_polygon(aes(group=group, fill=factor(f1_sig)), color='grey20', size=.1) +
-  coord_map(xlim=c(-180, 180), ylim=c(-50, 80)) +
-  scale_fill_manual(values=c('#e41a1c', '#f0f0f0', '#377eb8')) +
-  theme_void() +
-  theme(
-    legend.position='top'
-  )
+  # desig what should happen if cat or not
+  if(!cat){
+    gg = gg +
+      geom_polygon(
+        aes(group=group, fill=colVar),
+        color='grey20', size=.1 ) +
+      scale_fill_gradient2() }
+  if(cat){
+    gg = gg +
+      geom_polygon(
+        aes(group=group, fill=factor(colVar)),
+        color='grey20', size=.1 ) +
+      scale_fill_manual(values=c('#e41a1c', '#f0f0f0', '#377eb8')) }
 
-# f2 sig
-f2sigmap = ggplot(world, aes(x=long, y=lat, group=group)) +
-  geom_polygon(aes(group=group, fill=factor(f2_sig)), color='grey20', size=.1) +
-  coord_map(xlim=c(-180, 180), ylim=c(-50, 80)) +
-  scale_fill_manual(values=c('#e41a1c', '#f0f0f0', '#377eb8')) +
-  theme_void() +
-  theme(
-    legend.position='top'
-  )
+  # cleanup plot
+  gg = gg +
+    coord_map(xlim=c(-180,180), ylim=c(-50,80)) +
+    theme_void() +
+    theme(
+      legend.position='top',
+      legend.key.width=unit(1,'cm') )
+
+  #
+  return(gg) }
+
+# apply fns
+f1map = makeMap(world, 'f1_mu', F)
+f2map = makeMap(world, 'f2_mu', F)
+f1sigmap = makeMap(world, 'f1_sig', T)
+f2sigmap = makeMap(world, 'f2_sig', T)
 
 #
-loadPkg('patchwork')
 maps = (f1map + f2map) / (f1sigmap + f2sigmap)
-ggsave(maps, file=paste0(rpth, 'hetEffMaps.pdf'))
+maps
+ggsave(maps, file=paste0(rpth, 'hetEffMaps_v2.pdf'))
 ####
