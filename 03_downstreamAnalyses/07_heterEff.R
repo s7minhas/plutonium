@@ -108,10 +108,6 @@ for(mod in mods){
     world$tmp = slice[match(world$cname, slice$cntry),v]
     names(world)[ncol(world)] = paste0(mod,'_',v) } }
 
-world = na.omit(world)
-head(world)
-cor(world$f1_mu, world$i1_mu) # that's weird
-
 # maps
 makeMap = function(dat, var, cat=FALSE, legWidth=1){
 
