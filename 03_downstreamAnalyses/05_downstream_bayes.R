@@ -84,26 +84,22 @@ options(mc.cores = parallel::detectCores())
 bf1 = stan_lmer(
   econDelta_lfm ~
     USf1.l1 + polity.l1 + GDP.l1 + pop.l1 +
-    # beijDist +
-    IdealPointDistance + (1|cname1),
+    beijDist + IdealPointDistance + (1|cname1),
     data = modData, seed=6886)
 bf2 = stan_lmer(
   econDelta_lfm ~
     USf2.l1 + polity.l1 + GDP.l1 + pop.l1 +
-    # beijDist +
-    IdealPointDistance + (1|cname1),
+    beijDist + IdealPointDistance + (1|cname1),
     data = modData, seed=6886)
 bf1HetEff = stan_lmer(
   econDelta_lfm ~
     polity.l1 + GDP.l1 + pop.l1 +
-    # beijDist +
-    IdealPointDistance + (1 + USf1.l1 |cname1),
+    beijDist + IdealPointDistance + (1 + USf1.l1 |cname1),
     data = modData, seed=6886)
 bf2HetEff = stan_lmer(
   econDelta_lfm ~
     polity.l1 + GDP.l1 + pop.l1 +
-    # beijDist +
-    IdealPointDistance + (1 + USf2.l1 |cname1),
+    beijDist + IdealPointDistance + (1 + USf2.l1 |cname1),
     data = modData, seed=6886)
 ####
 
@@ -126,6 +122,6 @@ save(
   mf1, mf2, mf1HetEff, mf2HetEff,
   bf1, bf2, bf1HetEff, bf2HetEff,
   modData,
-  file=paste0(rpth, 'dstreamModels_cname_v2.rda')
+  file=paste0(rpth, 'dstreamModels_cname.rda')
 )
 ####

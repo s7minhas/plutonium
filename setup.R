@@ -44,6 +44,22 @@ pasteVec = function(x, y, sep=''){
 stdz = function(x){ (x-mean(x,na.rm=TRUE))/sd(x,na.rm=TRUE) }
 cbindNumb = function(x){ cbind(x, 1:length(x)) }
 
+# mod summ helpers for use in downstream analyses
+digs=3
+getCoef = function(x){
+  round(cbind(mu=fixef(x), sd=sqrt(diag(vcov(x)))),digs) }
+
+getCoefB = function(x, vars, int = FALSE){
+  out = cbind(
+    mu=apply(x[,vars], 2, mean) ,
+    sd=apply(x[,vars], 2, sd) )
+  if(int){
+    out = cbind(out,
+      qtLo95 = apply(x[,vars], 2, quantile, .025),
+      qtHi95 = apply(x[,vars], 2, quantile, .975) ) }
+  out = round( out, digs )
+  return(out) }
+
 # Global params
 seed=6886
 set.seed(seed)
