@@ -1,5 +1,4 @@
 
-dapth = paste0(pth, '03_downstreamAnalyses/')
 dapth = "/Users/maxgallop/Dropbox/booz_allen_gdmm/03_downstreamAnalyses/"
 
 load(paste0(dapth, "dyadData.rda"))
@@ -20,14 +19,27 @@ chiData$USf3 = usLevel$f3_UE[match(chiData$year, usLevel$year)]
 
 dpth = "/Users/maxgallop/Dropbox/booz_allen_gdmm/data/"
 polity = read.csv(paste0(dpth, 'p5v2018.csv'))
+
 polity$cname = countrycode(polity$country, 'country.name','country.name')
 polity$cnameYr = with(polity, paste0(cname, year))
 toDrop = names(table(polity$cnameYr)[table(polity$cnameYr)>1])
 polity = polity[!polity$cnameYr %in% toDrop,]
 
+polity$codeyr = with(polity, paste0(ccode, year))
+chiData$ccode1 = countrycode(chiData$cname1, "country.name", "cown")
+chiData$codeyr = with(chiData, paste0(ccode1, year))
+
+
 chiData$cnameYr = paste0(chiData$cname1, chiData$year)
 chiData$polity = polity$polity2[match(chiData$cnameYr, toupper(polity$cnameYr))]
 chiData$region = countrycode(chiData$cname1, "country.name", "region")
+
+
+bad = unique(chiData$cname1[is.na(chiData$polity)])
+good = unique(chiData$cname1[!is.na(chiData$polity)])
+needfix = setdiff(bad, good)
+
+chiData$polity[chiData$cname1 %in% needfix] = polity$polity2[match(chiData$codeyr[chiData$cname1 %in% needfix], toupper(polity$codeyr))]
 
 load(paste0(dpth, 'wbData.rda'))
 wbData$cnameYr = paste0(wbData$cname, wbData$year)

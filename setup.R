@@ -3,6 +3,11 @@ if(Sys.info()['user'] %in% c('S7M','s7m','herme','Owner')){
 	pathDrop = paste0(suf, 'Dropbox/Research/plutonium/')
 }
 
+if(Sys.info()['user'] %in% c('maxgallop')){
+	suf = paste0('C:/Users/', Sys.info()['user'], '/')
+	pathDrop = paste0(suf, 'Dropbox/plutonium/')
+}
+
 # General functions/libraries
 ## See info on package versions and other session info
 ### at bottom of script
