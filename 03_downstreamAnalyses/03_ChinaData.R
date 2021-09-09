@@ -81,7 +81,6 @@ lagger<-function(variable, country, year, laglength){
 multilagger<-function(X, country, year, laglength, relabel=T){
   
   if(is.data.frame(X)==F) stop("X needs to be a dataframe")
-  
   laggedX<-X
   
   for (i in 1:ncol(X)){
@@ -99,6 +98,9 @@ multilagger<-function(X, country, year, laglength, relabel=T){
   laggedX
   
 } # close multilagger function
+
+l1 = lagger(chiData$polity, chiData$cname1, chiData$year, 1)
+chiData$polity.l1 = l1
 
 
 names(chiData)
