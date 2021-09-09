@@ -43,6 +43,7 @@ inteffs = effs[grepl('(Intercept)', effs)]
 f1HetEffs = getCoefB(bMats$'bf1HetEff', f1effs, T)
 int1HetEffs = getCoefB(bMats$'bf1HetEff', inteffs, T)
 
+write.csv(f1HetEffs, file='C:/Users/Owner/Desktop/tmp.csv')
 
 effs = setdiff(colnames(bMats$'bf2HetEff'), ivs[-(2:3)])
 f2effs = effs[!grepl('(Intercept)', effs)]
@@ -156,6 +157,7 @@ i2sigmap = makeMap(world, 'i2_sig', T, .5)
 
 #
 maps = (f1map + f2map) / (f1sigmap + f2sigmap)
+maps
 ggsave(maps, file=paste0(rpth, 'hetEffMaps.pdf'))
 
 #
