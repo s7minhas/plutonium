@@ -14,6 +14,7 @@ loadPkg(pkgs)
 # load data and results
 # modData, m1, m2, m3, m1b, m2b, m3b
 load(paste0(rpth, 'dstreamModels_cname.rda'))
+# load(paste0(rpth, 'dstreamModels_cname.rda'))
 ####
 
 ####
@@ -45,15 +46,11 @@ names(bMats) = c('bf1', 'bf2', 'bf1HetEff', 'bf2HetEff')
 
 ####
 #  quick comparison of iv effs
-getCoef(mf1)
 getCoefB(bMats$'bf1', ivs[-3])
 
-getCoef(mf2)
 getCoefB(bMats$'bf2', ivs[-2])
 
-getCoef(mf1HetEff)
 getCoefB(bMats$'bf1HetEff', ivs[-(2:3)])
 
-getCoef(mf2HetEff)
 getCoefB(bMats$'bf2HetEff', ivs[-(2:3)])
 ####
