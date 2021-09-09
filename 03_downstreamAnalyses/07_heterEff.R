@@ -99,8 +99,6 @@ for(mod in mods){
     world$tmp = slice[match(world$cname, slice$cntry),v]
     names(world)[ncol(world)] = paste0(mod,'_',v) } }
 
-head(world)
-
 # merge in intEff data
 toMerge = names(intEffs[[1]])[-1]
 mods = names(intEffs)
@@ -110,10 +108,12 @@ for(mod in mods){
     world$tmp = slice[match(world$cname, slice$cntry),v]
     names(world)[ncol(world)] = paste0(mod,'_',v) } }
 
+world = na.omit(world)
 head(world)
+cor(world$f1_mu, world$i1_mu) # that's weird
 
 # maps
-makeMap = function(dat, var, cat=FALSE){
+makeMap = function(dat, var, cat=FALSE, legWidth=1){
 
   # desig colVar
   dat$colVar = dat[,var]
@@ -141,28 +141,28 @@ makeMap = function(dat, var, cat=FALSE){
     theme_void() +
     theme(
       legend.position='top',
-      legend.key.width=unit(1,'cm') )
+      legend.key.width=unit(legWidth,'cm') )
 
   #
   return(gg) }
 
 # apply fns
-f1map = makeMap(world, 'f1_mu', F)
-f2map = makeMap(world, 'f2_mu', F)
-f1sigmap = makeMap(world, 'f1_sig', T)
-f2sigmap = makeMap(world, 'f2_sig', T)
+f1map = makeMap(world, 'f1_mu', F, 1)
+f2map = makeMap(world, 'f2_mu', F, 1)
+f1sigmap = makeMap(world, 'f1_sig', T, .5)
+f2sigmap = makeMap(world, 'f2_sig', T, .5)
 
 # apply fns
-i1map = makeMap(world, 'i1_mu', F)
-i2map = makeMap(world, 'i2_mu', F)
-i1sigmap = makeMap(world, 'i1_sig', T)
-i2sigmap = makeMap(world, 'i2_sig', T)
+i1map = makeMap(world, 'i1_mu', F, 1)
+i2map = makeMap(world, 'i2_mu', F, 1)
+i1sigmap = makeMap(world, 'i1_sig', T, .5)
+i2sigmap = makeMap(world, 'i2_sig', T, .5)
 
 #
 maps = (f1map + f2map) / (f1sigmap + f2sigmap)
-ggsave(maps, file=paste0(rpth, 'hetEffMaps_v2.pdf'))
+ggsave(maps, file=paste0(rpth, 'hetEffMaps.pdf'))
 
 #
 imaps = (i1map + i2map) / (i1sigmap + i2sigmap)
-ggsave(maps, file=paste0(rpth, 'intEffMaps_v2.pdf'))
+ggsave(maps, file=paste0(rpth, 'intEffMaps.pdf'))
 ####
