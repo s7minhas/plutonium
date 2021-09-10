@@ -157,7 +157,6 @@ i2sigmap = makeMap(world, 'i2_sig', T, .5)
 
 #
 maps = (f1map + f2map) / (f1sigmap + f2sigmap)
-maps
 ggsave(maps, file=paste0(rpth, 'hetEffMaps.pdf'))
 
 #

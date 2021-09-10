@@ -113,7 +113,6 @@ cInter2 = lm(
   econDelta_lfm ~
     USf1.l1*chinaRegions + polity.l1+GDP.l1+ pop.l1 +
     beijDist + IdealPointDistance + region2, data = chiData)
-summary(cInter2)
 ####
 
 ####

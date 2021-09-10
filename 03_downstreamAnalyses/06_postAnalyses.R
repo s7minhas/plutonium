@@ -6,7 +6,7 @@ rpth = paste0(pathDrop, 'results/')
 
 #
 pkgs = c(
-  'lme4', 'rstanarm', 'ggplot2', 'maps', 'patchwork' )
+  'lme4', 'rstanarm', 'knitr' )
 loadPkg(pkgs)
 ####
 
@@ -14,7 +14,7 @@ loadPkg(pkgs)
 # load data and results
 # modData, m1, m2, m3, m1b, m2b, m3b
 load(paste0(rpth, 'dstreamModels_cname.rda'))
-# load(paste0(rpth, 'dstreamModels_cname.rda'))
+# load(paste0(rpth, 'dstreamModels_region.rda'))
 ####
 
 ####
@@ -30,10 +30,10 @@ ivs = c(
 
 ####
 # check convergence
-plot(bf1, 'trace', pars=ivs[-3])
-plot(bf2, 'trace', pars=ivs[-2])
-plot(bf1HetEff, 'trace', pars=ivs[-(2:3)])
-plot(bf2HetEff, 'trace', pars=ivs[-(2:3)])
+# plot(bf1, 'trace', pars=ivs[-3])
+# plot(bf2, 'trace', pars=ivs[-2])
+# plot(bf1HetEff, 'trace', pars=ivs[-(2:3)])
+# plot(bf2HetEff, 'trace', pars=ivs[-(2:3)])
 ####
 
 ####
@@ -46,11 +46,11 @@ names(bMats) = c('bf1', 'bf2', 'bf1HetEff', 'bf2HetEff')
 
 ####
 #  quick comparison of iv effs
-getCoefB(bMats$'bf1', ivs[-3])
+kable(getCoefB(bMats$'bf1', ivs[-3]))
 
-getCoefB(bMats$'bf2', ivs[-2])
+kable(getCoefB(bMats$'bf2', ivs[-2]))
 
-getCoefB(bMats$'bf1HetEff', ivs[-(2:3)])
+kable(getCoefB(bMats$'bf1HetEff', ivs[-(2:3)]))
 
-getCoefB(bMats$'bf2HetEff', ivs[-(2:3)])
+kable(getCoefB(bMats$'bf2HetEff', ivs[-(2:3)]))
 ####
