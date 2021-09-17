@@ -19,37 +19,7 @@ load(paste0(dpth, "chiData.rda"))
 ####
 # processing
 
-# vars for analysis
-useVars = c(
-  "USf1.l1", "USf2.l1", "USf3.l1", "polity.l1",
-  "GDP.l1", "pop.l1", "beijDist", "washDist", "IdealPointDistance")
-use = c(
-  useVars,
-  "econScores_tradeDepSend", "diplomScores_agree", "icewsScores_gov",
-  "econScores_tradeDepSend_lfm", "diplomScores_agree_lfm", "icewsScores_gov_lfm")
 
-# add region dummies
-regionMat = model.matrix(~chiData$region)
-regionMat = data.frame(regionMat)
-chiData = cbind(chiData, regionMat)
-
-# set up region codings
-chiData$region2 = countrycode(chiData$cname1, "country.name", "region23")
-chiData$region3 = countrycode(chiData$cname1, "country.name", "region")
-chiData$chinaRegions = chiData$region2 %in% c("Eastern Asia", "Australia and New Zealand", "South-Eastern Asia")
-
-# log vars
-chiData$GDP.l1 = log(chiData$GDP.l1 + 1)
-chiData$pop.l1 = log(chiData$pop.l1 + 1)
-
-# stdz
-chiData$beijDist = scale(chiData$beijDist)
-chiData$washDist = scale(chiData$washDist)
-
-# lag vars and create diff version of dvs
-chiData$econScores_tradeDepSend.l1 = lagger(chiData$econScores_tradeDepSend, chiData$cname1, chiData$year, 1)
-chiData$econDelta = chiData$econScores_tradeDepSend - chiData$econScores_tradeDepSend.l1
-chiData$econDelta_lfm = chiData$econScores_tradeDepSend_lfm - chiData$econScores_tradeDepSend_lfm.l1
 ####
 
 ####
