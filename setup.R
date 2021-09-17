@@ -5,6 +5,11 @@ if(Sys.info()['user'] %in% c('S7M','s7m','herme','Owner')){
 	pathOut = paste0(pathDrop, 'results/')
 }
 
+if(Sys.info()['user'] %in% c('maxgallop')){
+	suf = paste0('C:/Users/', Sys.info()['user'], '/')
+	pathDrop = paste0(suf, 'Dropbox/plutonium/')
+}
+
 # General functions/libraries
 ## See info on package versions and other session info
 ### at bottom of script
@@ -69,7 +74,7 @@ lagger<-function(variable, country, year, laglength){
 multilagger<-function(X, country, year, laglength, relabel=T){
 
   if(is.data.frame(X)==F) stop("X needs to be a dataframe")
-  
+
   laggedX<-X
 
   for (i in 1:ncol(X)){

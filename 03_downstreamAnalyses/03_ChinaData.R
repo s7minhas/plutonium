@@ -33,6 +33,11 @@ polity$cnameYr = with(polity, paste0(cname, year))
 toDrop = names(table(polity$cnameYr)[table(polity$cnameYr)>1])
 polity = polity[!polity$cnameYr %in% toDrop,]
 
+polity$codeyr = with(polity, paste0(ccode, year))
+chiData$ccode1 = countrycode(chiData$cname1, "country.name", "cown")
+chiData$codeyr = with(chiData, paste0(ccode1, year))
+
+
 chiData$cnameYr = paste0(chiData$cname1, chiData$year)
 chiData$polity = polity$polity2[match(chiData$cnameYr, toupper(polity$cnameYr))]
 chiData$region = countrycode(chiData$cname1, "country.name", "region")
