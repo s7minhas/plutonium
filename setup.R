@@ -1,6 +1,8 @@
 if(Sys.info()['user'] %in% c('S7M','s7m','herme','Owner')){
 	suf = paste0('C:/Users/', Sys.info()['user'], '/')
 	pathDrop = paste0(suf, 'Dropbox/Research/plutonium/')
+	pathIn = paste0(pathDrop, 'data/')
+	pathOut = paste0(pathDrop, 'results/')
 }
 
 if(Sys.info()['user'] %in% c('maxgallop')){
@@ -49,21 +51,47 @@ pasteVec = function(x, y, sep=''){
 stdz = function(x){ (x-mean(x,na.rm=TRUE))/sd(x,na.rm=TRUE) }
 cbindNumb = function(x){ cbind(x, 1:length(x)) }
 
-# mod summ helpers for use in downstream analyses
-digs=3
-getCoef = function(x){
-  round(cbind(mu=fixef(x), sd=sqrt(diag(vcov(x)))),digs) }
+# ts helpers
+lagger<-function(variable, country, year, laglength){
 
-getCoefB = function(x, vars, int = FALSE){
-  out = cbind(
-    mu=apply(x[,vars], 2, mean) ,
-    sd=apply(x[,vars], 2, sd) )
-  if(int){
-    out = cbind(out,
-      qtLo95 = apply(x[,vars], 2, quantile, .025),
-      qtHi95 = apply(x[,vars], 2, quantile, .975) ) }
-  out = round( out, digs )
-  return(out) }
+  country<-as.character(country)
+  laggedvar<-rep(NA,length(variable))
+
+  leadingNAs<-rep(NA,laglength)
+  countryshift<-c(leadingNAs, country[1:(length(country)-laglength)])
+
+  variableshift<-c(leadingNAs, variable[1:(length(variable)-laglength)])
+
+  replacementrefs<-country==countryshift
+  replacementrefs[is.na(replacementrefs)==T]<-FALSE
+  laggedvar[replacementrefs]<-variableshift[replacementrefs]
+
+  laggedvar
+
+} # close lagger function
+
+# function for lagging whole dataframes:
+multilagger<-function(X, country, year, laglength, relabel=T){
+
+  if(is.data.frame(X)==F) stop("X needs to be a dataframe")
+
+  laggedX<-X
+
+  for (i in 1:ncol(X)){
+
+    laggedX[,i]<-lagger(variable=X[,i], country=country, year=year, laglength=laglength)
+
+  } # close i loop
+
+  # now append the laglength to the variable names:
+  if (relabel==T){
+    suffix<-paste(".l",laglength,sep="")
+    names(laggedX)<-paste(names(X), suffix, sep="")
+  } # close if relabel==T condition
+
+  laggedX
+
+} # close multilagger function
 
 # Global params
 seed=6886
