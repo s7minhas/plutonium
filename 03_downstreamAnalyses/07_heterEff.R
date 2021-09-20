@@ -37,6 +37,8 @@ names(bMats) = c('bf1', 'bf2', 'bf1HetEff', 'bf2HetEff')
 
 ####
 # ran effects
+
+
 effs = setdiff(colnames(bMats$'bf1HetEff'), ivs[-(2:3)])
 f1effs = effs[!grepl('(Intercept)', effs)]
 inteffs = effs[grepl('(Intercept)', effs)]

@@ -1,4 +1,6 @@
-dapth = "/Users/maxgallop/Dropbox/booz_allen_gdmm/03_downstreamAnalyses/"
+here::set_here()
+source(paste0(here::here(), "/setup.R"))
+dapth = paste0(pathDrop, "data/")
 load(paste0(dapth, "chiData.rda"))
 
 
@@ -68,7 +70,7 @@ plot_glmnet(lasso1, xvar="dev", label = 20, lwd=2, cex=2)
 source('~/Dropbox/lagger.r')
 chiData$econScores_tradeDepSend.l1 = lagger(chiData$econScores_tradeDepSend, chiData$cname1, chiData$year, 1)
 chiData$econDelta = chiData$econScores_tradeDepSend - chiData$econScores_tradeDepSend.l1
-chiData$econDelta_lfm = chiData$econScores_tradeDepSend_lfm - chiData$econScores_tradeDepSend_lfm.l1
+chiData$econDelta = chiData$econScores_tradeDepSend_lfm - chiData$econScores_tradeDepSend_lfm.l1
 
 
 ###BaseModels, FD
@@ -83,22 +85,25 @@ r2 = glm(econDelta_lfm~USf1.l1 + USf2.l1 + USf3.l1 + region, data = chiData)
 c1 = glm(econDelta ~ USf1.l1 + USf2.l1 + USf3.l1 + polity.l1+GDP.l1+ pop.l1+beijDist+washDist + IdealPointDistance + as.factor(region), data = chiData)
 c2 = glm(econDelta_lfm ~ USf1.l1 + USf2.l1 + USf3.l1 + polity.l1+GDP.l1+ pop.l1+beijDist+washDist + IdealPointDistance + as.factor(region), data = chiData)
 
-useVars = c("USf1.l1", "USf2.l1", "USf3.l1", "polity.l1",  "GDP.l1", "pop.l1", "beijDist", "washDist", "IdealPointDistance")
-use = c(useVars, "econDelta_lfm", "econDelta")
-regionMat = model.matrix(~chiData$region)
+useVars = c("USf1.l1", "USf2.l1", "USf3.l1", "polity.l1",  "GDP.l1", "pop.l1", "beijDist", "IdealPointDistance")
+use = c(useVars, "econDelta")
+lasso3 = glmnet(lassoData[,c(1:8, 10:28)], y = lassoData$econDelta, alpha = 1)
+chiData$region2 = countrycode(chiData$cname1, "country.name", 'region23')
+regionMat = model.matrix(~chiData$region2)
 regionMat = data.frame(regionMat)
 chiData = cbind(chiData, regionMat)
 
 regionVars = names(regionMat)
 
 
-lassoData = na.omit(chiData[,c(use, regionVars)])
+lassoData = na.omit(chiData[,c(use, regionVars[-1])])
 library(glmnet)
-lasso1 = glmnet(lassoData[,c(useVars,regionVars)], y = lassoData$econDelta_lfm, alpha = 1)
-lasso2 = glmnet(lassoData[,c(useVars,regionVars)], y = lassoData$econDelta, alpha = 1)
+library(plotmo)
+lasso2 = glmnet(lassoData[,c(useVars,regionVars[-1])], y = lassoData$econDelta, alpha = 1)
 plot_glmnet(lasso1, xvar="dev", label = 20, lwd=2, cex=2)
 plot_glmnet(lasso2, xvar="dev", label = 20, lwd=2, cex=2)
 
+save(lassoData, file = "forMD.rda")
 library(lme4)
 chiData$region2 = countrycode(chiData$cname1, "country.name", "region23")
 

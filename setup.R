@@ -4,7 +4,7 @@ if(Sys.info()['user'] %in% c('S7M','s7m','herme','Owner')){
 }
 
 if(Sys.info()['user'] %in% c('maxgallop')){
-	suf = paste0('C:/Users/', Sys.info()['user'], '/')
+	suf = paste0('/Users/', Sys.info()['user'], '/')
 	pathDrop = paste0(suf, 'Dropbox/plutonium/')
 }
 

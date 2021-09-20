@@ -1,5 +1,7 @@
-
-dapth = "/Users/maxgallop/Dropbox/booz_allen_gdmm/03_downstreamAnalyses/"
+source()
+here::set_here()
+source(paste0(here::here(), "/setup.R"))
+dapth = paste0(pathDrop, "data/")
 
 load(paste0(dapth, "dyadData.rda"))
 
@@ -17,8 +19,7 @@ chiData$USf3 = usLevel$f3_UE[match(chiData$year, usLevel$year)]
 ###FixefWant: Polity, Distance to China/US, Region, GDP, Population
 ###RandomEffs: Region
 
-dpth = "/Users/maxgallop/Dropbox/booz_allen_gdmm/data/"
-polity = read.csv(paste0(dpth, 'p5v2018.csv'))
+polity = read.csv(paste0(dapth, 'p5v2018.csv'))
 
 polity$cname = countrycode(polity$country, 'country.name','country.name')
 polity$cnameYr = with(polity, paste0(cname, year))
@@ -49,8 +50,10 @@ chiData$pop = wbData$SP.POP.TOTL[match(chiData$cnameYr, wbData$cnameYr)]
 chiData$gwcode1 = countrycode(chiData$cname1, "country.name", "gwn")
 chiData$date = as.Date(paste0("1/1/", chiData$year), format = "%m/%d/%Y")
 
+loadPkg('cshapes')
 years = 1990:2020
 for(y in years){
+  y = min(y, 2016)
   date = as.Date(paste0("1/1/", y), format = "%m/%d/%Y")
   use = distlist(date, useGW = T, type = "capdist")
   bd = use[use$ccode2 == 710,]
@@ -99,16 +102,15 @@ multilagger<-function(X, country, year, laglength, relabel=T){
   
 } # close multilagger function
 
+chiData = chiData[order(chiData$cname1, chiData$year),]
 l1 = lagger(chiData$polity, chiData$cname1, chiData$year, 1)
 chiData$polity.l1 = l1
 
 
 names(chiData)
-chiData = chiData[order(chiData$cname1, chiData$year),]
 toLag = c("cname1", "year", "diplomScores_agree_lfm", "econScores_tradeDepSend_lfm", "icewsScores_gov_lfm", "USf1", "USf2", "USf3", "polity", "GDP", "pop")
 ld = chiData[,toLag]
 lags = multilagger(ld, ld$cname1, ld$year, laglength = 1)
 chiData = cbind(chiData, lags[,3:dim(lags)[2]])
 
-setwd("/Users/maxgallop/Dropbox/plutonium/data/")
-save(chiData, file = "chiData.rda")
+save(chiData, file = paste0(pathDrop, "data/chiData.rda"))
