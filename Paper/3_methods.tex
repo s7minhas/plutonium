@@ -1,3 +1,52 @@
 \section*{Methods}
 \subsection*{Measuring Distraction}
+We have developed a measure of US constraint / distraction to capture a variety of mechanisms that might limit US action.  In broad terms, we believe (based on SME input and prior research) that constraint is a function of three possible sources:
+\begin{enumerate}
+\item	Active conflicts that the US is involved in with an emphasis on those conflicts that represent significant materiel commitment and US casualties
+\item US force commitments around the globe
+\item US political or economic distraction caused by either foreign or domestic shocks.
+\end{enumerate}
+To population these categories, we relied on sixteen variables distributed across the following broader categories:
+
+\begin{itemize}
+\item Defense spending	(World Bank, DoD)
+\item Troops levels, by region	(DoD, Kane)
+\item US Casualties	(DoD, Kane)
+\item Market Crises	(Frieden & Lake)
+\item Economic variables	(Trading Economics)
+\end{itemize}
+
+The main source of constraint that is incomplete in the above is domestic political crises (i.e., apart from a response to economic shocks, which is captured).  Prior work has shown that political crises of this sort are rare / not likely consequential (Frieden, et al., 2017), but we will add an improved measure if we continue the project.  A simple latent variable model of the above variables produced three variables, representing active US conflicts, US defense spending / commitments, and the economy.   
+
+These latent variables define the level of US constraint; in what follows, we will however focus on the first two latent variables because they more narrowly affect the US (and not other members of our sample). \textcolor{red}{Go into more detail about the PCA, and add pictures}.
+
+
 \subsection*{Measuring State Preference}
+An important component in understanding states? conflictual and cooperative behavior is to understand states affinity for each other, or the similarity of their preferences. When states have similar preferences on an issue, they will be more likely to collaborate to achieve their joint preference on that issue, and more generally states with similar foreign policy preferences will be cooperative in a larger proportion of their interactions. Unfortunately, while we have abundant data to measure the strength of states? economies, the volume of trade between states, or even their military power, it is much more difficult to measure the similarity of states? preferences, because as with many social and political constructs they cannot be observed directly.
+
+Specifically, we argue that these relations between states constitute a multilayer network, in which the various layers correspond to different ways states are interacting with one another at a given time point. A bevy of researchhas shown that accounting for network structure necessitates an approach that can account for the indirect relations states share. As such we reformulated the problem of determining state preferences in terms of a network analysis. The goal of our approach is summarized in Figure 1. In the top row, we represent UN voting and alliance patterns at time t as a pair of adjacency matrices that form an evolving multiplex network. Our goal is to extract a lower dimensional representation of this system, such that the output is a series of n?x n matrices, where n represents the number of actors and in which the cross-sections denote our estimates of the preference similarities between countries.
+
+In particular here, we generate a measure of state affinity relying on two measures of economic cooperation, the volume of trade flows (as measured by the IMF), and states sharing formal economic agreements, as measured by the Design of Economic Agreements (DESTA) dataset. These form the links in our network of cooperation, which we use to estimate state affinity using the Latent Factor Model \citep{hoff:year}. The latent factor model is a network model that is designed to account for three different orders of interdependencies in relational data. First, it accounts for the tendency of some actors to trade more, and agree to more economic agreements by including sender and receiver random effects. Second it accounts for the fact that economic cooperation is often reciprocal in the composition of the error term. Finally, the area that sets the LFM apart from other network estimators is how it handles third order dependencies. Two particular types of third order dependencies which the LFM can handle are homophily -- the tendency for actors that share an unobserved characteristic -- to interact more with each other, and stochastic equivalence, the idea that actors which play similar roles in a network are more likely to cooperate with the same third party. The LFM handles these third order dependencies with a multiplicative random effect based on the Singular Value Decomposition.\footnote{This effect needs to be multiplicative because by multiplying random variables, we can preserve the third order residuals which would have 0 expectation if they were simply added.} 
+
+
+\begin{align}
+	\begin{aligned}
+		y_{ij} \;=\; f(\theta_{ij}) &\text{, where } \\
+		\theta_{ij} \;=\;& \bm\beta_{d}^{\top} \mathbf{X}_{ij} + \bm\beta_{s}^{\top} \mathbf{X}_{i} + \bm\beta_{r}^{\top} \mathbf{X}_{j}  \\
+		& + a_{i} + b_{j} + \epsilon_{ij} \\
+		& + \mathbf{u}_{i}^{\top} \mathbf{D} \mathbf{v}_{j}   \\
+	\label{eqn:ame}
+	\end{aligned}
+\end{align}
+
+
+\begin{align}
+	\begin{aligned}
+		\{ (a_{1}, b_{1}), \ldots, (a_{n}, b_{n}) \} &\simiid N(0,\Sigma_{ab}) \\
+		\{ (\epsilon_{ij}, \epsilon_{ji}) : \; i \neq j\} &\simiid N(0,\Sigma_{\epsilon}), \text{ where } \\
+		\Sigma_{ab} = \begin{pmatrix} \sigma_{a}^{2} & \sigma_{ab} \\ \sigma_{ab} & \sigma_{b}^2   \end{pmatrix} \;\;\;\;\; &\Sigma_{\epsilon} = \sigma_{\epsilon}^{2} \begin{pmatrix} 1 & \rho \\ \rho & 1  \end{pmatrix}
+	\label{eqn:srm}
+	\end{aligned}
+\end{align}
+
+In particular, we argue that the $\mathbf{u}_{i}^{\top} \mathbf{D} \mathbf{v}_{j}$ term, which is included in the model to capture third order dependencies, also is useful for us as a measure of state affinity. So we run an LFM without covariates on the economic data, and then take this term for every pair of countries in  every year, as a measure of those countries' affinity. \textcolor{red}{Something about how we handle time here. Also, some visualizations of country affinity score over time.}
