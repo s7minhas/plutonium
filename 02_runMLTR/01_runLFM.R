@@ -4,8 +4,7 @@ pth = paste0(here::here(), '/')
 source(paste0(pth, 'setup.R'))
 
 # load data
-dpth = paste0(pth, 'data/')
-load(paste0(dpth, 'arrList_lfm.rda'))
+load(paste0(pathIn, 'arrList_lfm.rda'))
 
 # lib for lfm
 # devtools::install_github('s7minhas/amen')

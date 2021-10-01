@@ -3,6 +3,7 @@ if(Sys.info()['user'] %in% c('S7M','s7m','herme','Owner')){
 	pathDrop = paste0(suf, 'Dropbox/Research/plutonium/')
 	pathIn = paste0(pathDrop, 'data/')
 	pathOut = paste0(pathDrop, 'results/')
+	pathGraphics = paste0(pathDrop, 'graphics/')
 }
 
 if(Sys.info()['user'] %in% c('maxgallop')){
