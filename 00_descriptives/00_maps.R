@@ -12,7 +12,7 @@ loadPkg(pkgs)
 ####
 
 ####
-makeMapRegion = function(dat, var, legWidth=1){
+makeMapRegion = function(dat, var, legWidth=1, grad2=TRUE){
 
   # desig colVar
   dat$colVar = dat[,var]
@@ -21,16 +21,22 @@ makeMapRegion = function(dat, var, legWidth=1){
   gg = ggplot(dat, aes(x=long, y=lat, group=group)) +
     geom_polygon(
       aes(group=group, fill=colVar),
-      color='grey20', size=.1 ) +
-    # scale_fill_viridis(discrete=FALSE) +
-    scale_fill_gradient2() +
+      color='grey20', size=.1 )
+
+  if(grad2){
+    gg = gg + scale_fill_gradient2() }
+
+  if(!grad2){
+    gg = gg + scale_fill_viridis(discrete=FALSE) }
+
+  gg = gg +
     coord_equal(
       ylim=c(-6e+06,.9e+07),
       xlim=c(-1.3e+07, 1.8e+07) ) +
     theme_void() +
     theme(
       legend.position='top',
-      legend.key.width=unit(1,'cm'),
+      legend.key.width=unit(legWidth,'cm'),
       legend.title=element_blank()
     )
   return(gg) }
@@ -63,7 +69,7 @@ econData = dyadData[,c(
   'cname1','cname2','year',
   'ptaCnt', 'pta',
   'trade', 'tradeDepSend',
-  'econScores_tradeDepSend_lfm'
+  'econScores_tradeDepSend_lfm' 
   )]
 
 # subset to relev timeframe
@@ -71,7 +77,7 @@ econData = econData[econData$year>=1990,]
 
 # subset to china 2 cases
 china = econData[
-  econData$cname1=='CHINA' & econData$cname2!='CHINA', ]
+  econData$cname2=='CHINA' & econData$cname1!='CHINA', ]
 ####
 
 ####
@@ -85,11 +91,14 @@ chinaEconMaps = lapply(yrs, function(yr){
   slice = china[china$year==yr,]
 
   # merge with map data
+  slice$rnkVal = rank(-slice$econScores_tradeDepSend_lfm)
   world$val = slice$econScores_tradeDepSend_lfm[
-    match(world$cname, slice$cname2)]
+    match(world$cname, slice$cname1)]
+  world$rnkVal = slice$rnkVal[
+    match(world$cname, slice$cname1)]
 
   # make map
-  map = makeMapRegion(world, 'val') + ggtitle(yr)
+  map = makeMapRegion(world, 'val', grad2=TRUE) + ggtitle(yr)
 
   #
   return(map) })
