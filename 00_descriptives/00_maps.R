@@ -69,7 +69,7 @@ econData = dyadData[,c(
   'cname1','cname2','year',
   'ptaCnt', 'pta',
   'trade', 'tradeDepSend',
-  'econScores_tradeDepSend_lfm'
+  'econScores_tradeDepSend_lfm_v2'
   )]
 
 # subset to relev timeframe
@@ -91,8 +91,8 @@ chinaEconMaps = lapply(yrs, function(yr){
   slice = china[china$year==yr,]
 
   # merge with map data
-  slice$rnkVal = rank(-slice$econScores_tradeDepSend_lfm)
-  world$val = slice$econScores_tradeDepSend_lfm[
+  slice$rnkVal = rank(-slice$econScores_tradeDepSend_lfm_v2)
+  world$val = slice$econScores_tradeDepSend_lfm_v2[
     match(world$cname, slice$cname1)]
   world$rnkVal = slice$rnkVal[
     match(world$cname, slice$cname1)]

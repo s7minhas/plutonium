@@ -66,6 +66,16 @@ econScoresTrade = processLFM(
 	fname='econScores_trade_lfm.rda')
 
 #
+econScoresTradeDep2 = processLFM(
+	yrs=1990:2020,
+	fname='econScores_tradeDepSend_lfm_v2.rda')
+
+#
+econScoresTrade2 = processLFM(
+	yrs=1990:2020,
+	fname='econScores_trade_lfm_v2.rda')
+
+#
 icewsScoresGov = processLFM(
 	yrs=1995:2020,
 	fname='icewsScores_gov_lfm.rda')
@@ -77,6 +87,8 @@ toMerge = list(
 	diplomScoresAgree,
 	econScoresTradeDep,
 	econScoresTrade,
+	econScoresTradeDep2,
+	econScoresTrade2,
 	icewsScoresGov)
 
 # merge

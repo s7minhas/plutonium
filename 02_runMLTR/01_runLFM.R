@@ -66,19 +66,36 @@ lfmWrapper = function(
 
 ####
 # econ index
-econScores = lfmWrapper(
+econTradeDepScores = lfmWrapper(
 	econList,
 	c('ptaCnt', 'tradeDepSend') )
-save(econScores,
+save(econTradeDepScores,
 	file=paste0(pathOut, 'econScores_tradeDepSend_lfm.rda'))
-rm(econScores)
+rm(econTradeDepScores)
 
-econScores2 = lfmWrapper(
+econTradeScores = lfmWrapper(
 	econList,
 	c('ptaCnt', 'trade') )
-save(econScores2,
+save(econTradeScores,
 	file=paste0(pathOut, 'econScores_trade_lfm.rda'))
-rm(econScores2)
+rm(econTradeScores)
+####
+
+####
+# econ index
+econTradeDepScores2 = lfmWrapper(
+	econList2,
+	c('ptaCnt', 'tradeDepSend') )
+save(econTradeDepScores2,
+	file=paste0(pathOut, 'econScores_tradeDepSend_lfm_v2.rda'))
+rm(econTradeDepScores2)
+
+econTradeScores2 = lfmWrapper(
+	econList2,
+	c('ptaCnt', 'trade') )
+save(econTradeScores2,
+	file=paste0(pathOut, 'econScores_trade_lfm_v2.rda'))
+rm(econTradeScores2)
 ####
 
 ####

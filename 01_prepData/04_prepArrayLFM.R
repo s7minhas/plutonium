@@ -3,9 +3,9 @@
 rm(list=ls())
 pth = paste0(here::here(), '/')
 source(paste0(pth, 'setup.R'))
+loadPkg('scales')
 mltrPth = paste0(pth, 'Funcs/mltrFuncs/')
 load(paste0(pathIn, 'frame.rda'))
-source(paste0(pth, 'setup.R'))
 ####
 
 ####
@@ -56,6 +56,19 @@ econList = lfmPrep(econYrs, econVars)
 ####
 
 ####
+# econ index
+# 1990-2020 (1990 start because of limitations in imf trade data)
+# run yearly in case of ame so can start at 1990
+
+# apply lfmPrep fn
+tmp = frame
+for(yr in econYrs){
+	for(v in econVars){
+		tmp[tmp$year==yr,v] = rescale(tmp[tmp$year==yr,v], to=c(0,1)) } }
+econList2 = lfmPrep(yrs=econYrs, vars=econVars, dyadYearData=tmp)
+####
+
+####
 # diplom array
 # 1980-2019 (idpt ends at 2019; atop ends at 2018 but 2019 values were copied over)
 diplomYrs = 1980:2019
@@ -76,7 +89,7 @@ icewsList = lfmPrep(icewsYrs, icewsVars)
 ####
 
 ###
-diplom + econ
+# diplom + econ
 super1List = lfmPrep(econYrs, c(econVars, diplomVars))
 ###
 
@@ -88,7 +101,8 @@ super2List = lfmPrep(icewsYrs, c(econVars, diplomVars, icewsVars))
 ####
 #
 save(
-  econList, diplomList, icewsList, super1List, super2List,
+  econList, econList2,
+	diplomList, icewsList, super1List, super2List,
   file=paste0(pathIn, 'arrList_lfm.rda')
 )
 ####
