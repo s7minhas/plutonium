@@ -77,11 +77,12 @@ plausViz = function(
   ggData$variable = factor(ggData$variable, levels=varLabs)
 
   # viz
-  ggPlaus = ggplot(ggData, aes(x=year, y=value, group=variable)) +
+  ggPlaus = ggplot(ggData, aes(x=year, y=value, group=variable, color=variable)) +
     geom_hline(yintercept=0, color='grey', linetype='dashed', size=1) +
     geom_line(size=.8) + geom_point(size=.7) +
     facet_grid(variable~dyadAbb, scales='free_y') +
     labs(color='', shape='') + ylab('') + xlab('') +
+    scale_color_brewer(palette='Set1') +
     theme_bw() +
     theme(
       axis.ticks=element_blank(),
