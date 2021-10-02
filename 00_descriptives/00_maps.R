@@ -12,7 +12,9 @@ loadPkg(pkgs)
 ####
 
 ####
-makeMapRegion = function(dat, var, legWidth=1, grad2=TRUE){
+makeMapRegion = function(
+  dat, var, legWidth=1,
+  grad2=TRUE, discScale=FALSE){
 
   # desig colVar
   dat$colVar = dat[,var]
@@ -27,7 +29,7 @@ makeMapRegion = function(dat, var, legWidth=1, grad2=TRUE){
     gg = gg + scale_fill_gradient2() }
 
   if(!grad2){
-    gg = gg + scale_fill_viridis(discrete=FALSE) }
+    gg = gg + scale_fill_viridis(discrete=discScale) }
 
   gg = gg +
     coord_equal(
@@ -40,6 +42,50 @@ makeMapRegion = function(dat, var, legWidth=1, grad2=TRUE){
       legend.title=element_blank()
     )
   return(gg) }
+
+cntryMaps = function(
+  cntry, yrBrks, var,
+  ddata=econData, cnameRef=2, rank=FALSE,
+  gradLogic=TRUE, discreteVar=FALSE){
+
+  # desig ref var
+  ddata$ref = ddata[,paste0('cname', cnameRef)]
+  ddata$oth = ddata[,paste0('cname',setdiff(1:2,cnameRef))]
+
+  # desig var for easier ref
+  ddata$val = ddata[,var]
+
+  # subset to cntry data
+  cntryData = ddata[ ddata$ref==cntry & ddata$oth!=cntry, ]
+
+  # make list of maps by year breaks
+  cntryEconMaps = lapply(yrBrks, function(yr){
+
+    # slice to relev year
+    slice = cntryData[cntryData$year==yr,]
+
+    # create ranked version
+    slice$rnkVal = rank(-slice$val)
+
+    # merge with map data
+    world$val = slice$val[match(world$cname, slice$oth)]
+    world$rnkVal = slice$rnkVal[match(world$cname, slice$oth)]
+
+    # choose version of var to plot
+    if(!rank){
+      world$toPlot = world[,'val']
+    } else { world$toPlot = world[,'rnkVal'] }
+
+    # make map
+    map = makeMapRegion(
+      world, 'toPlot',
+      grad2=gradLogic, discScale=discreteVar)
+
+    #
+    return(map) })
+
+  #
+  return(cntryEconMaps) }
 ####
 
 ####
@@ -78,33 +124,24 @@ econData = dyadData[,c(
 # subset to relev timeframe
 econData = econData[econData$year>=1990,]
 
-# subset to china 2 cases
-china = econData[
-  econData$cname2=='CHINA' & econData$cname1!='CHINA', ]
-####
+chMapsLFM = cntryMaps(
+  cname('China'),
+  c(1995, 2000, 2005, 2010, 2015, 2020),
+  'econScores_tradeDepSend_lfm_v2' )
 
-####
-# create yrs vector to iterate through
-yrs = sort(unique(china$year))
-yrs = c(1995, 2000, 2005, 2010, 2015, 2020)
+chMapsTradeDep = cntryMaps(
+  cname('China'),
+  c(1995, 2000, 2005, 2010, 2015, 2020),
+  'tradeDepSend', gradLogic=FALSE, discreteVar=FALSE)
 
-# make list of maps
-chinaEconMaps = lapply(yrs, function(yr){
-  # slice to relev year
-  slice = china[china$year==yr,]
+chMapsPTA = cntryMaps(
+  cname('China'),
+  c(1995, 2000, 2005, 2010, 2015, 2020),
+  'ptaCnt', gradLogic=FALSE, discreteVar=FALSE)
 
-  # merge with map data
-  slice$rnkVal = rank(-slice$econScores_tradeDepSend_lfm_v2)
-  world$val = slice$econScores_tradeDepSend_lfm_v2[
-    match(world$cname, slice$cname1)]
-  world$rnkVal = slice$rnkVal[
-    match(world$cname, slice$cname1)]
 
-  # make map
-  map = makeMapRegion(world, 'val', grad2=TRUE) + ggtitle(yr)
-
-  #
-  return(map) })
-
-chinaEconMaps[[length(chinaEconMaps)]]
+#
+chMapsLFM[[length(chMapsLFM)]]
+chMapsTradeDep[[length(chMapsTradeDep)]]
+chMapsPTA[[length(chMapsPTA)]]
 ####
