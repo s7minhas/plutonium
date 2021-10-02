@@ -70,8 +70,15 @@ econScores = lfmWrapper(
 	econList,
 	c('ptaCnt', 'tradeDepSend') )
 save(econScores,
-	file=paste0(pth, 'results/econScores_tradeDepSend_lfm.rda'))
+	file=paste0(pathOut, 'econScores_tradeDepSend_lfm.rda'))
 rm(econScores)
+
+econScores2 = lfmWrapper(
+	econList,
+	c('ptaCnt', 'trade') )
+save(econScores2,
+	file=paste0(pathOut, 'econScores_trade_lfm.rda'))
+rm(econScores2)
 ####
 
 ####
@@ -80,7 +87,7 @@ diplomScores = lfmWrapper(
 	diplomList,
 	c('allyTotal', 'agree') )
 save(diplomScores,
-	file=paste0(pth, 'results/diplomScores_agree_lfm.rda'))
+	file=paste0(pathOut, 'diplomScores_agree_lfm.rda'))
 rm(diplomScores)
 ####
 
@@ -90,6 +97,6 @@ icewsScores = lfmWrapper(
 	icewsList,
 	paste0(pasteVec(c('matl', 'verb'), c('Conf', 'Coop')), 'Gov') )
 save(icewsScores,
-	file=paste0(pth, 'results/icewsScores_gov_lfm.rda'))
+	file=paste0(pathOut, 'icewsScores_gov_lfm.rda'))
 rm(icewsScores)
 ####

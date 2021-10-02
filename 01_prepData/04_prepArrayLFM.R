@@ -2,9 +2,9 @@
 ####
 rm(list=ls())
 pth = paste0(here::here(), '/')
+source(paste0(pth, 'setup.R'))
 mltrPth = paste0(pth, 'Funcs/mltrFuncs/')
-dpth = paste0(pth, 'data/')
-load(paste0(dpth, 'frame.rda'))
+load(paste0(pathIn, 'frame.rda'))
 source(paste0(pth, 'setup.R'))
 ####
 
@@ -89,6 +89,6 @@ super2List = lfmPrep(icewsYrs, c(econVars, diplomVars, icewsVars))
 #
 save(
   econList, diplomList, icewsList, super1List, super2List,
-  file=paste0(dpth, 'arrList_lfm.rda')
+  file=paste0(pathIn, 'arrList_lfm.rda')
 )
 ####

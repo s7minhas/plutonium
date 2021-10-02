@@ -4,15 +4,14 @@ pth = paste0(here::here(), '/')
 source(paste0(pth, 'setup.R'))
 
 # load data
-dpth = paste0(pth, 'data/')
-load(paste0(dpth, 'frame.rda'))
+load(paste0(pathIn, 'frame.rda'))
 frame = frame[,1:4]
 ####
 
 ####
 # fn to extract scores from mltr
 processLFM = function(
-	yrs, fname, fpth=paste0(pth, 'results/') ){
+	yrs, fname, fpth=paste0(pathOut) ){
 
 	# load object and reassign
 	# its name to mod
@@ -62,6 +61,11 @@ econScoresTradeDep = processLFM(
 	fname='econScores_tradeDepSend_lfm.rda')
 
 #
+econScoresTrade = processLFM(
+	yrs=1990:2020,
+	fname='econScores_trade_lfm.rda')
+
+#
 icewsScoresGov = processLFM(
 	yrs=1995:2020,
 	fname='icewsScores_gov_lfm.rda')
@@ -72,6 +76,7 @@ icewsScoresGov = processLFM(
 toMerge = list(
 	diplomScoresAgree,
 	econScoresTradeDep,
+	econScoresTrade,
 	icewsScoresGov)
 
 # merge
@@ -85,5 +90,5 @@ for(df in toMerge){
 #
 lfmScores = frame
 save(lfmScores,
-	file=paste0(pth, 'results/lfmScores.rda') )
+	file=paste0(pathOut, 'lfmScores.rda') )
 ####

@@ -2,9 +2,8 @@
 ####
 rm(list=ls())
 pth = paste0(here::here(), '/')
-dpth = paste0(pth, 'data/')
-load(paste0(dpth, 'samp.rda'))
 source(paste0(pth, 'setup.R'))
+load(paste0(pathIn, 'samp.rda'))
 ####
 
 ####
@@ -30,7 +29,7 @@ fileShorts = c(
 # iterate through files and merge
 # into frame
 for(f in fileShorts){
-	load(paste0(dpth, f, '.rda'))
+	load(paste0(pathIn, f, '.rda'))
 	assign('toMerge', get(f)) ; rm(f)
 
 	# merge all non-id vars from dataset
@@ -132,13 +131,13 @@ for(t in yrs){
 # which will essentially make it so that some dyads dont
 # contribute to the likelihood, NAs in these vars arise
 # mostly because a country was not in the UN, imputation
-# would not be a good option for this types of NAs
+# would not be a good option for this types of NA
 frame$IdealPointDistance[frame$year<2020 & is.na(frame$IdealPointDistance)] = 0
 frame$agree[frame$year<2020 & is.na(frame$agree)] = 0
 ####
 
 ####
 save(
-	frame, file=paste0(dpth, 'frame.rda')
+	frame, file=paste0(pathIn, 'frame.rda')
 )
 ####

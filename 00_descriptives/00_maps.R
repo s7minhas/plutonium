@@ -69,7 +69,7 @@ econData = dyadData[,c(
   'cname1','cname2','year',
   'ptaCnt', 'pta',
   'trade', 'tradeDepSend',
-  'econScores_tradeDepSend_lfm' 
+  'econScores_tradeDepSend_lfm'
   )]
 
 # subset to relev timeframe
