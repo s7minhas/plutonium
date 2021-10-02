@@ -69,7 +69,10 @@ econData = dyadData[,c(
   'cname1','cname2','year',
   'ptaCnt', 'pta',
   'trade', 'tradeDepSend',
-  'econScores_tradeDepSend_lfm_v2'
+  'econScores_tradeDepSend_lfm',
+  'econScores_tradeDepSend_lfm_v2',
+  'econScores_trade_lfm',
+  'econScores_trade_lfm_v2'
   )]
 
 # subset to relev timeframe
@@ -103,5 +106,5 @@ chinaEconMaps = lapply(yrs, function(yr){
   #
   return(map) })
 
-chinaEconMaps
+chinaEconMaps[[length(chinaEconMaps)]]
 ####
