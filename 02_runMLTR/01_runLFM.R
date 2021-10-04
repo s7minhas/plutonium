@@ -19,6 +19,7 @@ library(foreach)
 lfmWrapper = function(
 	arrayList,
 	yVars=NULL,
+	allVars=FALSE,
 	iters=5000,
 	burn=1000,
 	dens=10,
@@ -26,7 +27,6 @@ lfmWrapper = function(
 	seed=6886,
 	cores=15
 ){
-
 	# par setup
 	cl = makeCluster(cores)
 	registerDoParallel(cl)
@@ -37,7 +37,7 @@ lfmWrapper = function(
 		.packages=c('amen')) %dopar% {
 
 			# extract relev yvars
-			if(is.null(yVars)){ yVars = dimnames(arr)[[3]] }
+			if(allVars){ yVars = dimnames(arr)[[3]] }
 			arr = arr[,,yVars]
 
 			# if multi layers convert into format
@@ -127,23 +127,23 @@ rm(
 ####
 # trade indices
 # time layer nets
-tradeL3_R2 = lfmWrapper(tradeTimeL3List, netDims=2)
-tradeL5_R2 = lfmWrapper(tradeTimeL5List, netDims=2)
-tradeDepL3_R2 = lfmWrapper(tradeDepTimeL3List, netDims=2)
-tradeDepL5_R2 = lfmWrapper(tradeDepTimeL5List, netDims=2)
-tradeRawL3_R2 = lfmWrapper(tradeRawTimeL3List, netDims=2)
-tradeRawL5_R2 = lfmWrapper(tradeRawTimeL5List, netDims=2)
-tradeDepRawL3_R2 = lfmWrapper(tradeDepRawTimeL3List, netDims=2)
-tradeDepRawL5_R2 = lfmWrapper(tradeDepRawTimeL5List, netDims=2)
+tradeL3_R2 = lfmWrapper(tradeTimeL3List, allVars=T, netDims=2)
+tradeL5_R2 = lfmWrapper(tradeTimeL5List, allVars=T, netDims=2)
+tradeDepL3_R2 = lfmWrapper(tradeDepTimeL3List, allVars=T, netDims=2)
+tradeDepL5_R2 = lfmWrapper(tradeDepTimeL5List, allVars=T, netDims=2)
+tradeRawL3_R2 = lfmWrapper(tradeRawTimeL3List, allVars=T, netDims=2)
+tradeRawL5_R2 = lfmWrapper(tradeRawTimeL5List, allVars=T, netDims=2)
+tradeDepRawL3_R2 = lfmWrapper(tradeDepRawTimeL3List, allVars=T, netDims=2)
+tradeDepRawL5_R2 = lfmWrapper(tradeDepRawTimeL5List, allVars=T, netDims=2)
 
-tradeL3_R8 = lfmWrapper(tradeTimeL3List, netDims=8)
-tradeL5_R8 = lfmWrapper(tradeTimeL5List, netDims=8)
-tradeDepL3_R8 = lfmWrapper(tradeDepTimeL3List, netDims=8)
-tradeDepL5_R8 = lfmWrapper(tradeDepTimeL5List, netDims=8)
-tradeRawL3_R8 = lfmWrapper(tradeRawTimeL3List, netDims=8)
-tradeRawL5_R8 = lfmWrapper(tradeRawTimeL5List, netDims=8)
-tradeDepRawL3_R8 = lfmWrapper(tradeDepRawTimeL3List, netDims=8)
-tradeDepRawL5_R8 = lfmWrapper(tradeDepRawTimeL5List, netDims=8)
+tradeL3_R8 = lfmWrapper(tradeTimeL3List, allVars=T, netDims=8)
+tradeL5_R8 = lfmWrapper(tradeTimeL5List, allVars=T, netDims=8)
+tradeDepL3_R8 = lfmWrapper(tradeDepTimeL3List, allVars=T, netDims=8, seed=1234)
+tradeDepL5_R8 = lfmWrapper(tradeDepTimeL5List, allVars=T, netDims=8)
+tradeRawL3_R8 = lfmWrapper(tradeRawTimeL3List, allVars=T, netDims=8)
+tradeRawL5_R8 = lfmWrapper(tradeRawTimeL5List, allVars=T, netDims=8)
+tradeDepRawL3_R8 = lfmWrapper(tradeDepRawTimeL3List, allVars=T, netDims=8, seed=1234)
+tradeDepRawL5_R8 = lfmWrapper(tradeDepRawTimeL5List, allVars=T, netDims=8, seed=1234)
 
 # save
 save(

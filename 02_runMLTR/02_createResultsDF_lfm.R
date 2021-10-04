@@ -11,7 +11,7 @@ frame = frame[,1:4]
 ####
 # fn to extract scores from mltr
 processLFM = function(
-	yrs, fname, obj=NULL, fpth=paste0(pathOut) ){
+	yrs, fname, obj=NULL, varName=NULL, fpth=pathOut ){
 
 	# load object and reassign
 	# its name to mod
@@ -40,7 +40,9 @@ processLFM = function(
 	means = do.call('rbind', means)
 
 	# replace varname
-	names(means)[3] = gsub('.rda','',fname)
+	if(is.null(varName)){
+		names(means)[3] = gsub('.rda','',fname)
+	} else { names(means)[3] = varName }
 
 	# create id var
 	means$id = with(means,
@@ -68,79 +70,79 @@ econScoresTrade = processLFM(
 
 # single layer trade lfms
 trade_R2 = processLFM(
-	yrs=1990:2020,
-	fname='trade_singleLayer_lfms.rda', obj='trade_R2')
+	yrs=1990:2020, fname='trade_singleLayer_lfms.rda',
+	obj='trade_R2', varName='trade_R2_lfm')
 tradeDep_R2 = processLFM(
-	yrs=1990:2020,
-	fname='trade_singleLayer_lfms.rda', obj='tradeDep_R2')
+	yrs=1990:2020, fname='trade_singleLayer_lfms.rda',
+	obj='tradeDep_R2', varName='tradeDep_R2_lfm')
 tradeRaw_R2 = processLFM(
-	yrs=1990:2020,
-	fname='trade_singleLayer_lfms.rda', obj='tradeRaw_R2')
+	yrs=1990:2020, fname='trade_singleLayer_lfms.rda',
+	obj='tradeRaw_R2', varName='tradeRaw_R2_lfm')
 tradeDepRaw_R2 = processLFM(
-	yrs=1990:2020,
-	fname='trade_singleLayer_lfms.rda', obj='tradeDepRaw_R2')
+	yrs=1990:2020, fname='trade_singleLayer_lfms.rda',
+	obj='tradeDepRaw_R2', varName='tradeDepRaw_R2_lfm')
 trade_R8 = processLFM(
-	yrs=1990:2020,
-	fname='trade_singleLayer_lfms.rda', obj='trade_R8')
+	yrs=1990:2020, fname='trade_singleLayer_lfms.rda',
+	obj='trade_R8', varName='trade_R8_lfm')
 tradeDep_R8 = processLFM(
-	yrs=1990:2020,
-	fname='trade_singleLayer_lfms.rda', obj='tradeDep_R8')
+	yrs=1990:2020, fname='trade_singleLayer_lfms.rda',
+	obj='tradeDep_R8', varName='tradeDep_R8_lfm')
 tradeRaw_R8 = processLFM(
-	yrs=1990:2020,
-	fname='trade_singleLayer_lfms.rda', obj='tradeRaw_R8')
+	yrs=1990:2020, fname='trade_singleLayer_lfms.rda',
+	obj='tradeRaw_R8', varName='tradeRaw_R8_lfm')
 tradeDepRaw_R8 = processLFM(
-	yrs=1990:2020,
-	fname='trade_singleLayer_lfms.rda', obj='tradeDepRaw_R8')
+	yrs=1990:2020, fname='trade_singleLayer_lfms.rda',
+	obj='tradeDepRaw_R8', varName='tradeDepRaw_R8_lfm')
 
 # time layer trade lfms
 tradeL3_R2 = processLFM(
-	yrs=1990:2020,
-	fname='trade_timeLayer_lfms.rda', obj='tradeL3_R2')
+	yrs=1990:2020, fname='trade_timeLayer_lfms.rda',
+	obj='tradeL3_R2', varName='trade_L3_R2_lfm')
 tradeL5_R2 = processLFM(
-	yrs=1990:2020,
-	fname='trade_timeLayer_lfms.rda', obj='tradeL5_R2')
+	yrs=1990:2020, fname='trade_timeLayer_lfms.rda',
+	obj='tradeL5_R2', varName='trade_L5_R2_lfm')
 tradeDepL3_R2 = processLFM(
-	yrs=1990:2020,
-	fname='trade_timeLayer_lfms.rda', obj='tradeDepL3_R2')
+	yrs=1990:2020, fname='trade_timeLayer_lfms.rda',
+	obj='tradeDepL3_R2', varName='tradeDep_L3_R2_lfm')
 tradeDepL5_R2 = processLFM(
-	yrs=1990:2020,
-	fname='trade_timeLayer_lfms.rda', obj='tradeDepL5_R2')
+	yrs=1990:2020, fname='trade_timeLayer_lfms.rda',
+	obj='tradeDepL5_R2', varName='tradeDep_L5_R2_lfm')
 tradeRawL3_R2 = processLFM(
-	yrs=1990:2020,
-	fname='trade_timeLayer_lfms.rda', obj='tradeRawL3_R2')
+	yrs=1990:2020, fname='trade_timeLayer_lfms.rda',
+	obj='tradeRawL3_R2', varName='tradeRaw_L3_R2_lfm')
 tradeRawL5_R2 = processLFM(
-	yrs=1990:2020,
-	fname='trade_timeLayer_lfms.rda', obj='tradeRawL5_R2')
+	yrs=1990:2020, fname='trade_timeLayer_lfms.rda',
+	obj='tradeRawL5_R2', varName='tradeRaw_L5_R2_lfm')
 tradeDepRawL3_R2 = processLFM(
-	yrs=1990:2020,
-	fname='trade_timeLayer_lfms.rda', obj='tradeDepRawL3_R2')
+	yrs=1990:2020, fname='trade_timeLayer_lfms.rda',
+	obj='tradeDepRawL3_R2', varName='tradeDepRaw_L3_R2_lfm')
 tradeDepRawL5_R2 = processLFM(
-	yrs=1990:2020,
-	fname='trade_timeLayer_lfms.rda', obj='tradeDepRawL5_R2')
+	yrs=1990:2020, fname='trade_timeLayer_lfms.rda',
+	obj='tradeDepRawL5_R2', varName='tradeDepRaw_L5_R2_lfm')
 tradeL3_R8 = processLFM(
-	yrs=1990:2020,
-	fname='trade_timeLayer_lfms.rda', obj='tradeL3_R8')
+	yrs=1990:2020, fname='trade_timeLayer_lfms.rda',
+	obj='tradeL3_R8', varName='trade_L3_R8_lfm')
 tradeL5_R8 = processLFM(
-	yrs=1990:2020,
-	fname='trade_timeLayer_lfms.rda', obj='tradeL5_R8')
+	yrs=1990:2020, fname='trade_timeLayer_lfms.rda',
+	obj='tradeL5_R8', varName='trade_L5_R8_lfm')
 tradeDepL3_R8 = processLFM(
-	yrs=1990:2020,
-	fname='trade_timeLayer_lfms.rda', obj='tradeDepL3_R8')
+	yrs=1990:2020, fname='trade_timeLayer_lfms.rda',
+	obj='tradeDepL3_R8', varName='tradeDep_L3_R8_lfm')
 tradeDepL5_R8 = processLFM(
-	yrs=1990:2020,
-	fname='trade_timeLayer_lfms.rda', obj='tradeDepL5_R8')
+	yrs=1990:2020, fname='trade_timeLayer_lfms.rda',
+	obj='tradeDepL5_R8', varName='tradeDep_L5_R8_lfm')
 tradeRawL3_R8 = processLFM(
-	yrs=1990:2020,
-	fname='trade_timeLayer_lfms.rda', obj='tradeRawL3_R8')
+	yrs=1990:2020, fname='trade_timeLayer_lfms.rda',
+	obj='tradeRawL3_R8', varName='tradeRaw_L3_R8_lfm')
 tradeRawL5_R8 = processLFM(
-	yrs=1990:2020,
-	fname='trade_timeLayer_lfms.rda', obj='tradeRawL5_R8')
+	yrs=1990:2020, fname='trade_timeLayer_lfms.rda',
+	obj='tradeRawL5_R8', varName='tradeRaw_L5_R8_lfm')
 tradeDepRawL3_R8 = processLFM(
-	yrs=1990:2020,
-	fname='trade_timeLayer_lfms.rda', obj='tradeDepRawL3_R8')
+	yrs=1990:2020, fname='trade_timeLayer_lfms.rda',
+	obj='tradeDepRawL3_R8', varName='tradeDepRaw_L3_R8_lfm')
 tradeDepRawL5_R8 = processLFM(
-	yrs=1990:2020,
-	fname='trade_timeLayer_lfms.rda', obj='tradeDepRawL5_R8')
+	yrs=1990:2020, fname='trade_timeLayer_lfms.rda',
+	obj='tradeDepRawL5_R8', varName='tradeDepRaw_L5_R8_lfm')
 
 #
 icewsScoresGov = processLFM(
@@ -159,7 +161,7 @@ toMerge = list(
 	tradeL3_R2, tradeL5_R2, tradeDepL3_R2, tradeDepL5_R2,
 	tradeRawL3_R2, tradeRawL5_R2, tradeDepRawL3_R2, tradeDepRawL5_R2,
 	tradeL3_R8, tradeL5_R8, tradeDepL3_R8, tradeDepL5_R8,
-	tradeRawL3_R8, tradeRawL5_R8, tradeDepRawL3_R8, tradeDepRawL5_R8,	
+	tradeRawL3_R8, tradeRawL5_R8, tradeDepRawL3_R8, tradeDepRawL5_R8,
 	icewsScoresGov)
 
 # merge

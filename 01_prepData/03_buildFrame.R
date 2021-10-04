@@ -115,8 +115,8 @@ frame$tradeDepSend[frame$year<1990] = NA
 
 # logged version of trade
 # skip logging since we're standardizing,
-# logging and stdizing compresses the scale
-# too much
+# logging and stdizing seems to compress
+# diffs too much
 # frame$trade = log(frame$trade + 1)
 ####
 

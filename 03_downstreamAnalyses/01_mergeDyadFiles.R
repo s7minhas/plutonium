@@ -35,6 +35,13 @@ for(fname in files){
 ####
 
 ####
+# add ccodes and dyad var
+frame$ccode1 = countrycode(frame$cname1, "country.name", "cown")
+frame$ccode2 = countrycode(frame$cname2, "country.name", "cown")
+frame$dyad = paste(frame$ccode1, frame$ccode2, sep ="_")
+####
+
+####
 # save
 dyadData = frame
 save(dyadData, file=paste0(pathIn, 'dyadData.rda'))
