@@ -36,66 +36,94 @@ lfmWrapper = function(
 		arr = arrayList,
 		.packages=c('amen')) %dopar% {
 
-			# extract relev yvars and
-			# convert into format for ame_repL
+			# extract relev yvars
 			arr = arr[,,yVars]
-			yL = lapply(1:dim(arr)[3], function(pp){
-				return(arr[,,pp]) })
 
-			# run
-			out = ame_repL(
-					Y = yL,
-					rvar=FALSE, cvar=FALSE,
-					dcor=FALSE, nvar=FALSE,
-					R=2, model='nrm', intercept=FALSE,
-					symmetric=FALSE,
-					nscan=iters,
-					burn=burn, odens=dens, seed=seed,
-					plot=FALSE, print=FALSE, gof=FALSE
-			)
+			# if multi layers convert into format
+			# for ame_repL and run
+			if(length(dim(arr))>2){
+
+				# convert dv into ame_repL format
+				yL = lapply(1:dim(arr)[3], function(pp){
+					return(arr[,,pp]) })
+
+				# run
+				out = ame_repL(
+						Y = yL,
+						rvar=FALSE, cvar=FALSE,
+						dcor=FALSE, nvar=FALSE,
+						R=2, model='nrm', intercept=FALSE,
+						symmetric=FALSE,
+						nscan=iters,
+						burn=burn, odens=dens, seed=seed,
+						plot=FALSE, print=FALSE, gof=FALSE ) }
+
+			# if single layer then proceed with regular ame
+			if(length(dim(arr))==2){
+
+				# run
+				out = ame(
+						Y = arr,
+						rvar=FALSE, cvar=FALSE,
+						dcor=FALSE, nvar=FALSE,
+						R=2, model='nrm', intercept=FALSE,
+						symmetric=FALSE,
+						nscan=iters,
+						burn=burn, odens=dens, seed=seed,
+						plot=FALSE, print=FALSE, gof=FALSE ) } }
 
 			# extract relev output
-			return( list(U=out$U, V=out$V, UVPM=out$UVPM) )
-		}
+			return( list(U=out$U, V=out$V, UVPM=out$UVPM) ) }
 	stopCluster(cl)
 
 	#
-	return(ameOut)
-}
+	return(ameOut) }
 ####
 
-####
-# econ index
-econTradeDepScores = lfmWrapper(
-	econList,
-	c('ptaCnt', 'tradeDepSend') )
-save(econTradeDepScores,
-	file=paste0(pathOut, 'econScores_tradeDepSend_lfm.rda'))
-rm(econTradeDepScores)
+# ####
+# # econ index
+# econTradeDepScores = lfmWrapper(
+# 	econList,
+# 	c('ptaCnt', 'tradeDepSend') )
+# save(econTradeDepScores,
+# 	file=paste0(pathOut, 'econScores_tradeDepSend_lfm.rda'))
+# rm(econTradeDepScores)
+#
+# econTradeScores = lfmWrapper(
+# 	econList,
+# 	c('ptaCnt', 'trade') )
+# save(econTradeScores,
+# 	file=paste0(pathOut, 'econScores_trade_lfm.rda'))
+# rm(econTradeScores)
+# ####
 
-econTradeScores = lfmWrapper(
-	econList,
-	c('ptaCnt', 'trade') )
-save(econTradeScores,
-	file=paste0(pathOut, 'econScores_trade_lfm.rda'))
-rm(econTradeScores)
 ####
+# trade indices
+# tradeList,
+# tradeTimeL3List, tradeTimeL5List,
+# tradeRawTimeL3List, tradeRawTimeL5List,
+# tradeDepTimeL3List, tradeDepTimeL5List,
+# tradeDepRawTimeL3List, tradeDepRawTimeL5List,
+arrayList = tradeList
+yVars = 'trade'
+iters=5000
+burn=1000
+dens=10
+R=2
+seed=6886
+cores=15
 
-####
-# econ index
-econTradeDepScores2 = lfmWrapper(
-	econList2,
-	c('ptaCnt', 'tradeDepSend') )
-save(econTradeDepScores2,
-	file=paste0(pathOut, 'econScores_tradeDepSend_lfm_v2.rda'))
-rm(econTradeDepScores2)
+arr = arrayList[[1]]
 
-econTradeScores2 = lfmWrapper(
-	econList2,
-	c('ptaCnt', 'trade') )
-save(econTradeScores2,
-	file=paste0(pathOut, 'econScores_trade_lfm_v2.rda'))
-rm(econTradeScores2)
+dim(arr)
+
+if(length(dim(arr))>2)
+
+# extract relev yvars and
+# convert into format for ame_repL
+arr = arr[,,yVars]
+yL = lapply(1:dim(arr)[3], function(pp){
+	return(arr[,,pp]) })
 ####
 
 ####
