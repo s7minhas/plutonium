@@ -3,7 +3,6 @@
 rm(list=ls())
 pth = paste0(here::here(), '/')
 source(paste0(pth, 'setup.R'))
-loadPkg('scales')
 mltrPth = paste0(pth, 'Funcs/mltrFuncs/')
 load(paste0(pathIn, 'frame.rda'))
 ####
@@ -35,10 +34,52 @@ lfmPrep = function(
 		sampLong = sampLong[sampLong$year==tt,]
 		arr = acast(
 			sampLong,
-			cname1 ~ cname2 ~ var, value.var='val'
-		)
-		return(arr)
-	})
+			cname1 ~ cname2 ~ var, value.var='val')
+		return(arr) })
+	names(arrList) = yrs
+
+	#
+	return(arrList) }
+
+# fn to prep data in a time series format for lfm
+lfmTimePrep = function(
+	var, lags, dyadYearData=frame, yrs=1990:2020, idVars=ids
+){
+	# subset to relevant pd and ftrs
+	samp = dyadYearData[
+		dyadYearData$year %in% yrs,c(idVars, var)]
+
+	# create grouped time version
+	yrBrks = lapply(yrs, function(yr){
+		yrCut = (yr-(lags-1)):yr
+		return( yrCut[yrCut %in% yrs] ) })
+
+	# divide up samp into buckets
+	sampList = lapply(yrBrks, function(yrBrk){
+
+		# only keep obs in relev years
+		slice = samp[samp$year %in% yrBrk,]
+
+		# define actors for relev year
+		actors = unique( c(
+				slice$cname1[slice$year %in% max(yrBrk)],
+				slice$cname1[slice$year %in% max(yrBrk)]
+			) )
+
+		# subset slice by relev actors
+		slice = slice[
+			slice$cname1 %in% actors & slice$cname2 %in% actors,]
+
+		#
+		return(slice) })
+
+	# cast into arrays separately for each year
+	arrList = lapply(sampList, function(slice){
+		arr = acast(
+			slice,
+			cname1~cname2~year, value.var=var )
+			return(arr) })
+	names(arrList) = yrs
 
 	#
 	return(arrList) }
@@ -69,35 +110,23 @@ tradeList = lfmPrep(tradeYrs, tradeVars)
 ####
 # econ index - trade only
 # layers here will be time, so we will use lagged versions of
-# trade with current versions of trade
-# 1990-2020 (1990 start because of limitations in imf trade data)
-tradeYrs = 1990:2020
-tradeVar = 'trade'
+# our trade operationalizations with current versions of trade
 
-# apply lfmPrep fn
-yrs = 1990:2020
-var = tradeVar
-dyadYearData=frame
-idVars=ids
-lags = 3
+# apply lfmTimePrep fn to standardized trade
+tradeTimeL3List = lfmTimePrep('trade', 3)
+tradeTimeL5List = lfmTimePrep('trade', 5)
 
-# subset to relevant pd and ftrs
-samp = dyadYearData[
-	dyadYearData$year %in% yrs,c(idVars, var)]
+# apply lfmTimePrep fn to raw trade
+tradeRawTimeL3List = lfmTimePrep('tradeRaw', 3)
+tradeRawTimeL5List = lfmTimePrep('tradeRaw', 5)
 
-head(samp)
+# apply lfmTimePrep fn to standardized trade dep
+tradeDepTimeL3List = lfmTimePrep('tradeDepSend', 3)
+tradeDepTimeL5List = lfmTimePrep('tradeDepSend', 5)
 
-# cast into arrays separately for each year
-arrList = lapply(yrs, function(tt){
-	slice = samp[samp$year==tt,]
-	mat = acast(
-		slice,
-		cname1~cname2, value.var=var )
-		return(arr) })
-
-lapply(arrList, dim)
-
-tradeList = lfmPrep(tradeYrs, tradeVars)
+# apply lfmTimePrep fn to raw trade
+tradeDepRawTimeL3List = lfmTimePrep('tradeDepSendRaw', 3)
+tradeDepRawTimeL5List = lfmTimePrep('tradeDepSendRaw', 5)
 ####
 
 ####
@@ -133,7 +162,11 @@ super2List = lfmPrep(icewsYrs, c(econVars, diplomVars, icewsVars))
 ####
 #
 save(
-  econList, econListRaw, econList2,
+  econList, tradeList,
+	tradeTimeL3List, tradeTimeL5List,
+	tradeRawTimeL3List, tradeRawTimeL5List,
+	tradeDepTimeL3List, tradeDepTimeL5List,
+	tradeDepRawTimeL3List, tradeDepRawTimeL5List,
 	diplomList, icewsList, super1List, super2List,
   file=paste0(pathIn, 'arrList_lfm.rda')
 )
