@@ -48,77 +48,6 @@ dyadData = dyadData[dyadData$year>=1990,]
 ####
 
 ####
-# stdz lfm measures by year
-vars = c(
-  'trade_R2_lfm',
-  'trade_R8_lfm',
-  'trade_L3_R2_lfm',
-  'trade_L5_R2_lfm',
-  'trade_L3_R8_lfm',
-  'trade_L5_R8_lfm',
-  'tradeDep_R2_lfm',
-  'tradeDep_R8_lfm',
-  'tradeDep_L3_R2_lfm',
-  'tradeDep_L5_R2_lfm',
-  'tradeDep_L3_R8_lfm',
-  'tradeDep_L5_R8_lfm'
-  )
-
-toAdd = matrix(NA, nrow=nrow(dyadData), ncol=length(vars), dimnames=list(NULL, paste0('Z',vars)))
-
-dyadData = cbind(dyadData, toAdd)
-
-yrs = unique(dyadData$year)
-for(v in vars){
-  for(yr in yrs){
-    dyadData[dyadData$year==yr,paste0('Z',v)] = stdz(dyadData[dyadData$year==yr,v])
-  }
-}
-####
-
-####
-# correl check with next year of data
-tmp = dyadData
-tmp$year = tmp$year - 1
-tmp$id = with(tmp, paste(cname1, cname2, year, sep='_'))
-dyadData$trade_nextYr = tmp$trade[match(dyadData$id, tmp$id)]
-dyadData$tradeDepSend_nextYr = tmp$tradeDepSend[match(dyadData$id, tmp$id)]
-vars = c(
-  'trade_nextYr',
-  'trade',
-  'trade_R2_lfm',
-  'trade_R8_lfm',
-  'trade_L3_R2_lfm',
-  'trade_L5_R2_lfm',
-  'trade_L3_R8_lfm',
-  'trade_L5_R8_lfm',
-  'Ztrade_R2_lfm',
-  'Ztrade_R8_lfm',
-  'Ztrade_L3_R2_lfm',
-  'Ztrade_L5_R2_lfm',
-  'Ztrade_L3_R8_lfm',
-  'Ztrade_L5_R8_lfm' )
-cbind(sort(cor(dyadData[,vars], use='pairwise.complete.obs')[-1,-(2:length(vars))], decreasing=TRUE))
-
-vars = c(
-  'tradeDepSend_nextYr',
-  'tradeDepSend',
-  'tradeDep_R2_lfm',
-  'tradeDep_R8_lfm',
-  'tradeDep_L3_R2_lfm',
-  'tradeDep_L5_R2_lfm',
-  'tradeDep_L3_R8_lfm',
-  'tradeDep_L5_R8_lfm',
-  'ZtradeDep_R2_lfm',
-  'ZtradeDep_R8_lfm',
-  'ZtradeDep_L3_R2_lfm',
-  'ZtradeDep_L5_R2_lfm',
-  'ZtradeDep_L3_R8_lfm',
-  'ZtradeDep_L5_R8_lfm' )
-cbind(sort(cor(dyadData[,vars], use='pairwise.complete.obs')[-1,-(2:length(vars))], decreasing=TRUE))
-####
-
-####
 # plaus viz fn
 plausViz = function(
   dyadIds, dyadLabs,
@@ -177,7 +106,7 @@ plausViz = function(
 
 ####
 # test out results with standardized trade
-plausViz(
+zTradeViz = plausViz(
   dyadIds=c('2_200', '2_365'),
   dyadLabs=c('USA-UK', 'USA-Russia'),
   affVar = c(
@@ -190,27 +119,13 @@ plausViz(
     'lfm 1yr',
     'lfm 3yr',
     'lfm 5yr',
-    'trade stdz')
-   )
-
-plausViz(
-  dyadIds=c('2_200', '2_365'),
-  dyadLabs=c('USA-UK', 'USA-Russia'),
-  affVar = c(
-    'Ztrade_R8_lfm',
-    'Ztrade_L3_R8_lfm',
-    'Ztrade_L5_R8_lfm'
-     ),
-  compVars = c('trade'),
-  varLabs = c(
-    'lfm 1yr',
-    'lfm 3yr',
-    'lfm 5yr',
-    'trade stdz')
-   )
+    'trade stdz') )
+ggsave(zTradeViz,
+  width=8, height=6,
+  file=paste0(pathGraphics, 'zTradeVizPlaus.pdf'))
 
 # test out results with standardized trade dependence
-plausViz(
+zTradeDepViz = plausViz(
   dyadIds=c('2_200', '2_365'),
   dyadLabs=c('USA-UK', 'USA-Russia'),
   affVar = c(
@@ -223,25 +138,13 @@ plausViz(
     'lfm 1yr',
     'lfm 3yr',
     'lfm 5yr',
-    'trade dep stdz')
-   )
+    'trade dep stdz') )
+ggsave(zTradeDepViz,
+  width=8, height=6,
+  file=paste0(pathGraphics, 'zTradeDepVizPlaus.pdf'))
+####
 
-plausViz(
-  dyadIds=c('2_200', '2_365'),
-  dyadLabs=c('USA-UK', 'USA-Russia'),
-  affVar = c(
-    'ZtradeDep_R8_lfm',
-    'ZtradeDep_L3_R8_lfm',
-    'ZtradeDep_L5_R8_lfm'
-     ),
-  compVars = c('tradeDepSend'),
-  varLabs = c(
-    'lfm 1yr',
-    'lfm 3yr',
-    'lfm 5yr',
-    'trade dep stdz')
-   )
-
+####
 # dyads 1
 plausViz(
   dyadIds=c('220_255', '2_200', '710_365'),
