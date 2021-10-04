@@ -19,7 +19,6 @@ library(foreach)
 lfmWrapper = function(
 	arrayList,
 	yVars=NULL,
-	allLayers=FALSE,
 	iters=5000,
 	burn=1000,
 	dens=10,
@@ -38,7 +37,7 @@ lfmWrapper = function(
 		.packages=c('amen')) %dopar% {
 
 			# extract relev yvars
-			if(allLayers){ yVars = dimnames(arr)[[3]] }
+			if(is.null(yVars)){ yVars = dimnames(arr)[[3]] }
 			arr = arr[,,yVars]
 
 			# if multi layers convert into format
@@ -82,22 +81,22 @@ lfmWrapper = function(
 	return(ameOut) }
 ####
 
-# ####
-# # econ index
-# econTradeDepScores = lfmWrapper(
-# 	econList,
-# 	c('ptaCnt', 'tradeDepSend') )
-# save(econTradeDepScores,
-# 	file=paste0(pathOut, 'econScores_tradeDepSend_lfm.rda'))
-# rm(econTradeDepScores)
-#
-# econTradeScores = lfmWrapper(
-# 	econList,
-# 	c('ptaCnt', 'trade') )
-# save(econTradeScores,
-# 	file=paste0(pathOut, 'econScores_trade_lfm.rda'))
-# rm(econTradeScores)
-# ####
+####
+# econ index
+econTradeDepScores = lfmWrapper(
+	econList,
+	c('ptaCnt', 'tradeDepSend') )
+save(econTradeDepScores,
+	file=paste0(pathOut, 'econScores_tradeDepSend_lfm.rda'))
+rm(econTradeDepScores)
+
+econTradeScores = lfmWrapper(
+	econList,
+	c('ptaCnt', 'trade') )
+save(econTradeScores,
+	file=paste0(pathOut, 'econScores_trade_lfm.rda'))
+rm(econTradeScores)
+####
 
 ####
 # trade indices
@@ -116,7 +115,7 @@ tradeDepRaw_R8 = lfmWrapper(tradeList, 'tradeDepSendRaw', netDims=8 )
 save(
 	trade_R2, tradeDep_R2, tradeRaw_R2, tradeDepRaw_R2,
 	trade_R8, tradeDep_R8, tradeRaw_R8, tradeDepRaw_R8,
-	file='trade_singleLayer_lfms.rda'
+	file=paste0(pathOut, 'trade_singleLayer_lfms.rda')
 )
 
 # cleanup
@@ -126,10 +125,8 @@ rm(
 ####
 
 ####
-# tradeTimeL3List, tradeTimeL5List,
-# tradeRawTimeL3List, tradeRawTimeL5List,
-# tradeDepTimeL3List, tradeDepTimeL5List,
-# tradeDepRawTimeL3List, tradeDepRawTimeL5List,
+# trade indices
+# time layer nets
 tradeL3_R2 = lfmWrapper(tradeTimeL3List, netDims=2)
 tradeL5_R2 = lfmWrapper(tradeTimeL5List, netDims=2)
 tradeDepL3_R2 = lfmWrapper(tradeDepTimeL3List, netDims=2)
@@ -154,7 +151,7 @@ save(
 	tradeRawL3_R2, tradeRawL5_R2, tradeDepRawL3_R2, tradeDepRawL5_R2,
 	tradeL3_R8, tradeL5_R8, tradeDepL3_R8, tradeDepL5_R8,
 	tradeRawL3_R8, tradeRawL5_R8, tradeDepRawL3_R8, tradeDepRawL5_R8,
-	file='trade_timeLayer_lfms.rda'
+	file=paste0(pathOut, 'trade_timeLayer_lfms.rda')
 )
 
 # cleanup
@@ -165,6 +162,8 @@ rm(
 	tradeRawL3_R8, tradeRawL5_R8, tradeDepRawL3_R8, tradeDepRawL5_R8
 )
 ####
+
+getwd()
 
 ####
 # diplom index
