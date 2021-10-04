@@ -18,25 +18,27 @@ library(foreach)
 ####
 lfmWrapper = function(
 	arrayList,
-	yVars,
+	yVars=NULL,
+	allLayers=FALSE,
 	iters=5000,
 	burn=1000,
 	dens=10,
-	R=2,
+	netDims=2,
 	seed=6886,
 	cores=15
 ){
 
-	#
+	# par setup
 	cl = makeCluster(cores)
 	registerDoParallel(cl)
 
-	#
+	# iterate through each list element in par
 	ameOut = foreach(
 		arr = arrayList,
 		.packages=c('amen')) %dopar% {
 
 			# extract relev yvars
+			if(allLayers){ yVars = dimnames(arr)[[3]] }
 			arr = arr[,,yVars]
 
 			# if multi layers convert into format
@@ -52,7 +54,7 @@ lfmWrapper = function(
 						Y = yL,
 						rvar=FALSE, cvar=FALSE,
 						dcor=FALSE, nvar=FALSE,
-						R=2, model='nrm', intercept=FALSE,
+						R=netDims, model='nrm', intercept=FALSE,
 						symmetric=FALSE,
 						nscan=iters,
 						burn=burn, odens=dens, seed=seed,
@@ -66,17 +68,17 @@ lfmWrapper = function(
 						Y = arr,
 						rvar=FALSE, cvar=FALSE,
 						dcor=FALSE, nvar=FALSE,
-						R=2, model='nrm', intercept=FALSE,
+						R=netDims, model='nrm', intercept=FALSE,
 						symmetric=FALSE,
 						nscan=iters,
 						burn=burn, odens=dens, seed=seed,
-						plot=FALSE, print=FALSE, gof=FALSE ) } }
+						plot=FALSE, print=FALSE, gof=FALSE ) }
 
 			# extract relev output
 			return( list(U=out$U, V=out$V, UVPM=out$UVPM) ) }
-	stopCluster(cl)
 
-	#
+	# close cores and return
+	stopCluster(cl)
 	return(ameOut) }
 ####
 
@@ -99,31 +101,69 @@ lfmWrapper = function(
 
 ####
 # trade indices
-# tradeList,
+# single layer nets
+trade_R2 = lfmWrapper(tradeList, 'trade' )
+tradeDep_R2 = lfmWrapper(tradeList, 'tradeDepSend' )
+tradeRaw_R2 = lfmWrapper(tradeList, 'tradeRaw' )
+tradeDepRaw_R2 = lfmWrapper(tradeList, 'tradeDepSendRaw' )
+
+trade_R8 = lfmWrapper(tradeList, 'trade', netDims=8 )
+tradeDep_R8 = lfmWrapper(tradeList, 'tradeDepSend', netDims=8 )
+tradeRaw_R8 = lfmWrapper(tradeList, 'tradeRaw', netDims=8 )
+tradeDepRaw_R8 = lfmWrapper(tradeList, 'tradeDepSendRaw', netDims=8 )
+
+# save
+save(
+	trade_R2, tradeDep_R2, tradeRaw_R2, tradeDepRaw_R2,
+	trade_R8, tradeDep_R8, tradeRaw_R8, tradeDepRaw_R8,
+	file='trade_singleLayer_lfms.rda'
+)
+
+# cleanup
+rm(
+	trade_R2, tradeDep_R2, tradeRaw_R2, tradeDepRaw_R2,
+	trade_R8, tradeDep_R8, tradeRaw_R8, tradeDepRaw_R8 )
+####
+
+####
 # tradeTimeL3List, tradeTimeL5List,
 # tradeRawTimeL3List, tradeRawTimeL5List,
 # tradeDepTimeL3List, tradeDepTimeL5List,
 # tradeDepRawTimeL3List, tradeDepRawTimeL5List,
-arrayList = tradeList
-yVars = 'trade'
-iters=5000
-burn=1000
-dens=10
-R=2
-seed=6886
-cores=15
+tradeL3_R2 = lfmWrapper(tradeTimeL3List, netDims=2)
+tradeL5_R2 = lfmWrapper(tradeTimeL5List, netDims=2)
+tradeDepL3_R2 = lfmWrapper(tradeDepTimeL3List, netDims=2)
+tradeDepL5_R2 = lfmWrapper(tradeDepTimeL5List, netDims=2)
+tradeRawL3_R2 = lfmWrapper(tradeRawTimeL3List, netDims=2)
+tradeRawL5_R2 = lfmWrapper(tradeRawTimeL5List, netDims=2)
+tradeDepRawL3_R2 = lfmWrapper(tradeDepRawTimeL3List, netDims=2)
+tradeDepRawL5_R2 = lfmWrapper(tradeDepRawTimeL5List, netDims=2)
 
-arr = arrayList[[1]]
+tradeL3_R8 = lfmWrapper(tradeTimeL3List, netDims=8)
+tradeL5_R8 = lfmWrapper(tradeTimeL5List, netDims=8)
+tradeDepL3_R8 = lfmWrapper(tradeDepTimeL3List, netDims=8)
+tradeDepL5_R8 = lfmWrapper(tradeDepTimeL5List, netDims=8)
+tradeRawL3_R8 = lfmWrapper(tradeRawTimeL3List, netDims=8)
+tradeRawL5_R8 = lfmWrapper(tradeRawTimeL5List, netDims=8)
+tradeDepRawL3_R8 = lfmWrapper(tradeDepRawTimeL3List, netDims=8)
+tradeDepRawL5_R8 = lfmWrapper(tradeDepRawTimeL5List, netDims=8)
 
-dim(arr)
+# save
+save(
+	tradeL3_R2, tradeL5_R2, tradeDepL3_R2, tradeDepL5_R2,
+	tradeRawL3_R2, tradeRawL5_R2, tradeDepRawL3_R2, tradeDepRawL5_R2,
+	tradeL3_R8, tradeL5_R8, tradeDepL3_R8, tradeDepL5_R8,
+	tradeRawL3_R8, tradeRawL5_R8, tradeDepRawL3_R8, tradeDepRawL5_R8,
+	file='trade_timeLayer_lfms.rda'
+)
 
-if(length(dim(arr))>2)
-
-# extract relev yvars and
-# convert into format for ame_repL
-arr = arr[,,yVars]
-yL = lapply(1:dim(arr)[3], function(pp){
-	return(arr[,,pp]) })
+# cleanup
+rm(
+	tradeL3_R2, tradeL5_R2, tradeDepL3_R2, tradeDepL5_R2,
+	tradeRawL3_R2, tradeRawL5_R2, tradeDepRawL3_R2, tradeDepRawL5_R2,
+	tradeL3_R8, tradeL5_R8, tradeDepL3_R8, tradeDepL5_R8,
+	tradeRawL3_R8, tradeRawL5_R8, tradeDepRawL3_R8, tradeDepRawL5_R8
+)
 ####
 
 ####
