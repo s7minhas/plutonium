@@ -114,18 +114,29 @@ frame$tradeDepSend[is.na(frame$tradeDepSend)] = 0
 frame$tradeDepSend[frame$year<1990] = NA
 
 # logged version of trade
-frame$tradeRaw = frame$trade
-frame$trade = log(frame$trade + 1)
+# skip logging since we're standardizing,
+# logging and stdizing compresses the scale
+# too much
+# frame$trade = log(frame$trade + 1)
 ####
 
 ####
 # stdz various relational measures by year
-frameRaw = frame
+
+# save an unstandardized version of trade
+tradeRaw = frame$trade
+tradeDepSendRaw = frame$tradeDepSend
+
+# stdz by year
 yrs = sort(unique(frame$year))
 for(t in yrs){
 	slice = frame[frame$year==t,5:ncol(frame)]
 	slice = apply(slice, 2, stdz)
 	frame[frame$year==t,5:ncol(frame)] = slice }
+
+# merge back in raw trade val
+frame$tradeRaw = tradeRaw ; rm(tradeRaw)
+frame$tradeDepSendRaw = tradeDepSendRaw ; rm(tradeDepSendRaw)
 ####
 
 ####
@@ -136,14 +147,45 @@ for(t in yrs){
 # would not be a good option for this types of NA
 frame$IdealPointDistance[frame$year<2020 & is.na(frame$IdealPointDistance)] = 0
 frame$agree[frame$year<2020 & is.na(frame$agree)] = 0
-
-# make change in raw version as well
-frameRaw$IdealPointDistance[frameRaw$year<2020 & is.na(frameRaw$IdealPointDistance)] = 0
-frameRaw$agree[frameRaw$year<2020 & is.na(frameRaw$agree)] = 0
 ####
 
 ####
 save(
-	frame, frameRaw, file=paste0(pathIn, 'frame.rda')
+	frame, file=paste0(pathIn, 'frame.rda')
 )
 ####
+
+slice = frame[
+	frame$year>=1990 &
+	frame$cname1=='UNITED STATES' &
+	frame$cname2 %in% c('RUSSIAN FEDERATION','UNITED KINGDOM'),
+	c(
+		'cname1','cname2','year',
+		'tradeRaw','trade',
+		'tradeDepSendRaw','tradeDepSend'
+	)
+	]
+
+ggdata = pivot_longer(
+	data=slice,
+	cols=tradeRaw:tradeDepSend )
+ggdata$name = factor(
+	ggdata$name, levels=c(
+		'tradeRaw','trade',
+		'tradeDepSendRaw','tradeDepSend' ))
+
+library(ggplot2)
+ggplot(ggdata, aes(x=year, y=value, color=cname2)) +
+	geom_line() +
+	facet_wrap(~name, ncol=2, scale='free_y', dir='v') +
+	labs(
+		x='',
+		y='',
+		color=''
+	) +
+	theme_bw() +
+	theme(
+		legend.position='top',
+		axis.ticks=element_blank(),
+		panel.border=element_blank()
+	)

@@ -53,20 +53,51 @@ econVars = c('ptaCnt', 'trade', 'tradeDepSend')
 
 # apply lfmPrep fn
 econList = lfmPrep(econYrs, econVars)
-econListRaw = lfmPrep(econYrs, econVars, dyadYearData=frameRaw)
 ####
 
 ####
-# econ index
+# econ index - trade only
 # 1990-2020 (1990 start because of limitations in imf trade data)
 # run yearly in case of ame so can start at 1990
+tradeYrs = 1990:2020
+tradeVars = c('trade', 'tradeRaw', 'tradeDepSend', 'tradeDepSendRaw')
 
 # apply lfmPrep fn
-tmp = frame
-for(yr in econYrs){
-	for(v in econVars){
-		tmp[tmp$year==yr,v] = rescale(tmp[tmp$year==yr,v], to=c(0,1)) } }
-econList2 = lfmPrep(yrs=econYrs, vars=econVars, dyadYearData=tmp)
+tradeList = lfmPrep(tradeYrs, tradeVars)
+####
+
+####
+# econ index - trade only
+# layers here will be time, so we will use lagged versions of
+# trade with current versions of trade
+# 1990-2020 (1990 start because of limitations in imf trade data)
+tradeYrs = 1990:2020
+tradeVar = 'trade'
+
+# apply lfmPrep fn
+yrs = 1990:2020
+var = tradeVar
+dyadYearData=frame
+idVars=ids
+lags = 3
+
+# subset to relevant pd and ftrs
+samp = dyadYearData[
+	dyadYearData$year %in% yrs,c(idVars, var)]
+
+head(samp)
+
+# cast into arrays separately for each year
+arrList = lapply(yrs, function(tt){
+	slice = samp[samp$year==tt,]
+	mat = acast(
+		slice,
+		cname1~cname2, value.var=var )
+		return(arr) })
+
+lapply(arrList, dim)
+
+tradeList = lfmPrep(tradeYrs, tradeVars)
 ####
 
 ####
