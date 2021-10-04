@@ -114,11 +114,13 @@ frame$tradeDepSend[is.na(frame$tradeDepSend)] = 0
 frame$tradeDepSend[frame$year<1990] = NA
 
 # logged version of trade
+frame$tradeRaw = frame$trade
 frame$trade = log(frame$trade + 1)
 ####
 
 ####
 # stdz various relational measures by year
+frameRaw = frame
 yrs = sort(unique(frame$year))
 for(t in yrs){
 	slice = frame[frame$year==t,5:ncol(frame)]
@@ -134,10 +136,14 @@ for(t in yrs){
 # would not be a good option for this types of NA
 frame$IdealPointDistance[frame$year<2020 & is.na(frame$IdealPointDistance)] = 0
 frame$agree[frame$year<2020 & is.na(frame$agree)] = 0
+
+# make change in raw version as well
+frameRaw$IdealPointDistance[frameRaw$year<2020 & is.na(frameRaw$IdealPointDistance)] = 0
+frameRaw$agree[frameRaw$year<2020 & is.na(frameRaw$agree)] = 0
 ####
 
 ####
 save(
-	frame, file=paste0(pathIn, 'frame.rda')
+	frame, frameRaw, file=paste0(pathIn, 'frame.rda')
 )
 ####

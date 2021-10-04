@@ -53,6 +53,7 @@ econVars = c('ptaCnt', 'trade', 'tradeDepSend')
 
 # apply lfmPrep fn
 econList = lfmPrep(econYrs, econVars)
+econListRaw = lfmPrep(econYrs, econVars, dyadYearData=frameRaw)
 ####
 
 ####
@@ -101,7 +102,7 @@ super2List = lfmPrep(icewsYrs, c(econVars, diplomVars, icewsVars))
 ####
 #
 save(
-  econList, econList2,
+  econList, econListRaw, econList2,
 	diplomList, icewsList, super1List, super2List,
   file=paste0(pathIn, 'arrList_lfm.rda')
 )

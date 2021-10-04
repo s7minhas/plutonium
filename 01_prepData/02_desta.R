@@ -1,15 +1,14 @@
 # get economic agreement data
 ####
 rm(list=ls())
-pth = paste0(here::here(""), '/')
-dpth = paste0(pth, 'data/')
-load(paste0(dpth, 'samp.rda'))
-source(paste0(here::here(), '/setup.R'))
+pth = paste0(here::here(), '/')
+source(paste0(pth, 'setup.R'))
+load(paste0(pathIn, 'samp.rda'))
 ####
 
 ####
 # load raw desta
-load(paste0(dpth, 'destaRaw.rda'))
+load(paste0(pathIn, 'destaRaw.rda'))
 ####
 
 ####
