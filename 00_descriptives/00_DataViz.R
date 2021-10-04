@@ -110,18 +110,15 @@ plausViz(
   dyadIds=c('2_200', '2_365'),
   dyadLabs=c('USA-UK', 'USA-Russia'),
   affVar = c(
-    'trade_R2_lfm',
     'trade_R8_lfm',
-    'trade_L3_R2_lfm',
-    'trade_L5_R2_lfm',
     'trade_L3_R8_lfm',
     'trade_L5_R8_lfm'
      ),
   compVars = c('trade'),
   varLabs = c(
-    'k=2, 1yr', 'k=8, 1yr',
-    'k=2, 3yr', 'k=2, 5yr',
-    'k=8, 3yr', 'k=8, 5yr',
+    'lfm 1yr',
+    'lfm 3yr',
+    'lfm 5yr',
     'trade stdz')
    )
 
@@ -130,48 +127,17 @@ plausViz(
   dyadIds=c('2_200', '2_365'),
   dyadLabs=c('USA-UK', 'USA-Russia'),
   affVar = c(
-    'tradeDep_R2_lfm',
     'tradeDep_R8_lfm',
-    'tradeDep_L3_R2_lfm',
-    'tradeDep_L5_R2_lfm',
     'tradeDep_L3_R8_lfm',
     'tradeDep_L5_R8_lfm'
      ),
   compVars = c('tradeDepSend'),
   varLabs = c(
-    'k=2, 1yr', 'k=8, 1yr',
-    'k=2, 3yr', 'k=2, 5yr',
-    'k=8, 3yr', 'k=8, 5yr',
+    'lfm 1yr',
+    'lfm 3yr',
+    'lfm 5yr',
     'trade dep stdz')
    )
-
-# correl check with next year of data
-tmp = dyadData
-tmp$year = tmp$year - 1
-tmp$id = with(tmp, paste(cname1, cname2, year, sep='_'))
-dyadData$trade_nextYr = tmp$trade[match(dyadData$id, tmp$id)]
-dyadData$tradeDepSend_nextYr = tmp$tradeDepSend[match(dyadData$id, tmp$id)]
-vars = c(
-  'trade_nextYr',
-  'trade',
-  'trade_R2_lfm',
-  'trade_R8_lfm',
-  'trade_L3_R2_lfm',
-  'trade_L5_R2_lfm',
-  'trade_L3_R8_lfm',
-  'trade_L5_R8_lfm' )
-cbind(sort(cor(dyadData[,vars], use='pairwise.complete.obs')[-1,-(2:length(vars))], decreasing=TRUE))
-
-vars = c(
-  'tradeDepSend_nextYr',
-  'tradeDepSend',
-  'tradeDep_R2_lfm',
-  'tradeDep_R8_lfm',
-  'tradeDep_L3_R2_lfm',
-  'tradeDep_L5_R2_lfm',
-  'tradeDep_L3_R8_lfm',
-  'tradeDep_L5_R8_lfm' )
-cbind(sort(cor(dyadData[,vars], use='pairwise.complete.obs')[-1,-(2:length(vars))], decreasing=TRUE))
 
 # dyads 1
 plausViz(
