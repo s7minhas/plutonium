@@ -88,14 +88,20 @@ lfmTimePrep = function(
 ####
 # treaty index
 # 1975-2020
-treatyYrs = 1980:2020
+treatyYrs = 1990:2020
 treatyVars = c(
-	'ptaCnt', 'allyTotal',
-	'ptaBin', 'allyBin',
-	'treatyCoop', 'treatyCoopZ', 'treatyCoopBin')
+	'treatyCoopZ', 'treatyCoopBin')
 
 # apply lfmPrep fn
 treatyList = lfmPrep(treatyYrs, treatyVars)
+
+# apply lfmTimePrep fn to stdz treaty coop
+treatyZTimeL3List = lfmTimePrep('treatyCoopZ', 3)
+treatyZTimeL5List = lfmTimePrep('treatyCoopZ', 5)
+
+# apply lfmTimePrep fn to bin treaty coop
+treatyBinTimeL3List = lfmTimePrep('treatyCoopBin', 3)
+treatyBinTimeL5List = lfmTimePrep('treatyCoopBin', 5)
 ####
 
 ####
@@ -176,6 +182,8 @@ super2List = lfmPrep(icewsYrs, c(econVars, diplomVars, icewsVars))
 #
 save(
 	treatyList,
+	treatyZTimeL3List, treatyZTimeL5List,
+	treatyBinTimeL3List, treatyBinTimeL5List,
   econList, tradeList,
 	tradeTimeL3List, tradeTimeL5List,
 	tradeRawTimeL3List, tradeRawTimeL5List,

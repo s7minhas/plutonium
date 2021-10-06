@@ -82,6 +82,26 @@ lfmWrapper = function(
 ####
 
 ####
+# treaty index
+# single layer Nets
+treaty_R2 = lfmWrapper( treatyList, 'treatyCoopZ', cores=30 )
+treaty_R8 = lfmWrapper( treatyList, 'treatyCoopZ', cores=30 )
+
+# time layer nets
+treatyL3_R2 = lfmWrapper(treatyZTimeL3List, allVars=T, netDims=2, cores=30)
+treatyL3_R8 = lfmWrapper(treatyZTimeL3List, allVars=T, netDims=8, cores=30)
+treatyL5_R2 = lfmWrapper(treatyZTimeL5List, allVars=T, netDims=2, cores=30)
+treatyL5_R8 = lfmWrapper(treatyZTimeL5List, allVars=T, netDims=8, cores=30)
+
+#
+save(
+	treaty_R2, treaty_R8,
+	treatyL3_R2, treatyL3_R8,
+	treatyL5_R2, treatyL5_R8,
+	file=paste0(pathOut, 'treaty_lfms.rda') )
+####
+
+####
 # econ index
 econTradeDepScores = lfmWrapper(
 	econList,

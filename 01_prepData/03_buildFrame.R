@@ -41,7 +41,7 @@ for(f in fileShorts){
 
 ####
 # cleanup NAs where relevant
-# atop ends at 2018, but we extended to 2019, assuming 2019 vals = 2018
+# atop ends at 2018, but we extended to 2020, assuming 2020, 2019 vals = 2018
 # idPt ends at 2019
 # desta ends at 2020
 # icews starts at 1995 and ends at 2020
@@ -143,9 +143,9 @@ frame$allyTotalRaw = allyTotal ; rm(allyTotal)
 frame$ptaCntRaw = ptaCnt ; rm(ptaCnt)
 
 # add in gen coop index
-frame$treatyCoopRaw = frame$ptaCnt + frame$allyTotal
+frame$treatyCoopRaw = frame$ptaCntRaw + frame$allyTotalRaw
 frame$treatyCoopZ = stdz(frame$treatyCoop)
-frame$treatyCoopBin = 1*(frame$treatyCoop>0)
+frame$treatyCoopBin = 1*(frame$treatyCoopRaw>0)
 frame$ptaBin = 1*(frame$ptaCnt>0)
 frame$allyBin = 1*(frame$allyTotal>0)
 ####
@@ -165,5 +165,3 @@ save(
 	frame, file=paste0(pathIn, 'frame.rda')
 )
 ####
-
-frame[frame$cname1=='UNITED STATES' & frame$cname2=='CHINA',c('cname1','cname2','year','ptaCntRaw','allyTotalRaw')]

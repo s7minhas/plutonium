@@ -41,6 +41,9 @@ vars = c(
 
 atop = atop[,c(ids,vars)]
 atop$allyTotal = apply(
+	atop[,vars[-4]], 1, function(x){ sum(x) } )
+
+atop$allyTotal_nonagg = apply(
 	atop[,vars], 1, function(x){ sum(x) } )
 ####
 
@@ -59,10 +62,6 @@ tmp$year = 2020
 tmp$id = with(tmp, paste(cname1, cname2, year, sep='_'))
 atop = rbind(atop, tmp)
 ####
-
-atop[atop$cname1=='UNITED STATES' & atop$cname2=='UNITED KINGDOM',]
-
-atop[atop$offense==1,]
 
 ####
 # Save to binaries

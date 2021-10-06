@@ -68,6 +68,11 @@ econScoresTrade = processLFM(
 	yrs=1990:2020,
 	fname='econScores_trade_lfm.rda')
 
+# treaty lfms
+treaty_R2 = processLFM(
+	
+)
+
 # single layer trade lfms
 trade_R2 = processLFM(
 	yrs=1990:2020, fname='trade_singleLayer_lfms.rda',
