@@ -86,6 +86,19 @@ lfmTimePrep = function(
 ####
 
 ####
+# treaty index
+# 1975-2020
+treatyYrs = 1980:2020
+treatyVars = c(
+	'ptaCnt', 'allyTotal',
+	'ptaBin', 'allyBin',
+	'treatyCoop', 'treatyCoopZ', 'treatyCoopBin')
+
+# apply lfmPrep fn
+treatyList = lfmPrep(treatyYrs, treatyVars)
+####
+
+####
 # econ index
 # 1990-2020 (1990 start because of limitations in imf trade data)
 # run yearly in case of ame so can start at 1990
@@ -162,6 +175,7 @@ super2List = lfmPrep(icewsYrs, c(econVars, diplomVars, icewsVars))
 ####
 #
 save(
+	treatyList,
   econList, tradeList,
 	tradeTimeL3List, tradeTimeL5List,
 	tradeRawTimeL3List, tradeRawTimeL5List,

@@ -1,15 +1,14 @@
 ####
 rm(list=ls())
-pth = paste0(here::here(""), '/')
-dpth = paste0(pth, 'data/')
-load(paste0(dpth, 'samp.rda'))
-source(paste0(here::here(), '/setup.R'))
+pth = paste0(here::here(), '/')
+source(paste0(pth, 'setup.R'))
+load(paste0(pathIn, 'samp.rda'))
 ####
 
 ####
 # load atop dataset
 atop = read.csv(
-	paste0(pth, '/data/ATOP 5_0 (csv)/atop5_0ddyr.csv'))
+	paste0(pathIn, '/ATOP 5_0 (csv)/atop5_0ddyr.csv'))
 
 # post 1975
 atop = atop[atop$year>=1975,]
@@ -37,7 +36,7 @@ atop = atop[atop$cname2 %in% samp$cname,]
 # filter to relev vars
 ids = c('cname1', 'cname2', 'year', 'id')
 vars = c(
-	'atopally', 'defense', 'offense',
+	'defense', 'offense',
 	'neutral', 'nonagg', 'consul')
 
 atop = atop[,c(ids,vars)]
@@ -49,12 +48,23 @@ atop$allyTotal = apply(
 # extend atop by one year
 # assuming that alliances in 2019 are the same as those in 2018
 tmp = atop[atop$year==2018,]
+
+# repeat 2018 as 2019
 tmp$year = 2019
+tmp$id = with(tmp, paste(cname1, cname2, year, sep='_'))
+atop = rbind(atop, tmp)
+
+# repeat 2018 as 2020
+tmp$year = 2020
 tmp$id = with(tmp, paste(cname1, cname2, year, sep='_'))
 atop = rbind(atop, tmp)
 ####
 
+atop[atop$cname1=='UNITED STATES' & atop$cname2=='UNITED KINGDOM',]
+
+atop[atop$offense==1,]
+
 ####
 # Save to binaries
-save(atop, file=paste0(dpth,'atop.rda'))
+save(atop, file=paste0(pathIn,'atop.rda'))
 ####

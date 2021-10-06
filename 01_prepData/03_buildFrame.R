@@ -59,10 +59,9 @@ frame[,eventVars] = apply(
 	frame[,eventVars], 2, function(x){
 		x[is.na(x)] = 0 ; return(x) } )
 
-# make sure idPt and atop vars are NA after 2019
+# make sure idPt vars are NA after 2019
+# note that for ally we replicate 2018 through 2020
 naVars = c(
-	'atopally','defense','offense',
-	'neutral','nonagg','consul','allyTotal',
 	'IdealPointDistance', 'agree' )
 frame[frame$year==2020,naVars] = NA
 ####
@@ -123,9 +122,12 @@ frame$tradeDepSend[frame$year<1990] = NA
 ####
 # stdz various relational measures by year
 
-# save an unstandardized version of trade
+# save versions of a few vars so that we
+# add some raw versions back in for testing
 tradeRaw = frame$trade
 tradeDepSendRaw = frame$tradeDepSend
+allyTotal = frame$allyTotal
+ptaCnt = frame$ptaCnt
 
 # stdz by year
 yrs = sort(unique(frame$year))
@@ -137,6 +139,15 @@ for(t in yrs){
 # merge back in raw trade val
 frame$tradeRaw = tradeRaw ; rm(tradeRaw)
 frame$tradeDepSendRaw = tradeDepSendRaw ; rm(tradeDepSendRaw)
+frame$allyTotalRaw = allyTotal ; rm(allyTotal)
+frame$ptaCntRaw = ptaCnt ; rm(ptaCnt)
+
+# add in gen coop index
+frame$treatyCoopRaw = frame$ptaCnt + frame$allyTotal
+frame$treatyCoopZ = stdz(frame$treatyCoop)
+frame$treatyCoopBin = 1*(frame$treatyCoop>0)
+frame$ptaBin = 1*(frame$ptaCnt>0)
+frame$allyBin = 1*(frame$allyTotal>0)
 ####
 
 ####
@@ -155,37 +166,4 @@ save(
 )
 ####
 
-slice = frame[
-	frame$year>=1990 &
-	frame$cname1=='UNITED STATES' &
-	frame$cname2 %in% c('RUSSIAN FEDERATION','UNITED KINGDOM'),
-	c(
-		'cname1','cname2','year',
-		'tradeRaw','trade',
-		'tradeDepSendRaw','tradeDepSend'
-	)
-	]
-
-ggdata = pivot_longer(
-	data=slice,
-	cols=tradeRaw:tradeDepSend )
-ggdata$name = factor(
-	ggdata$name, levels=c(
-		'tradeRaw','trade',
-		'tradeDepSendRaw','tradeDepSend' ))
-
-library(ggplot2)
-ggplot(ggdata, aes(x=year, y=value, color=cname2)) +
-	geom_line() +
-	facet_wrap(~name, ncol=2, scale='free_y', dir='v') +
-	labs(
-		x='',
-		y='',
-		color=''
-	) +
-	theme_bw() +
-	theme(
-		legend.position='top',
-		axis.ticks=element_blank(),
-		panel.border=element_blank()
-	)
+frame[frame$cname1=='UNITED STATES' & frame$cname2=='CHINA',c('cname1','cname2','year','ptaCntRaw','allyTotalRaw')]
