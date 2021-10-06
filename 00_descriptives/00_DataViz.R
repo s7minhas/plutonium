@@ -109,8 +109,7 @@ plausViz = function(
   #
   return(ggPlaus) }
 ####
-cbind(names(dyadData)[-(1:30)])
-dyadData$treatyBin_R2_lfm2 = pnorm(dyadData$treatyBin_R2_lfm)
+
 ####
 # test out results with standardized trade
 zTradeViz = plausViz(
@@ -134,23 +133,26 @@ zTreatyViz = plausViz(
   dyadIds=c('2_200', '2_365', '2_710'),
   dyadLabs=c('USA-UK', 'USA-Russia', 'USA-China'),
   affVar = c(
-    'treaty_R2_lfm',
     'treatyBin_R2_lfm',
-    'treatyBin_R2_lfm2'
+    'treatyBin_R8_lfm',
+    'treaty_R2_lfm',
+    'treaty_R8_lfm'
      ),
   compVars = NULL,
   color=FALSE,
   varLabs = c(
-    'lfm r2',
     'lfm bin r2',
-    'lfm pnorm bin r2'
+    'lfm bin r8',
+    'lfm stdz r2',
+    'lfm stdz r8'
   ) )
 ggsave(zTreatyViz,
-  width=8, height=4,
+  width=8, height=6,
   file=paste0(pathGraphics, 'zTreatyVizPlaus.pdf'), device=cairo_pdf)
 ####
 
 ####
+# create slice of data for scott
 vars = c(
   'cname1',
   'cname2',
@@ -164,8 +166,11 @@ vars = c(
   'allyTotalRaw',
   'ptaCntRaw',
   'treatyCoopRaw',
+  'treatyBin_R2_lfm',
+  'treatyBin_R8_lfm',
   'treaty_R2_lfm',
-  'trade_R8_lfm' )
+  'treaty_R8_lfm'
+)
 
 forScott = dyadData[,vars]
 write.csv(forScott, file=paste0(pathIn, 'forScott.csv'))
