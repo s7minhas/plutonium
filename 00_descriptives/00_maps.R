@@ -116,9 +116,9 @@ econData = dyadData[,c(
   'ptaCnt', 'pta',
   'trade', 'tradeDepSend',
   'econScores_tradeDepSend_lfm',
-  'econScores_tradeDepSend_lfm_v2',
-  'econScores_trade_lfm',
-  'econScores_trade_lfm_v2'
+  # 'econScores_tradeDepSend_lfm_v2',
+  'econScores_trade_lfm'
+  # 'econScores_trade_lfm_v2'
   )]
 
 # subset to relev timeframe
@@ -127,12 +127,12 @@ econData = econData[econData$year>=1990,]
 chMapsLFM = cntryMaps(
   cname('China'),
   c(1995, 2000, 2005, 2010, 2015, 2020),
-  'econScores_tradeDepSend_lfm_v2' )
+  'trade' )
 
 chMapsTradeDep = cntryMaps(
   cname('China'),
   c(1995, 2000, 2005, 2010, 2015, 2020),
-  'tradeDepSend', gradLogic=FALSE, discreteVar=FALSE)
+  'trade', gradLogic=FALSE, discreteVar=FALSE)
 
 chMapsPTA = cntryMaps(
   cname('China'),
