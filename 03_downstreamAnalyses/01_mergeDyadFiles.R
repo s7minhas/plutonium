@@ -35,9 +35,10 @@ for(fname in files){
 ####
 
 ####
-# add ccodes and dyad var
-frame$ccode1 = countrycode(frame$cname1, "country.name", "cown")
-frame$ccode2 = countrycode(frame$cname2, "country.name", "cown")
+cntryKey = data.frame(dirty=unique(c(frame$cname1, frame$cname2)), stringsAsFactors=FALSE)
+cntryKey$clean = countrycode(cntryKey$dirty, 'country.name', 'cown')
+frame$ccode1 = cntryKey$clean[match(frame$cname1, cntryKey$dirty)]
+frame$ccode2 = cntryKey$clean[match(frame$cname2, cntryKey$dirty)]
 frame$dyad = paste(frame$ccode1, frame$ccode2, sep ="_")
 ####
 

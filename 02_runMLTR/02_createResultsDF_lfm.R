@@ -76,6 +76,14 @@ treaty_R8 = processLFM(
 		yrs=1990:2020, fname='treaty_lfms.rda',
 		obj='treaty_R8', varName='treaty_R8_lfm')
 
+# single layer binary treaty lfms
+treatyBin_R2 = processLFM(
+		yrs=1990:2020, fname='treaty_lfms.rda',
+		obj='treatyBin_R2', varName='treatyBin_R2_lfm')
+treatyBin_R8 = processLFM(
+		yrs=1990:2020, fname='treaty_lfms.rda',
+		obj='treatyBin_R8', varName='treatyBin_R8_lfm')
+
 # time layer treaty lfms
 treatyL3_R2 = processLFM(
 		yrs=1990:2020, fname='treaty_lfms.rda',
@@ -179,6 +187,7 @@ toMerge = list(
 	econScoresTradeDep,
 	econScoresTrade,
 	treaty_R2, treaty_R8,
+	treatyBin_R2, treatyBin_R8,
 	treatyL3_R2, treatyL3_R8,
 	treatyL5_R2, treatyL5_R8,
 	trade_R2, tradeDep_R2, tradeRaw_R2, tradeDepRaw_R2,

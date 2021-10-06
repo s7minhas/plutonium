@@ -51,7 +51,7 @@ dyadData = dyadData[dyadData$year>=1990,]
 # plaus viz fn
 plausViz = function(
   dyadIds, dyadLabs,
-  affVar='trade_R8_lfm',
+  affVar='trade_R8_lfm', color=TRUE,
   compVars=c('trade', 'tradeRaw', 'tradeDepSend', 'tradeDepSendRaw'),
   varLabs=c(
     paste0('LFM v', 1:length(affVar)),
@@ -75,27 +75,33 @@ plausViz = function(
   ggData$variable = factor(ggData$variable, levels=varLabs)
 
   # viz
-  ggPlaus = ggplot(ggData, aes(x=year, y=value, group=variable, color=variable)) +
+  if(color){
+    ggPlaus = ggplot(ggData,
+        aes(x=year, y=value, group=variable, color=variable)) +
+      scale_color_brewer(palette='Set1')
+  } else {
+    ggPlaus = ggplot(
+      ggData, aes(x=year, y=value, group=variable)) }
+  ggPlaus = ggPlaus +
     geom_hline(yintercept=0, color='grey', linetype='dashed', size=1) +
     geom_line(size=.8) + geom_point(size=.7) +
     facet_grid(variable~dyadAbb, scales='free_y') +
     labs(color='', shape='') + ylab('') + xlab('') +
-    scale_color_brewer(palette='Set1') +
     theme_bw() +
     theme(
       axis.ticks=element_blank(),
-      panel.border=element_blank(),
-      # legend.text=element_text(family="Source Sans Pro Light"),
+      # panel.border=element_blank(),
+      legend.text=element_text(family="Source Sans Pro Light"),
       legend.position='top',
       axis.text.x=element_text(
-        # family="Source Sans Pro Light",
+        family="Source Sans Pro Light",
         angle=45, hjust=1),
-      # axis.text.y=element_text(family="Source Sans Pro Light"),
+      axis.text.y=element_text(family="Source Sans Pro Light"),
       strip.text.x = element_text(color='white',
-                                  # family="Source Sans Pro Semibold"
+                                  family="Source Sans Pro Semibold"
                                   ),
       strip.text.y = element_text(color='white',
-                                  # family="Source Sans Pro Semibold"
+                                  family="Source Sans Pro Semibold"
                                   ),
       strip.background = element_rect(fill = "#525252", color='#525252')
     )
@@ -103,45 +109,66 @@ plausViz = function(
   #
   return(ggPlaus) }
 ####
-
+cbind(names(dyadData)[-(1:30)])
+dyadData$treatyBin_R2_lfm2 = pnorm(dyadData$treatyBin_R2_lfm)
 ####
 # test out results with standardized trade
 zTradeViz = plausViz(
-  dyadIds=c('2_200', '2_365'),
-  dyadLabs=c('USA-UK', 'USA-Russia'),
+  dyadIds=c('2_200', '2_365', '2_710'),
+  dyadLabs=c('USA-UK', 'USA-Russia', 'USA-China'),
   affVar = c(
     'trade_R8_lfm',
-    'trade_L3_R8_lfm',
-    'trade_L5_R8_lfm'
+    'trade_R2_lfm'
      ),
   compVars = c('trade'),
   varLabs = c(
-    'lfm 1yr',
-    'lfm 3yr',
-    'lfm 5yr',
+    'lfm r2',
+    'lfm r8',
     'trade stdz') )
 ggsave(zTradeViz,
   width=8, height=6,
-  file=paste0(pathGraphics, 'zTradeVizPlaus.pdf'))
+  file=paste0(pathGraphics, 'zTradeVizPlaus.pdf'), device=cairo_pdf)
 
 # test out results with standardized trade dependence
-zTradeDepViz = plausViz(
-  dyadIds=c('2_200', '2_365'),
-  dyadLabs=c('USA-UK', 'USA-Russia'),
+zTreatyViz = plausViz(
+  dyadIds=c('2_200', '2_365', '2_710'),
+  dyadLabs=c('USA-UK', 'USA-Russia', 'USA-China'),
   affVar = c(
-    'tradeDep_R8_lfm',
-    'tradeDep_L3_R8_lfm',
-    'tradeDep_L5_R8_lfm'
+    'treaty_R2_lfm',
+    'treatyBin_R2_lfm',
+    'treatyBin_R2_lfm2'
      ),
-  compVars = c('tradeDepSend'),
+  compVars = NULL,
+  color=FALSE,
   varLabs = c(
-    'lfm 1yr',
-    'lfm 3yr',
-    'lfm 5yr',
-    'trade dep stdz') )
-ggsave(zTradeDepViz,
-  width=8, height=6,
-  file=paste0(pathGraphics, 'zTradeDepVizPlaus.pdf'))
+    'lfm r2',
+    'lfm bin r2',
+    'lfm pnorm bin r2'
+  ) )
+ggsave(zTreatyViz,
+  width=8, height=4,
+  file=paste0(pathGraphics, 'zTreatyVizPlaus.pdf'), device=cairo_pdf)
+####
+
+####
+vars = c(
+  'cname1',
+  'cname2',
+  'ccode1',
+  'ccode2',
+  'dyad',
+  'year',
+  'id',
+  'trade',
+  'tradeRaw',
+  'allyTotalRaw',
+  'ptaCntRaw',
+  'treatyCoopRaw',
+  'treaty_R2_lfm',
+  'trade_R8_lfm' )
+
+forScott = dyadData[,vars]
+write.csv(forScott, file=paste0(pathIn, 'forScott.csv'))
 ####
 
 ####

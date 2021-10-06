@@ -24,6 +24,7 @@ lfmWrapper = function(
 	burn=1000,
 	dens=10,
 	netDims=2,
+	family='nrm',
 	seed=6886,
 	cores=15
 ){
@@ -53,7 +54,7 @@ lfmWrapper = function(
 						Y = yL,
 						rvar=FALSE, cvar=FALSE,
 						dcor=FALSE, nvar=FALSE,
-						R=netDims, model='nrm', intercept=FALSE,
+						R=netDims, model=family, intercept=FALSE,
 						symmetric=FALSE,
 						nscan=iters,
 						burn=burn, odens=dens, seed=seed,
@@ -87,6 +88,12 @@ lfmWrapper = function(
 treaty_R2 = lfmWrapper( treatyList, 'treatyCoopZ', cores=31 )
 treaty_R8 = lfmWrapper( treatyList, 'treatyCoopZ', cores=31 )
 
+load(paste0(pathOut, 'treaty_lfms.rda'))
+
+# single layer Nets bin
+treatyBin_R2 = lfmWrapper( treatyList, 'treatyCoopBin', family='bin', cores=31 )
+treatyBin_R8 = lfmWrapper( treatyList, 'treatyCoopBin', family='bin', cores=31 )
+
 # time layer nets
 treatyL3_R2 = lfmWrapper(treatyZTimeL3List, allVars=T, netDims=2, cores=31)
 treatyL3_R8 = lfmWrapper(treatyZTimeL3List, allVars=T, netDims=8, cores=31)
@@ -96,6 +103,7 @@ treatyL5_R8 = lfmWrapper(treatyZTimeL5List, allVars=T, netDims=8, cores=31)
 #
 save(
 	treaty_R2, treaty_R8,
+	treatyBin_R2, treatyBin_R8,
 	treatyL3_R2, treatyL3_R8,
 	treatyL5_R2, treatyL5_R8,
 	file=paste0(pathOut, 'treaty_lfms.rda') )
