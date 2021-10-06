@@ -68,10 +68,27 @@ econScoresTrade = processLFM(
 	yrs=1990:2020,
 	fname='econScores_trade_lfm.rda')
 
-# treaty lfms
+# single layer treaty lfms
 treaty_R2 = processLFM(
-	
-)
+		yrs=1990:2020, fname='treaty_lfms.rda',
+		obj='treaty_R2', varName='treaty_R2_lfm')
+treaty_R8 = processLFM(
+		yrs=1990:2020, fname='treaty_lfms.rda',
+		obj='treaty_R8', varName='treaty_R8_lfm')
+
+# time layer treaty lfms
+treatyL3_R2 = processLFM(
+		yrs=1990:2020, fname='treaty_lfms.rda',
+		obj='treatyL3_R2', varName='treaty_L3_R2_lfm')
+treatyL3_R8 = processLFM(
+		yrs=1990:2020, fname='treaty_lfms.rda',
+		obj='treatyL3_R8', varName='treaty_L3_R8_lfm')
+treatyL5_R2 = processLFM(
+		yrs=1990:2020, fname='treaty_lfms.rda',
+		obj='treatyL5_R2', varName='treaty_L5_R2_lfm')
+treatyL5_R8 = processLFM(
+		yrs=1990:2020, fname='treaty_lfms.rda',
+		obj='treatyL5_R8', varName='treaty_L5_R8_lfm')
 
 # single layer trade lfms
 trade_R2 = processLFM(
@@ -161,6 +178,9 @@ toMerge = list(
 	diplomScoresAgree,
 	econScoresTradeDep,
 	econScoresTrade,
+	treaty_R2, treaty_R8,
+	treatyL3_R2, treatyL3_R8,
+	treatyL5_R2, treatyL5_R8,
 	trade_R2, tradeDep_R2, tradeRaw_R2, tradeDepRaw_R2,
 	trade_R8, tradeDep_R8, tradeRaw_R8, tradeDepRaw_R8,
 	tradeL3_R2, tradeL5_R2, tradeDepL3_R2, tradeDepL5_R2,

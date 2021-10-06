@@ -84,14 +84,14 @@ lfmWrapper = function(
 ####
 # treaty index
 # single layer Nets
-treaty_R2 = lfmWrapper( treatyList, 'treatyCoopZ', cores=30 )
-treaty_R8 = lfmWrapper( treatyList, 'treatyCoopZ', cores=30 )
+treaty_R2 = lfmWrapper( treatyList, 'treatyCoopZ', cores=31 )
+treaty_R8 = lfmWrapper( treatyList, 'treatyCoopZ', cores=31 )
 
 # time layer nets
-treatyL3_R2 = lfmWrapper(treatyZTimeL3List, allVars=T, netDims=2, cores=30)
-treatyL3_R8 = lfmWrapper(treatyZTimeL3List, allVars=T, netDims=8, cores=30)
-treatyL5_R2 = lfmWrapper(treatyZTimeL5List, allVars=T, netDims=2, cores=30)
-treatyL5_R8 = lfmWrapper(treatyZTimeL5List, allVars=T, netDims=8, cores=30)
+treatyL3_R2 = lfmWrapper(treatyZTimeL3List, allVars=T, netDims=2, cores=31)
+treatyL3_R8 = lfmWrapper(treatyZTimeL3List, allVars=T, netDims=8, cores=31)
+treatyL5_R2 = lfmWrapper(treatyZTimeL5List, allVars=T, netDims=2, cores=31)
+treatyL5_R8 = lfmWrapper(treatyZTimeL5List, allVars=T, netDims=8, cores=31)
 
 #
 save(
