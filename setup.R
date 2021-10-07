@@ -10,7 +10,9 @@ if(Sys.info()['user'] %in% c('maxgallop')){
 	suf = paste0('/Users/', Sys.info()['user'], '/')
 	pathDrop = paste0(suf, 'Dropbox/plutonium/')
 	pathIn = paste0(pathDrop, 'data/')
-	pathOut = paste0(pathDrop, 'results/')}
+	pathOut = paste0(pathDrop, 'results/')
+  pathGraphics = paste0(pathDrop, 'graphics/')
+}
 
 # General functions/libraries
 ## See info on package versions and other session info

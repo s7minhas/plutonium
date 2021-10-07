@@ -1,12 +1,10 @@
 
 \section*{Downstream Modeling}
-\subsection*{Data}
-\begin{itemize}
-\item DV -- closeness to china, Delta from previous year
-\item Controls -- Polity, Population, Distance to Beijing, Bailey/Voeten/Strezhnev Ideal Point Distance, GDP  
-\item Random Efffects -- by region
-\item Key IV: lagged measure of US distraction
-\end{itemize}
+Our unit of observation here is at the country year level. We do this for 118 countries, for every year between 2000 and 2020. The countries excluded from the analysis are 1) those countries where the IMF has no data on their trade flows, 2) the United States and China, since we are interested in the effects of US distraction on economic alignment with China. To generate our dependent variable, we take our measure of a country's economic alignment with China, and we measure the change in it from one year to the next, to see how countries move towards or away from China given the distraction or demonstrated resolve of the United States.
+
+Our key independent variable, as discussed in section \ref{}, is our measures of US distraction based either on active US conflicts (called f1) and US defense expenditures and force commitments (called f2). For each country-year observation, we include the value of US distraction in the previous year to see how it relates to that country's alignment with China.
+
+We also include a number of country level controls that might influence a country's closeness of economic alignment with China. Following the insights of the gravity model of trade, we control for a country's population, their GDP, and the distance between their capital and Beijing. To account for political factors that might make a country more or less closely aligned with China, we include both Polity's measure of a country's level of democracy (the intuition being that autocratic regimes will be more close to other autocracies, like China, and democracies will be less close, all else being equal), and a measure of distance between a country's ideal point, and China's using \citet{bailey:voeten:strezhnev:year}'s measures of state preference drawn from UN voting data. We also include random effects using the UN's 23 region's to account for potentially systemic differences in tendencies of countries to align with the US and China.
 
 \subsection*{Main Results}
 \subsection*{Heterogeneous Effect}
