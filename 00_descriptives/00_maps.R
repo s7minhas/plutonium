@@ -51,7 +51,7 @@ cntryMaps = function(
   # desig ref var
   ddata$ref = ddata[,paste0('cname', cnameRef)]
   ddata$oth = ddata[,paste0('cname',setdiff(1:2,cnameRef))]
-
+  ddata$othcode = countrycode(ddata$oth, "country.name", "cown")
   # desig var for easier ref
   ddata$val = ddata[,var]
 
@@ -68,8 +68,8 @@ cntryMaps = function(
     slice$rnkVal = rank(-slice$val)
 
     # merge with map data
-    world$val = slice$val[match(world$cname, slice$oth)]
-    world$rnkVal = slice$rnkVal[match(world$cname, slice$oth)]
+    world$val = slice$val[match(world$ccode, slice$othcode)]
+    world$rnkVal = slice$rnkVal[match(world$ccode, slice$othcode)]
 
     # choose version of var to plot
     if(!rank){
@@ -88,10 +88,15 @@ cntryMaps = function(
   return(cntryEconMaps) }
 ####
 
+cntry = "UNITED STATES"
+var = "diplomScores_agree_lfm"
+yr = 2019
+ggsave(paste0(pathGraphics, "USdiplom2019.pdf"), map)
 ####
 # bring in map data
 world = fortify(spTransform(getMap(), CRS("+proj=wintri")))
 world$cname = countrycode(world$id, 'country.name', 'country.name')
+world$ccode = countrycode(world$id, 'country.name', 'cown')
 
 toExclude = c(
   'Greenland', 'Iceland',
@@ -113,35 +118,39 @@ load(paste0(pathIn, 'dyadData.rda'))
 # subset to relev vars
 econData = dyadData[,c(
   'cname1','cname2','year',
-  'ptaCnt', 'pta',
-  'trade', 'tradeDepSend',
-  'econScores_tradeDepSend_lfm',
-  # 'econScores_tradeDepSend_lfm_v2',
-  'econScores_trade_lfm'
-  # 'econScores_trade_lfm_v2'
+  'treatyBin_R2_lfm', "icewsScores_gov_lfm", "diplomScores_agree_lfm"
   )]
+
+econData$ccode1 = countrycode(econData$cname1, "country.name", "cown")
+econData$ccode2 = countrycode(econData$cname2, "country.name", "cown")
 
 # subset to relev timeframe
 econData = econData[econData$year>=1990,]
 
-chMapsLFM = cntryMaps(
-  cname('China'),
-  c(1995, 2000, 2005, 2010, 2015, 2020),
-  'trade' )
+usEcon = cntryMaps(
+  cntry = cname('UNITED STATES'),
+  yrBrks = c(1995, 2000, 2005, 2010, 2015, 2020),
+  var = 'treatyBin_R2_lfm' )
 
-chMapsTradeDep = cntryMaps(
-  cname('China'),
-  c(1995, 2000, 2005, 2010, 2015, 2020),
-  'trade', gradLogic=FALSE, discreteVar=FALSE)
-
-chMapsPTA = cntryMaps(
-  cname('China'),
-  c(1995, 2000, 2005, 2010, 2015, 2020),
-  'ptaCnt', gradLogic=FALSE, discreteVar=FALSE)
+chinaEcon = cntryMaps(
+  cntry = cname('CHINA'),
+  yrBrks = c(1995, 2000, 2005, 2010, 2015, 2020),
+  var = 'treatyBin_R2_lfm' )
 
 
-#
-chMapsLFM[[length(chMapsLFM)]]
-chMapsTradeDep[[length(chMapsTradeDep)]]
-chMapsPTA[[length(chMapsPTA)]]
+usDiplo = cntryMaps(
+  cntry = cname('UNITED STATES'),
+  yrBrks = c(1995, 2000, 2005, 2010, 2015, 2019),
+  var = 'diplomScores_agree_lfm' )
+
+chinaDiplo = cntryMaps(
+  cntry = cname('CHINA'),
+  yrBrks = c(1995, 2000, 2005, 2010, 2015, 2019),
+  var = 'diplomScores_agree_lfm' )
+
+
+
+#### Put in a number for the map for that year
+chinaDiplo[[length(chinaDiplo)]]
+usDiplo[[length(usDiplo)]]
 ####

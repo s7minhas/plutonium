@@ -1,11 +1,14 @@
 ####
+outPath = "~/Dropbox/plutonium/graphics"
 if(!'Y' %in% ls()){ load(paste0(inPath, "YXsm.rda")) }
-cntries=dimnames(Y)[[1]]
+cntries=countrycode(unique(dyadData$cname1), "country.name", "iso3c")
+
 loadPkg('cshapes')
 cmap = wmap = cshp(date=as.Date('2001-1-1'))
 wmap = wmap[which(as.character(wmap$ISO1AL3) %in% cntries),]
 coords=coordinates(wmap)
 rownames(coords)=wmap$ISO1AL3
+cntries = cntries[cntries %in% rownames(coords)]
 coords=coords[cntries,]
 
 # Create colors

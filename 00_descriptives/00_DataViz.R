@@ -51,12 +51,9 @@ dyadData = dyadData[dyadData$year>=1990,]
 # plaus viz fn
 plausViz = function(
   dyadIds, dyadLabs,
-  affVar='trade_R8_lfm', color=TRUE,
-  compVars=c('trade', 'tradeRaw', 'tradeDepSend', 'tradeDepSendRaw'),
-  varLabs=c(
-    paste0('LFM v', 1:length(affVar)),
-    'Trade (z)', 'Trade',
-    'Trade Dep. (z)', 'Trade Dep.')){
+  affVar=c('treatyBin_R2_lfm','icewsScores_gov_lfm','diplomScores_agree_lfm'), color=TRUE,
+  compVars=NULL,
+  varLabs=c("Econ and Treaty LFM", "ICEWS LFM", "Diplom LFM")){
 
   # subset to relev pairs and vars
   plausData = dyadData[
@@ -111,45 +108,62 @@ plausViz = function(
 ####
 
 ####
-# test out results with standardized trade
-zTradeViz = plausViz(
+# test out results for a number of dyads, to look at a new dyad, change the dyadIds (and the labels)
+USStuff = plausViz(
   dyadIds=c('2_200', '2_365', '2_710'),
   dyadLabs=c('USA-UK', 'USA-Russia', 'USA-China'),
-  affVar = c(
-    'trade_R8_lfm',
-    'trade_R2_lfm'
-     ),
-  compVars = c('trade'),
-  varLabs = c(
-    'lfm r2',
-    'lfm r8',
-    'trade stdz') )
-ggsave(zTradeViz,
+  affVar = c('treatyBin_R2_lfm','icewsScores_gov_lfm'),
+  compVars = 'diplomScores_agree_lfm',
+  varLabs = c("Econ + Treaties", "ICEWS", "Diplomacy") )
+ggsave(USStuff,
   width=8, height=6,
-  file=paste0(pathGraphics, 'zTradeVizPlaus.pdf'), device=cairo_pdf)
+  file=paste0(pathGraphics, 'boozCompareecon.pdf'), device=cairo_pdf)
 
 # test out results with standardized trade dependence
-zTreatyViz = plausViz(
-  dyadIds=c('2_200', '2_365', '2_710'),
-  dyadLabs=c('USA-UK', 'USA-Russia', 'USA-China'),
-  affVar = c(
-    'treatyBin_R2_lfm',
-    'treatyBin_R8_lfm',
-    'treaty_R2_lfm',
-    'treaty_R8_lfm'
-     ),
-  compVars = NULL,
-  color=FALSE,
-  varLabs = c(
-    'lfm bin r2',
-    'lfm bin r8',
-    'lfm stdz r2',
-    'lfm stdz r8'
-  ) )
-ggsave(zTreatyViz,
+Friends = plausViz(
+  dyadIds=c('2_666', '2_732', '220_255'),
+  dyadLabs=c('USA-Israel', 'US-ROK', 'France-Germany'),
+  affVar = c('treatyBin_R2_lfm','icewsScores_gov_lfm'),
+  compVars = 'diplomScores_agree_lfm',
+  varLabs = c("Econ + Treaties", "ICEWS", "Diplomacy") )
+ggsave(Friends,
   width=8, height=6,
-  file=paste0(pathGraphics, 'zTreatyVizPlaus.pdf'), device=cairo_pdf)
+  file=paste0(pathGraphics, 'boozFriendsEcon.pdf'), device=cairo_pdf)
 ####
+
+Rivals = plausViz(
+  dyadIds=c('750_770', '365_369', '710_740'),
+  dyadLabs=c('India-Pakistan', 'Russia-Ukraine', 'China-Japan'),
+  affVar = c('treatyBin_R2_lfm','icewsScores_gov_lfm'),
+  compVars = 'diplomScores_agree_lfm',
+  varLabs = c("Econ + Treaties", "ICEWS", "Diplomacy") )
+ggsave(Rivals,
+       width=8, height=6,
+       file=paste0(pathGraphics, 'boozRivalsEcon.pdf'), device=cairo_pdf)
+
+
+
+Random = plausViz(
+  dyadIds=c('2_704', '710_349', '640_135'),
+  dyadLabs=c('US-Uzbekistan', 'China-Slovenia', 'Turkey-Peru'),
+  affVar = c('treatyBin_R2_lfm','icewsScores_gov_lfm'),
+  compVars = 'diplomScores_agree_lfm',
+  varLabs = c("Econ + Treaties", "ICEWS", "Diplomacy") )
+ggsave(Random,
+       width=8, height=6,
+       file=paste0(pathGraphics, 'boozRandomEcon.pdf'), device=cairo_pdf)
+
+SecretPals = plausViz(
+  dyadIds=c('666_670', '666_630', '630_670'),
+  dyadLabs=c('Israel-KSA', 'Israel-Iran', 'Iran-KSA'),
+  affVar = c('treatyBin_R2_lfm','icewsScores_gov_lfm'),
+  compVars = 'diplomScores_agree_lfm',
+  varLabs = c("Econ + Treaties", "ICEWS", "Diplomacy") )
+ggsave(SecretPals,
+       width=8, height=6,
+       file=paste0(pathGraphics, 'boozMideastEcon.pdf'), device=cairo_pdf)
+
+summary(dyadData$treatyBin_R2_lfm)
 
 ####
 # create slice of data for scott
@@ -210,3 +224,21 @@ plausViz(
     'LFM Affinity v1', 'LFM Affinity v2',
     'PTA Count', 'Trade Dependence') )
 ####
+
+
+##Variable density by year
+
+p1 <- ggplot(data=dyadData, aes(x=treatyBin_R2_lfm, group=year, fill=year)) +
+  geom_density(adjust=1.5, alpha = .2)
+
+ggsave(paste0(pathGraphics, "bindensity.pdf"), p1)
+
+
+p1 <- ggplot(data=dyadData, aes(x=treaty_R8_lfm, group=year, fill=year)) +
+  geom_density(adjust=1.5, alpha = .2)
+
+ggsave(paste0(pathGraphics, "raw8Density.pdf"), p1)
+
+
+toUse = dyadData[,c(1:4,50:53, 82, 47)]
+save(toUse, file = paste0(pathDrop,"forScott.rda"))
