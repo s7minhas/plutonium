@@ -206,8 +206,77 @@ rm(diplomScores)
 # icews index
 icewsScores = lfmWrapper(
 	icewsList,
-	paste0(pasteVec(c('matl', 'verb'), c('Conf', 'Coop')), 'Gov') )
-save(icewsScores,
+	paste0(pasteVec(c('matl', 'verb'), c('Conf', 'Coop')), 'Gov'),
+	cores=31, netDims=2
+ )
+icewsScores_R5 = lfmWrapper(
+	icewsList,
+	paste0(pasteVec(c('matl', 'verb'), c('Conf', 'Coop')), 'Gov'),
+	cores=31, netDims=5
+ )
+icewsScores_R8 = lfmWrapper(
+	icewsList,
+	paste0(pasteVec(c('matl', 'verb'), c('Conf', 'Coop')), 'Gov'),
+	cores=31, netDims=8
+ )
+
+# coop index
+icewsCoopScores = lfmWrapper(
+	icewsList,
+	paste0(pasteVec(c('matl', 'verb'), c('Coop')), 'Gov'),
+	cores=31, netDims=2
+ )
+icewsCoopScores_R5 = lfmWrapper(
+	icewsList,
+	paste0(pasteVec(c('matl', 'verb'), c('Coop')), 'Gov'),
+	cores=31, netDims=5
+ )
+icewsCoopScores_R8 = lfmWrapper(
+	icewsList,
+	paste0(pasteVec(c('matl', 'verb'), c('Coop')), 'Gov'),
+
+	cores=31, netDims=8
+ )
+
+# matl coop
+matlCoopScores = lfmWrapper(
+	icewsList,
+	paste0(pasteVec(c('matl'), c('Coop')), 'Gov'),
+	cores=31, netDims=2
+ )
+matlCoopScores_R5 = lfmWrapper(
+	icewsList,
+	paste0(pasteVec(c('matl'), c('Coop')), 'Gov'),
+	cores=31, netDims=5
+ )
+matlCoopScores_R8 = lfmWrapper(
+	icewsList,
+	paste0(pasteVec(c('matl'), c('Coop')), 'Gov'),
+	cores=31, netDims=8
+ )
+
+# verb coop
+verbCoopScores = lfmWrapper(
+	icewsList,
+	paste0(pasteVec(c('verb'), c('Coop')), 'Gov'),
+	cores=31, netDims=2
+ )
+verbCoopScores_R5 = lfmWrapper(
+	icewsList,
+	paste0(pasteVec(c('verb'), c('Coop')), 'Gov'),
+	cores=31, netDims=5
+ )
+verbCoopScores_R8 = lfmWrapper(
+	icewsList,
+	paste0(pasteVec(c('verb'), c('Coop')), 'Gov'),
+	cores=31, netDims=8
+ )
+
+#
+save(
+	icewsScores, icewsScores_R5, icewsScores_R8,
+	icewsCoopScores, icewsCoopScores_R5, icewsCoopScores_R8,
+	matlCoopScores, matlCoopScores_R5, matlCoopScores_R8,
+	verbCoopScores, verbCoopScores_R5, verbCoopScores_R8,
 	file=paste0(pathOut, 'icewsScores_gov_lfm.rda'))
-rm(icewsScores)
 ####

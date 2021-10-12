@@ -181,9 +181,48 @@ tradeDepRawL5_R8 = processLFM(
 	obj='tradeDepRawL5_R8', varName='tradeDepRaw_L5_R8_lfm')
 
 #
-icewsScoresGov = processLFM(
-	yrs=1995:2020,
-	fname='icewsScores_gov_lfm.rda')
+icewsScoresGov_R2 = processLFM(
+		yrs=1995:2020, fname='icewsScores_gov_lfm.rda',
+		obj='icewsScores', varName='icewsScores_R2_lfm')
+icewsScoresGov_R5 = processLFM(
+		yrs=1995:2020, fname='icewsScores_gov_lfm.rda',
+		obj='icewsScores_R5', varName='icewsScores_R5_lfm')
+icewsScoresGov_R8 = processLFM(
+		yrs=1995:2020, fname='icewsScores_gov_lfm.rda',
+		obj='icewsScores_R8', varName='icewsScores_R8_lfm')
+
+#
+icewsCoopScoresGov_R2 = processLFM(
+		yrs=1995:2020, fname='icewsScores_gov_lfm.rda',
+		obj='icewsCoopScores', varName='icewsCoopScores_R2_lfm')
+icewsCoopScoresGov_R5 = processLFM(
+		yrs=1995:2020, fname='icewsScores_gov_lfm.rda',
+		obj='icewsCoopScores_R5', varName='icewsCoopScores_R5_lfm')
+icewsCoopScoresGov_R8 = processLFM(
+		yrs=1995:2020, fname='icewsScores_gov_lfm.rda',
+		obj='icewsCoopScores_R8', varName='icewsCoopScores_R8_lfm')
+
+#
+matlCoopScoresGov_R2 = processLFM(
+		yrs=1995:2020, fname='icewsScores_gov_lfm.rda',
+		obj='matlCoopScores', varName='matlCoopScores_R2_lfm')
+matlCoopScoresGov_R5 = processLFM(
+		yrs=1995:2020, fname='icewsScores_gov_lfm.rda',
+		obj='matlCoopScores_R5', varName='matlCoopScores_R5_lfm')
+matlCoopScoresGov_R8 = processLFM(
+		yrs=1995:2020, fname='icewsScores_gov_lfm.rda',
+		obj='matlCoopScores_R8', varName='matlCoopScores_R8_lfm')
+
+#
+verbCoopScoresGov_R2 = processLFM(
+		yrs=1995:2020, fname='icewsScores_gov_lfm.rda',
+		obj='verbCoopScores', varName='verbCoopScores_R2_lfm')
+verbCoopScoresGov_R5 = processLFM(
+		yrs=1995:2020, fname='icewsScores_gov_lfm.rda',
+		obj='verbCoopScores_R5', varName='verbCoopScores_R5_lfm')
+verbCoopScoresGov_R8 = processLFM(
+		yrs=1995:2020, fname='icewsScores_gov_lfm.rda',
+		obj='verbCoopScores_R8', varName='verbCoopScores_R8_lfm')
 ####
 
 ####
@@ -202,7 +241,11 @@ toMerge = list(
 	tradeRawL3_R2, tradeRawL5_R2, tradeDepRawL3_R2, tradeDepRawL5_R2,
 	tradeL3_R8, tradeL5_R8, tradeDepL3_R8, tradeDepL5_R8,
 	tradeRawL3_R8, tradeRawL5_R8, tradeDepRawL3_R8, tradeDepRawL5_R8,
-	icewsScoresGov)
+	icewsScoresGov_R2, icewsScoresGov_R5, icewsScoresGov_R8,
+	icewsCoopScoresGov_R2, icewsCoopScoresGov_R5, icewsCoopScoresGov_R8,
+	matlCoopScoresGov_R2, matlCoopScoresGov_R5, matlCoopScoresGov_R8,
+	verbCoopScoresGov_R2, verbCoopScoresGov_R5, verbCoopScoresGov_R8
+)
 
 # merge
 for(df in toMerge){
