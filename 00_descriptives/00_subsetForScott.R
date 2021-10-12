@@ -53,8 +53,6 @@ vars = c(
 	'verbCoopScores_R2_lfm', 'verbCoopScores_R5_lfm', 'verbCoopScores_R8_lfm'
 )
 
-cbind(setdiff(vars, names(dyadData)))
-
 forScott = dyadData[,vars]
 write.csv(forScott, file=paste0(pathIn, 'forScott.csv'))
 save(forScott, file=paste0(pathIn, 'forScott.rda'))
