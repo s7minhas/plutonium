@@ -112,6 +112,9 @@ frame$tradeDepSend = with(frame, trade/tradeSend)
 frame$tradeDepSend[is.na(frame$tradeDepSend)] = 0
 frame$tradeDepSend[frame$year<1990] = NA
 
+# calc level of trade dependence using gdp of sender as denom
+
+
 # logged version of trade
 # skip logging since we're standardizing,
 # logging and stdizing seems to compress

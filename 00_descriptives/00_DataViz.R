@@ -163,32 +163,6 @@ ggsave(SecretPals,
        width=8, height=6,
        file=paste0(pathGraphics, 'boozMideastEcon.pdf'), device=cairo_pdf)
 
-summary(dyadData$treatyBin_R2_lfm)
-
-####
-# create slice of data for scott
-vars = c(
-  'cname1',
-  'cname2',
-  'ccode1',
-  'ccode2',
-  'dyad',
-  'year',
-  'id',
-  'trade',
-  'tradeRaw',
-  'allyTotalRaw',
-  'ptaCntRaw',
-  'treatyCoopRaw',
-  'treatyBin_R2_lfm',
-  'treatyBin_R8_lfm',
-  'treaty_R2_lfm',
-  'treaty_R8_lfm'
-)
-
-forScott = dyadData[,vars]
-write.csv(forScott, file=paste0(pathIn, 'forScott.csv'))
-####
 
 ####
 # dyads 1
