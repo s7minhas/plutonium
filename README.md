@@ -1,6 +1,6 @@
 ## Replication instructions for the project
 
-The replication archive is organized into three main directories:
+The code directory is organized into three main directories:
 
 - **01_prepData**: contains the scripts necessary to process data downloaded from the variables that feed into the network preference generation models. The inputs and outputs from this directory are all included in the **data** directory.
   - 01_buildSample.R: Steps for building the sample utilized in this analysis
