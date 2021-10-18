@@ -37,6 +37,20 @@ for(f in fileShorts){
 	frame = cbind(
 		frame,
 		toMerge[match(frame$id, toMerge$id),vars] ) }
+
+# also load in nodal economic information from WDI
+# and merge
+load(paste0(pathIn, 'wbData.rda'))
+wbVars = names(wbData)[4:(ncol(wbData)-1)]
+for(v in wbVars){
+
+	# add in sender side info
+	frame$tmp = wbData[match(frame$cname1,wbData$cname),v]
+	names(frame)[ncol(frame)] = paste0(v, '_i')
+
+	# add in receiver side info
+	frame$tmp = wbData[match(frame$cname2,wbData$cname),v]
+	names(frame)[ncol(frame)] = paste0(v, '_j') }
 ####
 
 ####
@@ -54,7 +68,10 @@ for(f in fileShorts){
 # times in which a country was essentially not in the UN
 eventVars = setdiff(
 	names(frame),
-	c('agree', 'IdealPointDistance', names(frame)[1:4]) )
+	c(
+		'agree', 'IdealPointDistance',
+		pasteVec(wbVars, c('_i','_j')),
+		names(frame)[1:4]) )
 frame[,eventVars] = apply(
 	frame[,eventVars], 2, function(x){
 		x[is.na(x)] = 0 ; return(x) } )
@@ -113,7 +130,7 @@ frame$tradeDepSend[is.na(frame$tradeDepSend)] = 0
 frame$tradeDepSend[frame$year<1990] = NA
 
 # calc level of trade dependence using gdp of sender as denom
-
+frame$tradeGDP = with(frame, trade/gdp_i)
 
 # logged version of trade
 # skip logging since we're standardizing,

@@ -2,9 +2,8 @@
 ####
 rm(list=ls())
 pth = paste0(here::here(), '/')
-dpth = paste0(pth, 'data/')
-load(paste0(dpth, 'samp.rda'))
 source(paste0(pth, 'setup.R'))
+load(paste0(pathIn, 'samp.rda'))
 
 #
 loadPkg(c('imfr','foreach','doParallel'))
