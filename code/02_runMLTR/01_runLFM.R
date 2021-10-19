@@ -87,11 +87,12 @@ lfmWrapper = function(
 ####
 
 ####
-# trade dep and gdp raw with srm toggles
+# trade variants with srm toggles
 
 # configs to run
 configs = expand.grid(
 	vars = c(
+		paste0('trade',c('','Raw')),
 		paste0('tradeDepSend',c('','Raw')),
 		paste0('tradeGDP',c('','Raw')) ),
 	netDims = paste0('k',c(2, 5, 8)),
@@ -105,7 +106,7 @@ configs$netDims = char(configs$netDims)
 # configs$time = char(configs$time)
 
 # iterate through config rows
-tMods = lapply(1:nrow(configs), function(ii){
+tradeMods = lapply(1:nrow(configs), function(ii){
 
 	# org configs
 	var = configs$vars[ii]
@@ -121,8 +122,82 @@ tMods = lapply(1:nrow(configs), function(ii){
 	return(out) })
 
 #
-names(tMods) = configs$id
-save(tMods, file=paste0(pathOut, 'tMods.rda'))
+names(tradeMods) = configs$id
+save(tradeMods, file=paste0(pathOut, 'tradeMods.rda'))
+####
+
+####
+# un variants with srm toggles
+
+# configs to run
+configs = expand.grid(
+	vars = c( 'agree' ),
+	netDims = paste0('k',c(2, 5, 8)),
+	# time = paste0('t',c(0, 3, 5)),
+	nodalEffs = c(T, F) )
+configs$id = apply(configs, 1, paste, collapse='_')
+configs$id = gsub('TRUE','srm_lfm',configs$id)
+configs$id = gsub('FALSE','lfm',configs$id)
+configs$vars = char(configs$vars)
+configs$netDims = char(configs$netDims)
+# configs$time = char(configs$time)
+
+# iterate through config rows
+unMods = lapply(1:nrow(configs), function(ii){
+
+	# org configs
+	var = configs$vars[ii]
+	kDim = num(gsub('k','',configs$netDims[ii]))
+	# tDim = num(gsub('t','',configs$time[ii]))
+	inclSRM = configs$nodalEffs[ii]
+
+	# run mod
+	out = lfmWrapper(
+		arrayList = diplomList,
+		yVars=var, allVars = FALSE,
+		netDims = kDim, srmToggle = inclSRM )
+	return(out) })
+
+#
+names(unMods) = configs$id
+save(unMods, file=paste0(pathOut, 'unMods.rda'))
+####
+
+####
+# icews variants with srm toggles
+
+# configs to run
+configs = expand.grid(
+	vars = pasteVec(paste0(c('matl', 'verb'), c('Coop')), c('','Gov')),
+	netDims = paste0('k',c(2, 5, 8)),
+	# time = paste0('t',c(0, 3, 5)),
+	nodalEffs = c(T, F) )
+configs$id = apply(configs, 1, paste, collapse='_')
+configs$id = gsub('TRUE','srm_lfm',configs$id)
+configs$id = gsub('FALSE','lfm',configs$id)
+configs$vars = char(configs$vars)
+configs$netDims = char(configs$netDims)
+# configs$time = char(configs$time)
+
+# iterate through config rows
+icewsMods = lapply(1:nrow(configs), function(ii){
+
+	# org configs
+	var = configs$vars[ii]
+	kDim = num(gsub('k','',configs$netDims[ii]))
+	# tDim = num(gsub('t','',configs$time[ii]))
+	inclSRM = configs$nodalEffs[ii]
+
+	# run mod
+	out = lfmWrapper(
+		arrayList = icewsList,
+		yVars=var, allVars = FALSE,
+		netDims = kDim, srmToggle = inclSRM )
+	return(out) })
+
+#
+names(icewsMods) = configs$id
+save(icewsMods, file=paste0(pathOut, 'icewsMods.rda'))
 ####
 
 # ####
