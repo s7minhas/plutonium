@@ -117,7 +117,6 @@ tMods = lapply(1:nrow(configs), function(ii){
 	out = lfmWrapper(
 		arrayList = tradeList,
 		yVars=var, allVars = FALSE,
-		iters=10, burn=5, dens=1,
 		netDims = kDim, srmToggle = inclSRM )
 	return(out) })
 
