@@ -55,7 +55,7 @@ lfmWrapper = function(
 						Y = yL,
 						rvar=srmToggle, cvar=srmToggle,
 						dcor=srmToggle, nvar=srmToggle,
-						R=netDims, model=family, intercept=FALSE,
+						R=netDims, model=family, intercept=srmToggle,
 						symmetric=FALSE,
 						nscan=iters,
 						burn=burn, odens=dens, seed=seed,
@@ -67,16 +67,19 @@ lfmWrapper = function(
 				# run
 				out = ame(
 						Y = arr,
-						rvar=FALSE, cvar=FALSE,
-						dcor=FALSE, nvar=FALSE,
-						R=netDims, model='nrm', intercept=FALSE,
+						rvar=srmToggle, cvar=srmToggle,
+						dcor=srmToggle, nvar=srmToggle,
+						R=netDims, model=family, intercept=srmToggle,
 						symmetric=FALSE,
 						nscan=iters,
 						burn=burn, odens=dens, seed=seed,
 						plot=FALSE, print=FALSE, gof=FALSE ) }
 
 			# extract relev output
-			return( list(U=out$U, V=out$V, UVPM=out$UVPM) ) }
+			return( list(
+				U=out$U, V=out$V, UVPM=out$UVPM,
+				GOF=out$GOF, YPM=out$YPM, EZ=out$EZ
+			) ) }
 
 	# close cores and return
 	stopCluster(cl)
@@ -84,199 +87,239 @@ lfmWrapper = function(
 ####
 
 ####
-# treaty index
-# single layer Nets
-treaty_R2 = lfmWrapper( treatyList, 'treatyCoopZ', cores=31, netDims=2 )
-treaty_R5 = lfmWrapper( treatyList, 'treatyCoopZ', cores=31, netDims=5 )
-treaty_R8 = lfmWrapper( treatyList, 'treatyCoopZ', cores=31, netDims=8 )
+# trade dep and gdp raw with srm toggles
 
-# single layer Nets bin
-treatyBin_R2 = lfmWrapper( treatyList, 'treatyCoopBin', family='bin', cores=31, netDims=2 )
-treatyBin_R5 = lfmWrapper( treatyList, 'treatyCoopBin', family='bin', cores=31, netDims=5 )
-treatyBin_R8 = lfmWrapper( treatyList, 'treatyCoopBin', family='bin', cores=31, netDims=8 )
+# configs to run
+configs = expand.grid(
+	vars = c(
+		paste0('tradeDepSend',c('','Raw')),
+		paste0('tradeGDP',c('','Raw')) ),
+	netDims = paste0('k',c(2, 5, 8)),
+	# time = paste0('t',c(0, 3, 5)),
+	nodalEffs = c(T, F) )
+configs$id = apply(configs, 1, paste, collapse='_')
+configs$id = gsub('TRUE','srm_lfm',configs$id)
+configs$id = gsub('FALSE','lfm',configs$id)
+configs$vars = char(configs$vars)
+configs$netDims = char(configs$netDims)
+# configs$time = char(configs$time)
 
-# time layer nets
-treatyL3_R2 = lfmWrapper(treatyZTimeL3List, allVars=T, netDims=2, cores=31)
-treatyL3_R8 = lfmWrapper(treatyZTimeL3List, allVars=T, netDims=8, cores=31)
-treatyL5_R2 = lfmWrapper(treatyZTimeL5List, allVars=T, netDims=2, cores=31)
-treatyL5_R8 = lfmWrapper(treatyZTimeL5List, allVars=T, netDims=8, cores=31)
+# iterate through config rows
+tMods = lapply(1:nrow(configs), function(ii){
 
-#
-save(
-	treaty_R2, treaty_R5, treaty_R8,
-	treatyBin_R2, treatyBin_R5, treatyBin_R8,
-	treatyL3_R2, treatyL3_R8,
-	treatyL5_R2, treatyL5_R8,
-	file=paste0(pathOut, 'treaty_lfms.rda') )
-####
+	# org configs
+	var = configs$vars[ii]
+	kDim = num(gsub('k','',configs$netDims[ii]))
+	# tDim = num(gsub('t','',configs$time[ii]))
+	inclSRM = configs$nodalEffs[ii]
 
-####
-# econ index
-econTradeDepScores = lfmWrapper(
-	econList,
-	c('ptaCnt', 'tradeDepSend') )
-save(econTradeDepScores,
-	file=paste0(pathOut, 'econScores_tradeDepSend_lfm.rda'))
-rm(econTradeDepScores)
-
-econTradeScores = lfmWrapper(
-	econList,
-	c('ptaCnt', 'trade') )
-save(econTradeScores,
-	file=paste0(pathOut, 'econScores_trade_lfm.rda'))
-rm(econTradeScores)
-####
-
-####
-# trade indices
-# single layer nets
-trade_R2 = lfmWrapper(tradeList, 'trade' )
-tradeDep_R2 = lfmWrapper(tradeList, 'tradeDepSend' )
-tradeRaw_R2 = lfmWrapper(tradeList, 'tradeRaw' )
-tradeDepRaw_R2 = lfmWrapper(tradeList, 'tradeDepSendRaw' )
-
-trade_R8 = lfmWrapper(tradeList, 'trade', netDims=8 )
-tradeDep_R8 = lfmWrapper(tradeList, 'tradeDepSend', netDims=8 )
-tradeRaw_R8 = lfmWrapper(tradeList, 'tradeRaw', netDims=8 )
-tradeDepRaw_R8 = lfmWrapper(tradeList, 'tradeDepSendRaw', netDims=8 )
-
-# save
-save(
-	trade_R2, tradeDep_R2, tradeRaw_R2, tradeDepRaw_R2,
-	trade_R8, tradeDep_R8, tradeRaw_R8, tradeDepRaw_R8,
-	file=paste0(pathOut, 'trade_singleLayer_lfms.rda')
-)
-
-# cleanup
-rm(
-	trade_R2, tradeDep_R2, tradeRaw_R2, tradeDepRaw_R2,
-	trade_R8, tradeDep_R8, tradeRaw_R8, tradeDepRaw_R8 )
-####
-
-####
-# trade indices
-# time layer nets
-tradeL3_R2 = lfmWrapper(tradeTimeL3List, allVars=T, netDims=2)
-tradeL5_R2 = lfmWrapper(tradeTimeL5List, allVars=T, netDims=2)
-tradeDepL3_R2 = lfmWrapper(tradeDepTimeL3List, allVars=T, netDims=2)
-tradeDepL5_R2 = lfmWrapper(tradeDepTimeL5List, allVars=T, netDims=2)
-tradeRawL3_R2 = lfmWrapper(tradeRawTimeL3List, allVars=T, netDims=2)
-tradeRawL5_R2 = lfmWrapper(tradeRawTimeL5List, allVars=T, netDims=2)
-tradeDepRawL3_R2 = lfmWrapper(tradeDepRawTimeL3List, allVars=T, netDims=2)
-tradeDepRawL5_R2 = lfmWrapper(tradeDepRawTimeL5List, allVars=T, netDims=2)
-
-tradeL3_R8 = lfmWrapper(tradeTimeL3List, allVars=T, netDims=8)
-tradeL5_R8 = lfmWrapper(tradeTimeL5List, allVars=T, netDims=8)
-tradeDepL3_R8 = lfmWrapper(tradeDepTimeL3List, allVars=T, netDims=8, seed=1234)
-tradeDepL5_R8 = lfmWrapper(tradeDepTimeL5List, allVars=T, netDims=8)
-tradeRawL3_R8 = lfmWrapper(tradeRawTimeL3List, allVars=T, netDims=8)
-tradeRawL5_R8 = lfmWrapper(tradeRawTimeL5List, allVars=T, netDims=8)
-tradeDepRawL3_R8 = lfmWrapper(tradeDepRawTimeL3List, allVars=T, netDims=8, seed=1234)
-tradeDepRawL5_R8 = lfmWrapper(tradeDepRawTimeL5List, allVars=T, netDims=8, seed=1234)
-
-# save
-save(
-	tradeL3_R2, tradeL5_R2, tradeDepL3_R2, tradeDepL5_R2,
-	tradeRawL3_R2, tradeRawL5_R2, tradeDepRawL3_R2, tradeDepRawL5_R2,
-	tradeL3_R8, tradeL5_R8, tradeDepL3_R8, tradeDepL5_R8,
-	tradeRawL3_R8, tradeRawL5_R8, tradeDepRawL3_R8, tradeDepRawL5_R8,
-	file=paste0(pathOut, 'trade_timeLayer_lfms.rda')
-)
-
-# cleanup
-rm(
-	tradeL3_R2, tradeL5_R2, tradeDepL3_R2, tradeDepL5_R2,
-	tradeRawL3_R2, tradeRawL5_R2, tradeDepRawL3_R2, tradeDepRawL5_R2,
-	tradeL3_R8, tradeL5_R8, tradeDepL3_R8, tradeDepL5_R8,
-	tradeRawL3_R8, tradeRawL5_R8, tradeDepRawL3_R8, tradeDepRawL5_R8
-)
-####
-
-####
-# diplom index
-diplomScores = lfmWrapper(
-	diplomList,
-	c('allyTotal', 'agree') )
-save(diplomScores,
-	file=paste0(pathOut, 'diplomScores_agree_lfm.rda'))
-rm(diplomScores)
-####
-
-####
-# icews index
-icewsScores = lfmWrapper(
-	icewsList,
-	paste0(pasteVec(c('matl', 'verb'), c('Conf', 'Coop')), 'Gov'),
-	cores=31, netDims=2
- )
-icewsScores_R5 = lfmWrapper(
-	icewsList,
-	paste0(pasteVec(c('matl', 'verb'), c('Conf', 'Coop')), 'Gov'),
-	cores=31, netDims=5
- )
-icewsScores_R8 = lfmWrapper(
-	icewsList,
-	paste0(pasteVec(c('matl', 'verb'), c('Conf', 'Coop')), 'Gov'),
-	cores=31, netDims=8
- )
-
-# coop index
-icewsCoopScores = lfmWrapper(
-	icewsList,
-	paste0(pasteVec(c('matl', 'verb'), c('Coop')), 'Gov'),
-	cores=31, netDims=2
- )
-icewsCoopScores_R5 = lfmWrapper(
-	icewsList,
-	paste0(pasteVec(c('matl', 'verb'), c('Coop')), 'Gov'),
-	cores=31, netDims=5
- )
-icewsCoopScores_R8 = lfmWrapper(
-	icewsList,
-	paste0(pasteVec(c('matl', 'verb'), c('Coop')), 'Gov'),
-
-	cores=31, netDims=8
- )
-
-# matl coop
-matlCoopScores = lfmWrapper(
-	icewsList,
-	paste0(pasteVec(c('matl'), c('Coop')), 'Gov'),
-	cores=31, netDims=2
- )
-matlCoopScores_R5 = lfmWrapper(
-	icewsList,
-	paste0(pasteVec(c('matl'), c('Coop')), 'Gov'),
-	cores=31, netDims=5
- )
-matlCoopScores_R8 = lfmWrapper(
-	icewsList,
-	paste0(pasteVec(c('matl'), c('Coop')), 'Gov'),
-	cores=31, netDims=8
- )
-
-# verb coop
-verbCoopScores = lfmWrapper(
-	icewsList,
-	paste0(pasteVec(c('verb'), c('Coop')), 'Gov'),
-	cores=31, netDims=2
- )
-verbCoopScores_R5 = lfmWrapper(
-	icewsList,
-	paste0(pasteVec(c('verb'), c('Coop')), 'Gov'),
-	cores=31, netDims=5
- )
-verbCoopScores_R8 = lfmWrapper(
-	icewsList,
-	paste0(pasteVec(c('verb'), c('Coop')), 'Gov'),
-	cores=31, netDims=8
- )
+	# run mod
+	out = lfmWrapper(
+		arrayList = tradeList,
+		yVars=var, allVars = FALSE,
+		iters=10, burn=5, dens=1,
+		netDims = kDim, srmToggle = inclSRM )
+	return(out) })
 
 #
-save(
-	icewsScores, icewsScores_R5, icewsScores_R8,
-	icewsCoopScores, icewsCoopScores_R5, icewsCoopScores_R8,
-	matlCoopScores, matlCoopScores_R5, matlCoopScores_R8,
-	verbCoopScores, verbCoopScores_R5, verbCoopScores_R8,
-	file=paste0(pathOut, 'icewsScores_gov_lfm.rda'))
+names(tMods) = configs$id
+save(tMods, file=paste0(pathOut, 'tMods.rda'))
 ####
+
+# ####
+# # treaty index
+# # single layer Nets
+# treaty_R2 = lfmWrapper( treatyList, 'treatyCoopZ', cores=31, netDims=2 )
+# treaty_R5 = lfmWrapper( treatyList, 'treatyCoopZ', cores=31, netDims=5 )
+# treaty_R8 = lfmWrapper( treatyList, 'treatyCoopZ', cores=31, netDims=8 )
+#
+# # single layer Nets bin
+# treatyBin_R2 = lfmWrapper( treatyList, 'treatyCoopBin', family='bin', cores=31, netDims=2 )
+# treatyBin_R5 = lfmWrapper( treatyList, 'treatyCoopBin', family='bin', cores=31, netDims=5 )
+# treatyBin_R8 = lfmWrapper( treatyList, 'treatyCoopBin', family='bin', cores=31, netDims=8 )
+#
+# # time layer nets
+# treatyL3_R2 = lfmWrapper(treatyZTimeL3List, allVars=T, netDims=2, cores=31)
+# treatyL3_R8 = lfmWrapper(treatyZTimeL3List, allVars=T, netDims=8, cores=31)
+# treatyL5_R2 = lfmWrapper(treatyZTimeL5List, allVars=T, netDims=2, cores=31)
+# treatyL5_R8 = lfmWrapper(treatyZTimeL5List, allVars=T, netDims=8, cores=31)
+#
+# #
+# save(
+# 	treaty_R2, treaty_R5, treaty_R8,
+# 	treatyBin_R2, treatyBin_R5, treatyBin_R8,
+# 	treatyL3_R2, treatyL3_R8,
+# 	treatyL5_R2, treatyL5_R8,
+# 	file=paste0(pathOut, 'treaty_lfms.rda') )
+# ####
+#
+# ####
+# # econ index
+# econTradeDepScores = lfmWrapper(
+# 	econList,
+# 	c('ptaCnt', 'tradeDepSend') )
+# save(econTradeDepScores,
+# 	file=paste0(pathOut, 'econScores_tradeDepSend_lfm.rda'))
+# rm(econTradeDepScores)
+#
+# econTradeScores = lfmWrapper(
+# 	econList,
+# 	c('ptaCnt', 'trade') )
+# save(econTradeScores,
+# 	file=paste0(pathOut, 'econScores_trade_lfm.rda'))
+# rm(econTradeScores)
+# ####
+#
+# ####
+# # trade indices
+# # single layer nets
+# trade_R2 = lfmWrapper(tradeList, 'trade' )
+# tradeDep_R2 = lfmWrapper(tradeList, 'tradeDepSend' )
+# tradeRaw_R2 = lfmWrapper(tradeList, 'tradeRaw' )
+# tradeDepRaw_R2 = lfmWrapper(tradeList, 'tradeDepSendRaw' )
+#
+# trade_R8 = lfmWrapper(tradeList, 'trade', netDims=8 )
+# tradeDep_R8 = lfmWrapper(tradeList, 'tradeDepSend', netDims=8 )
+# tradeRaw_R8 = lfmWrapper(tradeList, 'tradeRaw', netDims=8 )
+# tradeDepRaw_R8 = lfmWrapper(tradeList, 'tradeDepSendRaw', netDims=8 )
+#
+# # save
+# save(
+# 	trade_R2, tradeDep_R2, tradeRaw_R2, tradeDepRaw_R2,
+# 	trade_R8, tradeDep_R8, tradeRaw_R8, tradeDepRaw_R8,
+# 	file=paste0(pathOut, 'trade_singleLayer_lfms.rda')
+# )
+#
+# # cleanup
+# rm(
+# 	trade_R2, tradeDep_R2, tradeRaw_R2, tradeDepRaw_R2,
+# 	trade_R8, tradeDep_R8, tradeRaw_R8, tradeDepRaw_R8 )
+# ####
+#
+# ####
+# # trade indices
+# # time layer nets
+# tradeL3_R2 = lfmWrapper(tradeTimeL3List, allVars=T, netDims=2)
+# tradeL5_R2 = lfmWrapper(tradeTimeL5List, allVars=T, netDims=2)
+# tradeDepL3_R2 = lfmWrapper(tradeDepTimeL3List, allVars=T, netDims=2)
+# tradeDepL5_R2 = lfmWrapper(tradeDepTimeL5List, allVars=T, netDims=2)
+# tradeRawL3_R2 = lfmWrapper(tradeRawTimeL3List, allVars=T, netDims=2)
+# tradeRawL5_R2 = lfmWrapper(tradeRawTimeL5List, allVars=T, netDims=2)
+# tradeDepRawL3_R2 = lfmWrapper(tradeDepRawTimeL3List, allVars=T, netDims=2)
+# tradeDepRawL5_R2 = lfmWrapper(tradeDepRawTimeL5List, allVars=T, netDims=2)
+#
+# tradeL3_R8 = lfmWrapper(tradeTimeL3List, allVars=T, netDims=8)
+# tradeL5_R8 = lfmWrapper(tradeTimeL5List, allVars=T, netDims=8)
+# tradeDepL3_R8 = lfmWrapper(tradeDepTimeL3List, allVars=T, netDims=8, seed=1234)
+# tradeDepL5_R8 = lfmWrapper(tradeDepTimeL5List, allVars=T, netDims=8)
+# tradeRawL3_R8 = lfmWrapper(tradeRawTimeL3List, allVars=T, netDims=8)
+# tradeRawL5_R8 = lfmWrapper(tradeRawTimeL5List, allVars=T, netDims=8)
+# tradeDepRawL3_R8 = lfmWrapper(tradeDepRawTimeL3List, allVars=T, netDims=8, seed=1234)
+# tradeDepRawL5_R8 = lfmWrapper(tradeDepRawTimeL5List, allVars=T, netDims=8, seed=1234)
+#
+# # save
+# save(
+# 	tradeL3_R2, tradeL5_R2, tradeDepL3_R2, tradeDepL5_R2,
+# 	tradeRawL3_R2, tradeRawL5_R2, tradeDepRawL3_R2, tradeDepRawL5_R2,
+# 	tradeL3_R8, tradeL5_R8, tradeDepL3_R8, tradeDepL5_R8,
+# 	tradeRawL3_R8, tradeRawL5_R8, tradeDepRawL3_R8, tradeDepRawL5_R8,
+# 	file=paste0(pathOut, 'trade_timeLayer_lfms.rda')
+# )
+#
+# # cleanup
+# rm(
+# 	tradeL3_R2, tradeL5_R2, tradeDepL3_R2, tradeDepL5_R2,
+# 	tradeRawL3_R2, tradeRawL5_R2, tradeDepRawL3_R2, tradeDepRawL5_R2,
+# 	tradeL3_R8, tradeL5_R8, tradeDepL3_R8, tradeDepL5_R8,
+# 	tradeRawL3_R8, tradeRawL5_R8, tradeDepRawL3_R8, tradeDepRawL5_R8
+# )
+# ####
+#
+# ####
+# # diplom index
+# diplomScores = lfmWrapper(
+# 	diplomList,
+# 	c('allyTotal', 'agree') )
+# save(diplomScores,
+# 	file=paste0(pathOut, 'diplomScores_agree_lfm.rda'))
+# rm(diplomScores)
+# ####
+#
+# ####
+# # icews index
+# icewsScores = lfmWrapper(
+# 	icewsList,
+# 	paste0(pasteVec(c('matl', 'verb'), c('Conf', 'Coop')), 'Gov'),
+# 	cores=31, netDims=2
+#  )
+# icewsScores_R5 = lfmWrapper(
+# 	icewsList,
+# 	paste0(pasteVec(c('matl', 'verb'), c('Conf', 'Coop')), 'Gov'),
+# 	cores=31, netDims=5
+#  )
+# icewsScores_R8 = lfmWrapper(
+# 	icewsList,
+# 	paste0(pasteVec(c('matl', 'verb'), c('Conf', 'Coop')), 'Gov'),
+# 	cores=31, netDims=8
+#  )
+#
+# # coop index
+# icewsCoopScores = lfmWrapper(
+# 	icewsList,
+# 	paste0(pasteVec(c('matl', 'verb'), c('Coop')), 'Gov'),
+# 	cores=31, netDims=2
+#  )
+# icewsCoopScores_R5 = lfmWrapper(
+# 	icewsList,
+# 	paste0(pasteVec(c('matl', 'verb'), c('Coop')), 'Gov'),
+# 	cores=31, netDims=5
+#  )
+# icewsCoopScores_R8 = lfmWrapper(
+# 	icewsList,
+# 	paste0(pasteVec(c('matl', 'verb'), c('Coop')), 'Gov'),
+#
+# 	cores=31, netDims=8
+#  )
+#
+# # matl coop
+# matlCoopScores = lfmWrapper(
+# 	icewsList,
+# 	paste0(pasteVec(c('matl'), c('Coop')), 'Gov'),
+# 	cores=31, netDims=2
+#  )
+# matlCoopScores_R5 = lfmWrapper(
+# 	icewsList,
+# 	paste0(pasteVec(c('matl'), c('Coop')), 'Gov'),
+# 	cores=31, netDims=5
+#  )
+# matlCoopScores_R8 = lfmWrapper(
+# 	icewsList,
+# 	paste0(pasteVec(c('matl'), c('Coop')), 'Gov'),
+# 	cores=31, netDims=8
+#  )
+#
+# # verb coop
+# verbCoopScores = lfmWrapper(
+# 	icewsList,
+# 	paste0(pasteVec(c('verb'), c('Coop')), 'Gov'),
+# 	cores=31, netDims=2
+#  )
+# verbCoopScores_R5 = lfmWrapper(
+# 	icewsList,
+# 	paste0(pasteVec(c('verb'), c('Coop')), 'Gov'),
+# 	cores=31, netDims=5
+#  )
+# verbCoopScores_R8 = lfmWrapper(
+# 	icewsList,
+# 	paste0(pasteVec(c('verb'), c('Coop')), 'Gov'),
+# 	cores=31, netDims=8
+#  )
+#
+# #
+# save(
+# 	icewsScores, icewsScores_R5, icewsScores_R8,
+# 	icewsCoopScores, icewsCoopScores_R5, icewsCoopScores_R8,
+# 	matlCoopScores, matlCoopScores_R5, matlCoopScores_R8,
+# 	verbCoopScores, verbCoopScores_R5, verbCoopScores_R8,
+# 	file=paste0(pathOut, 'icewsScores_gov_lfm.rda'))
+# ####

@@ -120,7 +120,11 @@ econList = lfmPrep(econYrs, econVars)
 # 1990-2020 (1990 start because of limitations in imf trade data)
 # run yearly in case of ame so can start at 1990
 tradeYrs = 1990:2020
-tradeVars = c('trade', 'tradeRaw', 'tradeDepSend', 'tradeDepSendRaw')
+tradeVars = c(
+	'trade', 'tradeRaw',
+	'tradeDepSend', 'tradeDepSendRaw',
+	'tradeGDP', 'tradeGDPRaw'
+)
 
 # apply lfmPrep fn
 tradeList = lfmPrep(tradeYrs, tradeVars)
@@ -146,6 +150,14 @@ tradeDepTimeL5List = lfmTimePrep('tradeDepSend', 5)
 # apply lfmTimePrep fn to raw trade
 tradeDepRawTimeL3List = lfmTimePrep('tradeDepSendRaw', 3)
 tradeDepRawTimeL5List = lfmTimePrep('tradeDepSendRaw', 5)
+
+# apply lfmTimePrep fn to standardized trade gdp
+tradeGDPTimeL3List = lfmTimePrep('tradeGDP', 3)
+tradeGDPTimeL5List = lfmTimePrep('tradeGDP', 5)
+
+# apply lfmTimePrep fn to raw trade
+tradeGDPRawTimeL3List = lfmTimePrep('tradeGDPRaw', 3)
+tradeGDPRawTimeL5List = lfmTimePrep('tradeGDPRaw', 5)
 ####
 
 ####
@@ -189,6 +201,8 @@ save(
 	tradeRawTimeL3List, tradeRawTimeL5List,
 	tradeDepTimeL3List, tradeDepTimeL5List,
 	tradeDepRawTimeL3List, tradeDepRawTimeL5List,
+	tradeGDPTimeL3List, tradeGDPTimeL5List,
+	tradeGDPRawTimeL3List, tradeGDPRawTimeL5List,
 	diplomList, icewsList, super1List, super2List,
   file=paste0(pathIn, 'arrList_lfm.rda')
 )

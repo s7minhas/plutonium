@@ -146,6 +146,7 @@ frame$tradeGDP = with(frame, trade/gdp_i)
 # add some raw versions back in for testing
 tradeRaw = frame$trade
 tradeDepSendRaw = frame$tradeDepSend
+tradeGDPRaw = frame$tradeGDP
 allyTotal = frame$allyTotal
 ptaCnt = frame$ptaCnt
 
@@ -159,6 +160,7 @@ for(t in yrs){
 # merge back in raw trade val
 frame$tradeRaw = tradeRaw ; rm(tradeRaw)
 frame$tradeDepSendRaw = tradeDepSendRaw ; rm(tradeDepSendRaw)
+frame$tradeGDPRaw = tradeGDPRaw ; rm(tradeGDPRaw)
 frame$allyTotalRaw = allyTotal ; rm(allyTotal)
 frame$ptaCntRaw = ptaCnt ; rm(ptaCnt)
 
