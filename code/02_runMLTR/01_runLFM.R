@@ -92,7 +92,7 @@ lfmWrapper = function(
 # configs to run
 configs = expand.grid(
 	vars = c(
-		paste0('trade',c('','Raw')),
+		paste0('trade',c('')),
 		paste0('tradeDepSend',c('','Raw')),
 		paste0('tradeGDP',c('','Raw')) ),
 	netDims = paste0('k',c(2, 5, 8)),
