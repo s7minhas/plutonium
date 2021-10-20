@@ -5,7 +5,7 @@ source(paste0(pth, 'setup.R'))
 
 #
 loadPkg(c(
-  'reshape2',
+  'reshape2', 'amen',
   'ggplot2', 'tidyverse',
   'cshapes', 'countrycode' ))
 ####
@@ -19,7 +19,7 @@ load(file=paste0(pathOut, 'icewsMods.rda')) # icewsMods
 ####
 # fn to pull out ypm from lat var mods
 getConfigDF = function(
-  modList
+  modList, getGOF=FALSE
 ){
 
   # iterate through modList and puill out YPM
@@ -36,6 +36,23 @@ getConfigDF = function(
 
       # pull out the YPM matrix
       yhat = modSlice$'YPM'
+
+      # get gof obs
+      if(getGOF){
+
+        # get gof stats
+        gofObs = as.vector(modSlice$'GOF')
+        gofPred = gofstats(modSlice$'YPM')
+        gofDiff = gofPred - gofObs
+
+        # organize
+        gofDF = data.frame(matrix(gofDiff, nrow=1))
+        names(gofDF) = colnames(modSlice$'GOF')
+        gofDF$config = names(modList)[iiConfig]
+        gofDF$time = tt
+
+        #
+        return(gofDF) }
 
       # reorg into column
       yhat = reshape2::melt(yhat)
@@ -60,22 +77,42 @@ getConfigDF = function(
     return(modT) })
 
   # merge into one df
-  configDF = configData[[1]]
-  for(ii in 2:length(configData)){
-    toAdd = configData[[ii]][,4]
-    configDF = cbind(configDF, toAdd)
-    names(configDF)[ncol(configDF)] = names(modList)[ii] }
+  if(!getGOF){
+    configDF = configData[[1]]
+    for(ii in 2:length(configData)){
+      toAdd = configData[[ii]][,4]
+      configDF = cbind(configDF, toAdd)
+      names(configDF)[ncol(configDF)] = names(modList)[ii] } }
+
+  # gof case
+  if(getGOF){
+    configDF = do.call('rbind', configData) }
 
   #
   return(configDF) }
+####
 
-# apply fn to mods
+####
+# apply fns to view gof stats
+unGOF = getConfigDF(unMods, TRUE)
+tradeGOF = getConfigDF(tradeMods, TRUE)
+icewsGOF = getConfigDF(icewsMods, TRUE)
+####
+
+####
+# apply fn to get out YPM from mods and examine correlations
 unDF = getConfigDF(unMods)
 tradeDF = getConfigDF(tradeMods)
 icewsDF = getConfigDF(icewsMods)
-####
 
-####
-# correlations
+# reorg into list
+dfs = list(unDF, tradeDF, icewsDF)
+lapply(dfs, head)
 
+# write correlations to csv
+lapply(1:length(dfs), function(ii){
+  df = dfs[[ii]]
+  mats = round(cor(df[,-(1:3)]), 2)
+  write.csv(mats, file=paste0('C:/Users/Owner/Desktop/tmp',ii,'.csv'))
+   })
 ####
