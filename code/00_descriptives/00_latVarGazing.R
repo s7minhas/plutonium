@@ -113,20 +113,23 @@ gofViz = function(gofData){
   return(gg) }
 
 # add some logical helpers to separate into blocks for trade
-tradeGOF$srm = grepl('_srm_', tradeGOF$config)
-tradeGOF$k2 = grepl('_k2_', tradeGOF$config)
-tradeGOF$k5 = grepl('_k5_', tradeGOF$config)
-tradeGOF$k8 = grepl('_k8_', tradeGOF$config)
 tradeGOF$trade = grepl('trade_k', tradeGOF$config)
 tradeGOF$tradeDepSend = grepl('tradeDepSend_k', tradeGOF$config)
 tradeGOF$tradeDepSendRaw = grepl('tradeDepSendRaw_k', tradeGOF$config)
 tradeGOF$tradeGDP = grepl('tradeGDP_k', tradeGOF$config)
 tradeGOF$tradeGDPRaw = grepl('tradeGDPRaw_k', tradeGOF$config)
 
+# add some logical helpers to separate into blocks for icews
+icewsGOF$matlCoopGov = grepl('matlCoopGov_k', icewsGOF$config)
+icewsGOF$verbCoopGov = grepl('verbCoopGov_k', icewsGOF$config)
+
 #
 gofViz(unGOF)
 gofViz(tradeGOF[tradeGOF$trade,])
-gofViz(icewsGOF)
+gofViz(tradeGOF[tradeGOF$tradeDepSendRaw,])
+gofViz(tradeGOF[tradeGOF$tradeGDP,])
+gofViz(icewsGOF[icewsGOF$matlCoopGov,])
+gofViz(icewsGOF[icewsGOF$verbCoopGov,])
 ####
 
 ####
