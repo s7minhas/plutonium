@@ -5,7 +5,7 @@ source(paste0(pth, 'setup.R'))
 
 #
 loadPkg(c(
-  'reshape2', 'amen',
+  'reshape2', 'amen', 'tidyr',
   'ggplot2', 'tidyverse',
   'cshapes', 'countrycode' ))
 ####
@@ -97,6 +97,36 @@ getConfigDF = function(
 unGOF = getConfigDF(unMods, TRUE)
 tradeGOF = getConfigDF(tradeMods, TRUE)
 icewsGOF = getConfigDF(icewsMods, TRUE)
+
+#
+gofViz = function(gofData){
+  ggData = pivot_longer(gofData, cols=sd.rowmean:triad.dep)
+  gg=ggplot(
+    data = ggData,
+    aes(x=config, y=value, color=time) ) +
+    geom_point() +
+    geom_hline(aes(yintercept=0), color='red', linetype='dashed') +
+    facet_wrap(~name, scales='free') +
+    theme(
+      axis.text.x=element_text(angle=45, hjust=1)
+    )
+  return(gg) }
+
+# add some logical helpers to separate into blocks for trade
+tradeGOF$srm = grepl('_srm_', tradeGOF$config)
+tradeGOF$k2 = grepl('_k2_', tradeGOF$config)
+tradeGOF$k5 = grepl('_k5_', tradeGOF$config)
+tradeGOF$k8 = grepl('_k8_', tradeGOF$config)
+tradeGOF$trade = grepl('trade_k', tradeGOF$config)
+tradeGOF$tradeDepSend = grepl('tradeDepSend_k', tradeGOF$config)
+tradeGOF$tradeDepSendRaw = grepl('tradeDepSendRaw_k', tradeGOF$config)
+tradeGOF$tradeGDP = grepl('tradeGDP_k', tradeGOF$config)
+tradeGOF$tradeGDPRaw = grepl('tradeGDPRaw_k', tradeGOF$config)
+
+#
+gofViz(unGOF)
+gofViz(tradeGOF[tradeGOF$trade,])
+gofViz(icewsGOF)
 ####
 
 ####
