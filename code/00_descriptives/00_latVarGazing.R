@@ -16,6 +16,19 @@ load(file=paste0(pathOut, 'unMods.rda')) # unMods
 load(file=paste0(pathOut, 'icewsMods.rda')) # icewsMods
 ####
 
+modList = unMods
+
+names(modList)
+iiConfig=3
+tt=30
+# lapply(modSlice, dim)
+
+# head(modSlice$'U')
+
+# library(amen)
+circplot(modSlice$'YPM', U=modSlice$'U', V=modSlice$'V')
+
+
 ####
 # fn to pull out ypm from lat var mods
 getConfigDF = function(
@@ -93,6 +106,24 @@ getConfigDF = function(
 ####
 
 ####
+# apply fn to get out YPM from mods and examine correlations
+unDF = getConfigDF(unMods)
+tradeDF = getConfigDF(tradeMods)
+icewsDF = getConfigDF(icewsMods)
+
+# reorg into list
+dfs = list(unDF, tradeDF, icewsDF)
+lapply(dfs, head)
+
+# write correlations to csv
+lapply(1:length(dfs), function(ii){
+  df = dfs[[ii]]
+  mats = round(cor(df[,-(1:3)]), 2)
+  write.csv(mats, file=paste0(pathOut, 'latVarGazingCorrel',ii,'.csv'))
+   })
+####
+
+####
 # apply fns to view gof stats
 unGOF = getConfigDF(unMods, TRUE)
 tradeGOF = getConfigDF(tradeMods, TRUE)
@@ -133,19 +164,93 @@ gofViz(icewsGOF[icewsGOF$verbCoopGov,])
 ####
 
 ####
-# apply fn to get out YPM from mods and examine correlations
-unDF = getConfigDF(unMods)
-tradeDF = getConfigDF(tradeMods)
-icewsDF = getConfigDF(icewsMods)
+# visualize mult eff space
 
-# reorg into list
-dfs = list(unDF, tradeDF, icewsDF)
-lapply(dfs, head)
-
-# write correlations to csv
-lapply(1:length(dfs), function(ii){
-  df = dfs[[ii]]
-  mats = round(cor(df[,-(1:3)]), 2)
-  write.csv(mats, file=paste0('C:/Users/Owner/Desktop/tmp',ii,'.csv'))
-   })
 ####
+
+
+yhat = modSlice$'YPM'
+U = modSlice$'U'
+V = modSlice$'V'
+
+
+# cntry key based on data
+
+cntryKey = rownames(yhat) %>%
+	data.frame(cname=., cown=countrycode(.,'country.name','cown'),stringsAsFactors = FALSE)
+cntryKey$cown[cntryKey$cname=="KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"]='731'
+cntryKey$cown[cntryKey$cname=="SERBIA"]='345'
+cntryKey$cowc = countrycode(cntryKey$cname, 'country.name', 'cowc')
+cntryKey$cowc[cntryKey$cname=='SERBIA'] = 'YUG'
+
+# relabel U, yhat, and V
+rownames(yhat) = colnames(yhat) = cntryKey$cowc
+rownames(U) = rownames(V) = cntryKey$cowc
+
+# geo colors for nodes
+# loadPkg('cshapes')
+cmap = wmap = cshp(date=as.Date('2016-1-1'))
+wmap$cowc = countrycode(wmap$COWCODE, 'cown', 'cowc')
+wmap$cowc[wmap$COWCODE==731]='PRK'
+wmap = wmap[which(as.character(wmap$cowc) %in% cntryKey$cowc),]
+coords=coordinates(wmap) ; rownames(coords)=wmap$cowc
+coords=coords[cntryKey$cowc,]
+
+# Create colors
+rlon = pi*coords[,1]/180 ; rlat = pi*coords[,2]/180
+slon =  (rlon-min(rlon))/(max(rlon)-min(rlon))
+slat =  (rlat-min(rlat))/(max(rlat)-min(rlat))
+ccols = rgb( slon^2,slat^2,(1-sqrt(slon*slat))^2)
+names(ccols) = cntryKey$cowc ; cntryKey$ccols = ccols
+
+# Generate legend map
+cmap@data$cowc = countrycode(cmap@data$COWCODE, 'cown', 'cowc')
+cmap@data$cowc[cmap@data$COWCODE==731]='PRK'
+mapCol = ccols[match(cmap$cowc, cntryKey$cowc)]
+mapCol[is.na(mapCol)] = 'grey' ; names(mapCol) = cmap@data$cowc
+cmapDF=fortify(cmap,region='FEATUREID') ; names(cmapDF)[6]='FEATUREID' ; cmapDF=join(cmapDF, cmap@data)
+ggMap = ggplot() +
+	geom_polygon(data=cmapDF, aes(x=long, y=lat,group=group,fill=cowc),color='grey30',size=.05) +
+	scale_fill_manual(values=mapCol) +
+	coord_equal() + xlab('') + ylab('') +
+	theme_bw() +
+	theme(
+		legend.position = 'none',
+		panel.border = element_blank(), panel.grid=element_blank(),
+		axis.ticks = element_blank(), axis.line=element_blank(),
+		axis.text = element_blank() )
+ggsave(ggMap, file=paste0(pathGraphics, 'mapLeg.png'))
+
+# load back in so we can add to circ
+loadPkg(c('grid', 'png'))
+mapForCirc = rasterGrob(readPNG(paste0(pathGraphics, 'mapLeg.png')), interpolate=TRUE)
+
+#
+source(paste0(pth, 'funcs/ameHelpers.R'))
+# plot
+toLabel=c("IRN","IRQ","SYR","PRK",'LIB','CHN','RUS','USA','GMY','CAN','UKG','ISR')
+other=names(sort(rowSums(yhat, na.rm=TRUE) + colSums(yhat, na.rm=TRUE), decreasing=TRUE))[1:50]
+tots = c(toLabel,other)
+
+ggU = getDataForCirc(Y=yhat[tots,tots], U=U[tots,], V=NULL, vscale=.65,removeIsolates=FALSE)$uG
+ggU = unique(ggU)
+ggU$ccols = cntryKey$ccols[match(ggU$actor,cntryKey$cowc)]
+ggU$lab = ggU$actor
+ggU$lab[!ggU$lab %in% toLabel] = ''
+ggU$lPch = ggU$tPch ; ggU$lPch[ggU$lab==''] = 0
+
+circViz = ggplot(ggU, aes(x=X1, y=X2, size=tPch, color=actor)) +
+	annotation_custom(mapForCirc, xmin=-.75, xmax=.75, ymin=-.75, ymax=.75) +
+	geom_point(alpha=.9) + scale_size(range=c(4,8)) +
+	ylab("") + xlab("") +
+	geom_label_repel(aes(label=lab, size=lPch)) +
+	scale_color_manual(values=ccols) +
+	theme_bw() +
+	theme(
+		legend.position = 'none',
+		panel.border = element_blank(), panel.grid=element_blank(),
+		axis.ticks = element_blank(), axis.line=element_blank(),
+		axis.text = element_blank()
+		)
+
+circViz
