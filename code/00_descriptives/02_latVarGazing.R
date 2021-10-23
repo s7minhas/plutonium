@@ -208,8 +208,7 @@ gofViz(icewsGOF[icewsGOF$verbCoopGov,])
 # 		axis.ticks = element_blank(), axis.line=element_blank(),
 # 		axis.text = element_blank() )
 # ggsave(ggMap, file=paste0(pathGraphics, 'mapLeg.png'))
-
-modList = unMods ; iiConfig = 3 ; tt = 1
+modList = tradeMods ; iiConfig = 'trade_k2_srm_lfm' ; tt = '2003'
     # get ii config
     modConfig = modList[[iiConfig]]
       # get tt mod from selected config

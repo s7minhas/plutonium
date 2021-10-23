@@ -71,7 +71,7 @@ shinyServer(function(input, output, session) {
     getData <- reactive({
         
         # config check
-        if(input$configSelect==''){ return(NULL) }
+        if(input$configSelect=='Pick a category first.'){ return(NULL) }
         
         # subset to specific model
         if(input$catSelect=='Trade'){ dat=tradeMods }
@@ -91,7 +91,10 @@ shinyServer(function(input, output, session) {
     
     # visualize
     output$circViz <- renderPlot({
-        
+
+        # config check
+        if(input$configSelect=='Pick a category first.'){ return(NULL) }        
+                
         # get data and break up
         dat = getData()
         yhat = dat$YPM ; U = dat$U ; V = dat$V ; rm(dat)
@@ -112,7 +115,7 @@ shinyServer(function(input, output, session) {
             annotation_custom(mapForCirc, xmin=-.75, xmax=.75, ymin=-.75, ymax=.75) +
             geom_point(alpha=.9) + scale_size(range=c(4,8)) +
             ylab("") + xlab("") +
-            geom_label_repel(aes(label=lab, size=lPch)) +
+            geom_label_repel(aes(label=lab, size=lPch), max.overlaps = Inf) +
             scale_color_manual(values=ccols) +
             theme_bw() +
             theme(
