@@ -10,8 +10,9 @@
 library(shiny)
 
 ####
-pth = paste0(here::here(), '/')
-pth = 'C:/Users/herme/Research/plutonium/code/'
+if(Sys.info()['user'] %in% c('S7M','s7m','herme','Owner')){
+    u = Sys.info()['user']
+    pth = paste0('C:/Users/', u, '/Research/plutonium/code/') }
 source(paste0(pth, 'setup.R'))
 
 #
