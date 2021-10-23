@@ -13,6 +13,12 @@ library(shiny)
 if(Sys.info()['user'] %in% c('S7M','s7m','herme','Owner')){
     u = Sys.info()['user']
     pth = paste0('C:/Users/', u, '/Research/plutonium/code/') }
+
+if(Sys.info()['user'] %in% c('haeunchoi')){
+    u = Sys.info()['user']
+    pth = paste0('C:/Users/', u, '/Dropbox/myrepo/plutonium/code/') }
+
+
 source(paste0(pth, 'setup.R'))
 
 #
