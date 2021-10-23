@@ -16,19 +16,6 @@ load(file=paste0(pathOut, 'unMods.rda')) # unMods
 load(file=paste0(pathOut, 'icewsMods.rda')) # icewsMods
 ####
 
-modList = unMods
-
-names(modList)
-iiConfig=3
-tt=30
-# lapply(modSlice, dim)
-
-# head(modSlice$'U')
-
-# library(amen)
-circplot(modSlice$'YPM', U=modSlice$'U', V=modSlice$'V')
-
-
 ####
 # fn to pull out ypm from lat var mods
 getConfigDF = function(
@@ -38,7 +25,7 @@ getConfigDF = function(
   # iterate through modList and puill out YPM
   configData = lapply(1:length(modList), function(iiConfig){
 
-    # get ii config unMOd
+    # get ii config
     modConfig = modList[[iiConfig]]
 
     # now iterate through time
@@ -169,61 +156,78 @@ gofViz(icewsGOF[icewsGOF$verbCoopGov,])
 ####
 
 
+# # cntry key based on data
+#
+# cntryKey = rownames(yhat) %>%
+# 	data.frame(
+# 		cname=.,
+# 		cown=countrycode(.,'country.name','cown'),
+# 		stringsAsFactors = FALSE)
+# cntryKey$cown[
+# 	cntryKey$cname=="KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"]='731'
+# cntryKey$cown[
+# 	cntryKey$cname=="SERBIA"]='345'
+# cntryKey$cowc = countrycode(
+# 	cntryKey$cname, 'country.name', 'cowc')
+# cntryKey$cowc[cntryKey$cname=='SERBIA'] = 'YUG'
+#
+# # relabel U, yhat, and V
+# rownames(yhat) = colnames(yhat) = cntryKey$cowc
+# rownames(U) = rownames(V) = cntryKey$cowc
+#
+# # geo colors for nodes
+# # loadPkg('cshapes')
+# cmap = wmap = cshp(date=as.Date('2016-1-1'))
+# wmap$cowc = countrycode(wmap$COWCODE, 'cown', 'cowc')
+# wmap$cowc[wmap$COWCODE==731]='PRK'
+# wmap = wmap[which(as.character(wmap$cowc) %in% cntryKey$cowc),]
+# coords=coordinates(wmap) ; rownames(coords)=wmap$cowc
+# coords=coords[cntryKey$cowc,]
+#
+# # Create colors
+# rlon = pi*coords[,1]/180 ; rlat = pi*coords[,2]/180
+# slon =  (rlon-min(rlon))/(max(rlon)-min(rlon))
+# slat =  (rlat-min(rlat))/(max(rlat)-min(rlat))
+# ccols = rgb( slon^2,slat^2,(1-sqrt(slon*slat))^2)
+# names(ccols) = cntryKey$cowc ; cntryKey$ccols = ccols
+#
+# # Generate legend map
+# cmap@data$cowc = countrycode(cmap@data$COWCODE, 'cown', 'cowc')
+# cmap@data$cowc[cmap@data$COWCODE==731]='PRK'
+# mapCol = ccols[match(cmap$cowc, cntryKey$cowc)]
+# mapCol[is.na(mapCol)] = 'grey' ; names(mapCol) = cmap@data$cowc
+# cmapDF=fortify(cmap,region='FEATUREID') ; names(cmapDF)[6]='FEATUREID' ; cmapDF=join(cmapDF, cmap@data)
+# ggMap = ggplot() +
+# 	geom_polygon(data=cmapDF, aes(x=long, y=lat,group=group,fill=cowc),color='grey30',size=.05) +
+# 	scale_fill_manual(values=mapCol) +
+# 	coord_equal() + xlab('') + ylab('') +
+# 	theme_bw() +
+# 	theme(
+# 		legend.position = 'none',
+# 		panel.border = element_blank(), panel.grid=element_blank(),
+# 		axis.ticks = element_blank(), axis.line=element_blank(),
+# 		axis.text = element_blank() )
+# ggsave(ggMap, file=paste0(pathGraphics, 'mapLeg.png'))
+
+modList = unMods ; iiConfig = 3 ; tt = 1
+    # get ii config
+    modConfig = modList[[iiConfig]]
+      # get tt mod from selected config
+      modSlice = modConfig[[tt]]
 yhat = modSlice$'YPM'
 U = modSlice$'U'
 V = modSlice$'V'
 
 
-# cntry key based on data
-
-cntryKey = rownames(yhat) %>%
-	data.frame(cname=., cown=countrycode(.,'country.name','cown'),stringsAsFactors = FALSE)
-cntryKey$cown[cntryKey$cname=="KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"]='731'
-cntryKey$cown[cntryKey$cname=="SERBIA"]='345'
-cntryKey$cowc = countrycode(cntryKey$cname, 'country.name', 'cowc')
-cntryKey$cowc[cntryKey$cname=='SERBIA'] = 'YUG'
-
-# relabel U, yhat, and V
-rownames(yhat) = colnames(yhat) = cntryKey$cowc
-rownames(U) = rownames(V) = cntryKey$cowc
-
-# geo colors for nodes
-# loadPkg('cshapes')
-cmap = wmap = cshp(date=as.Date('2016-1-1'))
-wmap$cowc = countrycode(wmap$COWCODE, 'cown', 'cowc')
-wmap$cowc[wmap$COWCODE==731]='PRK'
-wmap = wmap[which(as.character(wmap$cowc) %in% cntryKey$cowc),]
-coords=coordinates(wmap) ; rownames(coords)=wmap$cowc
-coords=coords[cntryKey$cowc,]
-
-# Create colors
-rlon = pi*coords[,1]/180 ; rlat = pi*coords[,2]/180
-slon =  (rlon-min(rlon))/(max(rlon)-min(rlon))
-slat =  (rlat-min(rlat))/(max(rlat)-min(rlat))
-ccols = rgb( slon^2,slat^2,(1-sqrt(slon*slat))^2)
-names(ccols) = cntryKey$cowc ; cntryKey$ccols = ccols
-
-# Generate legend map
-cmap@data$cowc = countrycode(cmap@data$COWCODE, 'cown', 'cowc')
-cmap@data$cowc[cmap@data$COWCODE==731]='PRK'
-mapCol = ccols[match(cmap$cowc, cntryKey$cowc)]
-mapCol[is.na(mapCol)] = 'grey' ; names(mapCol) = cmap@data$cowc
-cmapDF=fortify(cmap,region='FEATUREID') ; names(cmapDF)[6]='FEATUREID' ; cmapDF=join(cmapDF, cmap@data)
-ggMap = ggplot() +
-	geom_polygon(data=cmapDF, aes(x=long, y=lat,group=group,fill=cowc),color='grey30',size=.05) +
-	scale_fill_manual(values=mapCol) +
-	coord_equal() + xlab('') + ylab('') +
-	theme_bw() +
-	theme(
-		legend.position = 'none',
-		panel.border = element_blank(), panel.grid=element_blank(),
-		axis.ticks = element_blank(), axis.line=element_blank(),
-		axis.text = element_blank() )
-ggsave(ggMap, file=paste0(pathGraphics, 'mapLeg.png'))
-
 # load back in so we can add to circ
 loadPkg(c('grid', 'png'))
 mapForCirc = rasterGrob(readPNG(paste0(pathGraphics, 'mapLeg.png')), interpolate=TRUE)
+load(paste0(pathGraphics, 'mapCol.rda'))
+
+# relabel id attrs in mats
+ids=cntryKey$cowc[match(rownames(yhat), cntryKey$cname)]
+rownames(yhat) = colnames(yhat) = rownames(U) = rownames(V) = ids
+
 
 #
 source(paste0(pth, 'funcs/ameHelpers.R'))
@@ -232,7 +236,7 @@ toLabel=c("IRN","IRQ","SYR","PRK",'LIB','CHN','RUS','USA','GMY','CAN','UKG','ISR
 other=names(sort(rowSums(yhat, na.rm=TRUE) + colSums(yhat, na.rm=TRUE), decreasing=TRUE))[1:50]
 tots = c(toLabel,other)
 
-ggU = getDataForCirc(Y=yhat[tots,tots], U=U[tots,], V=NULL, vscale=.65,removeIsolates=FALSE)$uG
+ggU = getDataForCirc(Y=yhat, U=U, V=NULL, vscale=.65,removeIsolates=FALSE)$uG
 ggU = unique(ggU)
 ggU$ccols = cntryKey$ccols[match(ggU$actor,cntryKey$cowc)]
 ggU$lab = ggU$actor

@@ -123,6 +123,7 @@ tradeMods = lapply(1:nrow(configs), function(ii){
 
 #
 names(tradeMods) = configs$id
+tradeMods = lapply(tradeMods, function(x){ names(x) = 1991:2020 ; return(x) })
 save(tradeMods, file=paste0(pathOut, 'tradeMods.rda'))
 ####
 
@@ -160,6 +161,7 @@ unMods = lapply(1:nrow(configs), function(ii){
 
 #
 names(unMods) = configs$id
+unMods = lapply(unMods, function(x){ names(x) = 1980:2019 ; return(x) })
 save(unMods, file=paste0(pathOut, 'unMods.rda'))
 ####
 
@@ -197,6 +199,7 @@ icewsMods = lapply(1:nrow(configs), function(ii){
 
 #
 names(icewsMods) = configs$id
+icewsMods = lapply(icewsMods, function(x){ names(x) = 1995:2020 ; return(x) })
 save(icewsMods, file=paste0(pathOut, 'icewsMods.rda'))
 ####
 

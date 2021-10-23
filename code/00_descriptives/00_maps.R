@@ -88,10 +88,6 @@ cntryMaps = function(
   return(cntryEconMaps) }
 ####
 
-cntry = "UNITED STATES"
-var = "diplomScores_agree_lfm"
-yr = 2019
-ggsave(paste0(pathGraphics, "USdiplom2019.pdf"), map)
 ####
 # bring in map data
 world = fortify(spTransform(getMap(), CRS("+proj=wintri")))

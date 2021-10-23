@@ -6,21 +6,6 @@
 #
 #    http://shiny.rstudio.com/
 #
-
-pth = paste0(here::here(), '/')
-source(paste0(pth, 'setup.R'))
-
-#
-loadPkg(c(
-    'reshape2', 'amen', 'tidyr',
-    'ggplot2', 'tidyverse',
-    'cshapes', 'countrycode' ))
-####
-
-####
-load(file=paste0(pathOut, 'tradeMods.rda')) # tradeMods
-load(file=paste0(pathOut, 'unMods.rda')) # unMods
-load(file=paste0(pathOut, 'icewsMods.rda')) # icewsMods
 ####
 
 library(shiny)
@@ -29,21 +14,34 @@ library(shiny)
 shinyUI(fluidPage(
 
     # Application title
-    titlePanel("Old Faithful Geyser Data"),
+    titlePanel("Liberal Order Measurement Blah Blah"),
 
     # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
+            selectInput("catSelect",
+                        "Input Category:",
+                        choices=c('Trade', 'UN Voting', 'ICEWS'), 
+                        selected='Trade'
+                        ),
+            selectInput('configSelect',
+                        label="Choose model configuration: ",
+                        choices = 'Pick a category first.',
+                        selected=''
+                        ),
+            sliderInput('timeSelect',
+                        label="Choose year: ",
+                        min = 2000, max=2020, value=2000,
+                        sep='', animate=TRUE),
+            textInput('cntryVec',
+                      'Enter comma delimited set of countries in cowc format:',
+                      "USA, CHN"
+                      )
         ),
 
         # Show a plot of the generated distribution
         mainPanel(
-            plotOutput("distPlot")
+            plotOutput("circViz")
         )
     )
 ))
