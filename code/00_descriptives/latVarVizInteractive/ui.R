@@ -21,13 +21,18 @@ shinyUI(fluidPage(
         sidebarPanel(
             selectInput("catSelect",
                         "Input Category:",
-                        choices=c('Trade', 'UN Voting', 'ICEWS'), 
+                        choices=c('Trade', 'UN Voting', 'ICEWS'),
                         selected='Trade'
                         ),
             selectInput('configSelect',
                         label="Choose model configuration: ",
                         choices = 'Pick a category first.',
                         selected=''
+                        ),
+            selectInput('paramsToPlot',
+                        label="Choose model parameter to plot: ",
+                        choices = c('U', 'V', 'U and V'),
+                        selected='U and V'
                         ),
             sliderInput('timeSelect',
                         label="Choose year: ",
