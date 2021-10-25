@@ -27,7 +27,7 @@ source(paste0(pth, 'setup.R'))
 
 #
 loadPkg(c(
-    'shiny', 'ggplot2',
+    'shiny', 'ggplot2', 'plotly', 'ggthemes',
     'grid', 'png', 'philentropy' ))
 
 #
@@ -101,7 +101,7 @@ shinyServer(function(input, output, session) {
     })
 
     # visualize mult effs via circ
-    output$circViz <- renderPlot({
+    output$circViz <- renderPlotly({
 
         # config check
         if(input$configSelect=='Pick a category first.'){ return(NULL) }
@@ -111,7 +111,7 @@ shinyServer(function(input, output, session) {
         yhat = dat$YPM ; U = dat$U ; V = dat$V ; rm(dat)
 
         # chose countries to label
-        toLabel = trim(unlist(strsplit(input$cntryVec, ',')))
+        # toLabel = trim(unlist(strsplit(input$cntryVec, ',')))
 
         # org data for circ plot
         if(input$paramsToPlot == 'U and V'){
@@ -129,9 +129,9 @@ shinyServer(function(input, output, session) {
         # viz
         circViz = ggplot(ggU, aes(x=X1, y=X2, size=tPch, color=actor)) +
             annotation_custom(mapForCirc, xmin=-.75, xmax=.75, ymin=-.75, ymax=.75) +
-            geom_point(alpha=.9) + scale_size(range=c(4,8)) +
+            geom_point(alpha=.6) + scale_size(range=c(4,8)) +
             ylab("") + xlab("") +
-            geom_label_repel(aes(label=lab, size=lPch), max.overlaps = Inf) +
+            # geom_label_repel(aes(label=lab, size=lPch), max.overlaps = Inf) +
             scale_color_manual(values=ccols) +
             theme_bw() +
             theme(
@@ -140,6 +140,7 @@ shinyServer(function(input, output, session) {
                 axis.ticks = element_blank(), axis.line=element_blank(),
                 axis.text = element_blank()
             )
+        circViz = ggplotly(circViz, tooltip='actor')
 
         #
         return(circViz)

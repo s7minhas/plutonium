@@ -9,6 +9,7 @@
 ####
 
 library(shiny)
+library(plotly)
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
@@ -38,10 +39,10 @@ shinyUI(fluidPage(
                         label="Choose year: ",
                         min = 2000, max=2020, value=2000,
                         sep='', animate=TRUE),
-            textInput('cntryVec',
-                      'Enter comma delimited set of countries in cowc format:',
-                      "USA, CHN"
-                      ),
+            # textInput('cntryVec',
+            #           'Enter comma delimited set of countries in cowc format:',
+            #           "USA, CHN"
+            #           ),
             selectInput('distToPlot',
                         label='Choose distance metrics: ',
                         choices=philentropy::getDistMethods(),
@@ -55,7 +56,7 @@ shinyUI(fluidPage(
 
         # Show a plot of the generated distribution
         mainPanel(
-            plotOutput("circViz"),
+            plotlyOutput("circViz"),
             plotOutput("distViz")
         )
     )
