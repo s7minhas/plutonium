@@ -123,7 +123,7 @@ shinyServer(function(input, output, session) {
         ggU = unique(ggU)
         ggU$ccols = cntryKey$ccols[match(ggU$actor,cntryKey$cowc)]
         ggU$lab = ggU$actor
-        ggU$lab[!ggU$lab %in% toLabel] = ''
+        # ggU$lab[!ggU$lab %in% toLabel] = ''
         ggU$lPch = ggU$tPch ; ggU$lPch[ggU$lab==''] = 0
 
         # viz
