@@ -14,6 +14,10 @@ if(Sys.info()['user'] %in% c('S7M','s7m','herme','Owner')){
     u = Sys.info()['user']
     pth = paste0('C:/Users/', u, '/Research/plutonium/code/') }
 
+if(Sys.info()['user'] %in% c('maxgallop')){
+    u = Sys.info()['user']
+    pth = paste0('/Users/', u, '/Documents/GitHub/plutonium/code/') }
+
 if(Sys.info()['user'] %in% c('haeunchoi')){
     u = Sys.info()['user']
     pth = paste0('/Users/', u, '/Dropbox/myrepo/plutonium/code/') }
