@@ -102,13 +102,13 @@ icewsDF = getConfigDF(icewsMods)
 dfs = list(unDF, tradeDF, icewsDF)
 lapply(dfs, head)
 
-# write correlations to csv
-lapply(1:length(dfs), function(ii){
-  df = dfs[[ii]]
-  mats = round(cor(df[,-(1:3)]), 2)
-  write.csv(mats, file=paste0(pathOut, 'latVarGazingCorrel',ii,'.csv'))
-   })
-####
+# # write correlations to csv
+# lapply(1:length(dfs), function(ii){
+#   df = dfs[[ii]]
+#   mats = round(cor(df[,-(1:3)]), 2)
+#   write.csv(mats, file=paste0(pathOut, 'latVarGazingCorrel',ii,'.csv'))
+#    })
+# ####
 
 ####
 # apply fns to view gof stats
@@ -208,7 +208,7 @@ gofViz(icewsGOF[icewsGOF$verbCoopGov,])
 # 		axis.ticks = element_blank(), axis.line=element_blank(),
 # 		axis.text = element_blank() )
 # ggsave(ggMap, file=paste0(pathGraphics, 'mapLeg.png'))
-modList = tradeMods ; iiConfig = 'trade_k2_srm_lfm' ; tt = '2003'
+modList = tradeMods ; iiConfig = 'trade_k8_srm_lfm' ; tt = '2003'
     # get ii config
     modConfig = modList[[iiConfig]]
       # get tt mod from selected config
@@ -257,3 +257,97 @@ circViz = ggplot(ggU, aes(x=X1, y=X2, size=tPch, color=actor)) +
 		)
 
 circViz
+
+head(U)
+
+# distance metrics
+library(philentropy)
+distMethods = philentropy::getDistMethods()
+paramToPlotForDist = c('U', 'V', 'U and V')
+
+dyad = c('USA-CHN', 'USA-UKG', 'USA-RUS')
+distToPlot = c('euclidean', 'manhattan', 'cosine')
+paramToPlotForDist = c('U')
+
+
+numParams = (nchar(paramToPlotForDist)>2)+1
+
+# iterate through time
+distData = lapply(1:length(modConfig), function(tt){
+
+  # iterate through parameters
+  distDataParam = lapply(1:numParams, function(ii){
+
+    # org params
+    listParams = list()
+    if(paramToPlotForDist=='U'){
+      listParams[[1]] = modConfig[[tt]]$'U'
+      names(listParams) = 'U'}
+    if(paramToPlotForDist=='V'){
+      listParams[[1]] = modConfig[[tt]]$'V'
+      names(listParams) = 'V'}
+    if(paramToPlotForDist=='U and V'){
+      listParams[[1]] = modConfig[[tt]]$'U'
+      listParams[[2]] = modConfig[[tt]]$'V'
+      names(listParams) = c('U', 'V') }
+
+    # subset to relev param
+    paramMat = listParams[[ii]]
+
+    # iterate through distance metrics
+    distDataByMethod = lapply(distToPlot, function(distMethod){
+
+      # relabel id attrs in mats
+      ids=cntryKey$cowc[match(rownames(paramMat), cntryKey$cname)]
+      rownames(paramMat) = ids
+
+      # get distance calc
+      distMat = distance(paramMat, method=distMethod, use.row.names=TRUE)
+
+      # org
+      out = reshape2::melt(distMat)
+      out$year = num(names(modConfig)[tt])
+      out$param = names(listParams)[ii]
+      out$dist = distMethod
+      out$lab = with(out, paste0( param, '_', dist ))
+      return(out) })
+
+    # org
+    distDataByMethod = do.call('rbind', distDataByMethod)
+
+    # close iteration through distance metrics
+    return(distDataByMethod) })
+
+  # org
+  distDataParam = do.call('rbind', distDataParam)
+
+  # close iteration through params
+  return(distDataParam) })
+
+#
+distData = do.call('rbind', distData)
+
+# org by dyad pair
+distData$dyad = with(distData, paste0(Var1, '-', Var2))
+
+# subset to user chosen pairs
+distData = distData[distData$dyad %in% dyad, ]
+
+head(distData)
+
+# viz
+ggplot(
+  distData, aes(x=year, y=value, color=dyad) ) +
+  geom_point() +
+  geom_line() +
+  facet_grid(vars(dist), vars(param), scales='free') +
+  labs(
+    x='', y='', color=''
+  ) +
+  theme_bw() +
+  theme(
+    legend.position='bottom',
+    panel.border=element_blank(),
+    axis.ticks=element_blank(),
+    axis.text.x=element_text(angle=45, hjust=1)
+  )

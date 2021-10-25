@@ -41,12 +41,22 @@ shinyUI(fluidPage(
             textInput('cntryVec',
                       'Enter comma delimited set of countries in cowc format:',
                       "USA, CHN"
-                      )
+                      ),
+            selectInput('distToPlot',
+                        label='Choose distance metrics: ',
+                        choices=philentropy::getDistMethods(),
+                        multiple=TRUE,
+                        selected=c('euclidean', 'manhattan', 'cosine')
+                      ),
+            textInput('dyadVec',
+                      'Enter comma delimited set of dyads in cowc format:',
+                      'USA-CHN, USA-RUS, USA-UKG' )
         ),
 
         # Show a plot of the generated distribution
         mainPanel(
-            plotOutput("circViz")
+            plotOutput("circViz"),
+            plotOutput("distViz")
         )
     )
 ))

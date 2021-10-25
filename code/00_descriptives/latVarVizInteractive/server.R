@@ -24,7 +24,7 @@ source(paste0(pth, 'setup.R'))
 #
 loadPkg(c(
     'shiny', 'ggplot2',
-    'grid', 'png' ))
+    'grid', 'png', 'philentropy' ))
 
 #
 source(paste0(pth, 'funcs/ameHelpers.R'))
@@ -96,7 +96,7 @@ shinyServer(function(input, output, session) {
         return(dat)
     })
 
-    # visualize
+    # visualize mult effs via circ
     output$circViz <- renderPlot({
 
         # config check
@@ -140,4 +140,106 @@ shinyServer(function(input, output, session) {
         #
         return(circViz)
     })
+
+    ## visualize distance in sender space
+    output$distViz <- renderPlot({
+
+        # config check
+        if(input$configSelect=='Pick a category first.'){ return(NULL) }
+
+        # subset to specific model
+        if(input$catSelect=='Trade'){ dat=tradeMods }
+        if(input$catSelect=='UN Voting'){ dat=unMods }
+        if(input$catSelect=='ICEWS'){ dat=icewsMods }
+
+        # subset to config and time
+        modConfig = dat[[input$configSelect]]
+
+        # check number of selected params
+        numParams = (nchar(input$paramsToPlot)>2)+1
+
+        # iterate through time
+        distData = lapply(1:length(modConfig), function(tt){
+
+          # iterate through parameters
+          distDataParam = lapply(1:numParams, function(ii){
+
+            # org params
+            listParams = list()
+            if(input$paramsToPlot=='U'){
+              listParams[[1]] = modConfig[[tt]]$'U'
+              names(listParams) = 'U'}
+            if(input$paramsToPlot=='V'){
+              listParams[[1]] = modConfig[[tt]]$'V'
+              names(listParams) = 'V'}
+            if(input$paramsToPlot=='U and V'){
+              listParams[[1]] = modConfig[[tt]]$'U'
+              listParams[[2]] = modConfig[[tt]]$'V'
+              names(listParams) = c('U', 'V') }
+
+            # subset to relev param
+            paramMat = listParams[[ii]]
+
+            # iterate through distance metrics
+            distDataByMethod = lapply(input$distToPlot, function(distMethod){
+
+              # relabel id attrs in mats
+              ids=cntryKey$cowc[match(rownames(paramMat), cntryKey$cname)]
+              rownames(paramMat) = ids
+
+              # get distance calc
+              distMat = distance(paramMat, method=distMethod, use.row.names=TRUE)
+
+              # org
+              out = reshape2::melt(distMat)
+              out$year = num(names(modConfig)[tt])
+              out$param = names(listParams)[ii]
+              out$dist = distMethod
+              out$lab = with(out, paste0( param, '_', dist ))
+              return(out) })
+
+            # org
+            distDataByMethod = do.call('rbind', distDataByMethod)
+
+            # close iteration through distance metrics
+            return(distDataByMethod) })
+
+          # org
+          distDataParam = do.call('rbind', distDataParam)
+
+          # close iteration through params
+          return(distDataParam) })
+
+        #
+        distData = do.call('rbind', distData)
+
+        # org by dyad pair
+        distData$dyad = with(distData, paste0(Var1, '-', Var2))
+
+        # subset to user chosen pairs
+        # chose countries to label
+        dyadsToViz = trim(unlist(strsplit(input$dyadVec, ',')))
+        distData = distData[distData$dyad %in% dyadsToViz, ]
+
+        # viz
+        ggDistViz = ggplot(
+          distData, aes(x=year, y=value, color=dyad) ) +
+          geom_point() +
+          geom_line() +
+          facet_grid(vars(dist), vars(param), scales='free') +
+          labs(
+            x='', y='', color=''
+          ) +
+          theme_bw() +
+          theme(
+            legend.position='bottom',
+            panel.border=element_blank(),
+            axis.ticks=element_blank(),
+            axis.text.x=element_text(angle=45, hjust=1) )
+
+      #
+      return(ggDistViz)
+    })
+
+
 })
