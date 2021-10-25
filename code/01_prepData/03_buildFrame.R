@@ -187,7 +187,7 @@ save(
 	frame, file=paste0(pathIn, 'frame.rda')
 )
 ####
-# 
+#
 # summary(frame$tradeGDP)
 # summary(frame$tradeGDPRaw)
 # cor(frame[,c('tradeGDP','tradeGDPRaw')], use='pairwise.complete.obs')
