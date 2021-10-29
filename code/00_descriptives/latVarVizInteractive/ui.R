@@ -23,7 +23,7 @@ shinyUI(fluidPage(
             selectInput("catSelect",
                         "Input Category:",
                         choices=c('Trade', 'UN Voting', 'ICEWS'),
-                        selected='Trade'
+                        selected='UN Voting'
                         ),
             selectInput('configSelect',
                         label="Choose model configuration: ",
@@ -33,7 +33,7 @@ shinyUI(fluidPage(
             selectInput('paramsToPlot',
                         label="Choose model parameter to plot: ",
                         choices = c('U', 'V', 'U and V'),
-                        selected='U and V'
+                        selected='U'
                         ),
             sliderInput('timeSelect',
                         label="Choose year: ",
