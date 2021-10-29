@@ -10,20 +10,7 @@
 library(shiny)
 
 ####
-if(Sys.info()['user'] %in% c('S7M','s7m','herme','Owner')){
-    u = Sys.info()['user']
-    pth = paste0('C:/Users/', u, '/Research/plutonium/code/') }
-
-if(Sys.info()['user'] %in% c('maxgallop')){
-    u = Sys.info()['user']
-    pth = paste0('/Users/', u, '/Documents/GitHub/plutonium/code/') }
-
-if(Sys.info()['user'] %in% c('haeunchoi')){
-    u = Sys.info()['user']
-    pth = paste0('/Users/', u, '/Dropbox/myrepo/plutonium/code/') }
-
-
-source(paste0(pth, 'setup.R'))
+source('setup.R')
 
 #
 loadPkg(c(
@@ -31,13 +18,13 @@ loadPkg(c(
     'grid', 'png', 'philentropy' ))
 
 #
-source(paste0(pth, 'funcs/ameHelpers.R'))
+source('ameHelpers.R')
 ####
 
 ####
-load(file=paste0(pathOut, 'modsForApp.rda')) # tradeMods, unMods, icewsMods
-mapForCirc = rasterGrob(readPNG(paste0(pathGraphics, 'mapLeg.png')), interpolate=TRUE)
-load(paste0(pathGraphics, 'mapCol.rda'))
+load(file='modsForApp.rda') # tradeMods, unMods, icewsMods
+mapForCirc = rasterGrob(readPNG('mapLeg.png'), interpolate=TRUE)
+load('mapCol.rda')
 ####
 
 # Define server logic required to draw a histogram
