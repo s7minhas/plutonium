@@ -1,27 +1,3 @@
-if(Sys.info()['user'] %in% c('S7M','s7m','herme','Owner')){
-	suf = paste0('C:/Users/', Sys.info()['user'], '/')
-	pathDrop = paste0(suf, 'Dropbox/Research/plutonium/')
-	pathIn = paste0(pathDrop, 'data/')
-	pathOut = paste0(pathDrop, 'results/')
-	pathGraphics = paste0(pathDrop, 'graphics/')
-}
-
-if(Sys.info()['user'] %in% c('maxgallop')){
-	suf = paste0('/Users/', Sys.info()['user'], '/')
-	pathDrop = paste0(suf, 'Dropbox/plutonium/')
-	pathIn = paste0(pathDrop, 'data/')
-	pathOut = paste0(pathDrop, 'results/')
-  pathGraphics = paste0(pathDrop, 'graphics/')
-}
-
-if(Sys.info()['user'] %in% c('haeunchoi')){
-  suf = paste0('/Users/', Sys.info()['user'], '/')
-  pathDrop = paste0(suf, 'Dropbox/plutonium/')
-  pathIn = paste0(pathDrop, 'data/')
-  pathOut = paste0(pathDrop, 'results/')
-  pathGraphics = paste0(pathDrop, 'graphics/')
-}
-
 # General functions/libraries
 ## See info on package versions and other session info
 ### at bottom of script

@@ -9,7 +9,7 @@
 ####
 
 library(shiny)
-# library(plotly)
+library(ggiraph)
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
@@ -45,7 +45,7 @@ shinyUI(fluidPage(
                       ),
             selectInput('distToPlot',
                         label='Choose distance metrics: ',
-                        choices=philentropy::getDistMethods(),
+                        choices=c('euclidean', 'manhattan', 'cosine'),
                         multiple=TRUE,
                         selected=c('euclidean', 'manhattan', 'cosine')
                       ),
@@ -56,7 +56,7 @@ shinyUI(fluidPage(
 
         # Show a plot of the generated distribution
         mainPanel(
-            plotOutput("circViz"),
+            girafeOutput("circViz"),
             plotOutput("distViz")
         )
     )

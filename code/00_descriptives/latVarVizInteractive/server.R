@@ -7,14 +7,12 @@
 #    http://shiny.rstudio.com/
 #
 
-library(shiny)
-
 ####
 source('setup.R')
 
 #
 loadPkg(c(
-    'shiny', 'ggplot2', 'plotly', 'ggthemes',
+    'shiny', 'ggplot2', 'ggiraph', 'ggthemes',
     'grid', 'png', 'philentropy' ))
 
 #
@@ -88,7 +86,7 @@ shinyServer(function(input, output, session) {
     })
 
     # visualize mult effs via circ
-    output$circViz <- renderPlot({
+    output$circViz <- renderGirafe({
 
         # config check
         if(input$configSelect=='Pick a category first.'){ return(NULL) }
@@ -116,7 +114,7 @@ shinyServer(function(input, output, session) {
         # viz
         circViz = ggplot(ggU, aes(x=X1, y=X2, size=tPch, color=actor)) +
             annotation_custom(mapForCirc, xmin=-.75, xmax=.75, ymin=-.75, ymax=.75) +
-            geom_point(alpha=.9) + scale_size(range=c(4,8)) +
+            geom_point_interactive(alpha=.65, aes(tooltip=actor)) + scale_size(range=c(4,8)) +
             ylab("") + xlab("") +
             geom_label_repel(aes(label=lab, size=lPch), max.overlaps = Inf) +
             scale_color_manual(values=ccols) +
@@ -129,7 +127,7 @@ shinyServer(function(input, output, session) {
             )
 
         #
-        return(circViz)
+        return(girafe(ggobj = circViz))
     })
 
     ## visualize distance in sender space
@@ -142,6 +140,10 @@ shinyServer(function(input, output, session) {
         if(input$catSelect=='Trade'){ dat=tradeMods }
         if(input$catSelect=='UN Voting'){ dat=unMods }
         if(input$catSelect=='ICEWS'){ dat=icewsMods }
+
+        # cntry pairs to calc dists for
+        dyadsToViz = trim(unlist(strsplit(input$dyadVec, ',')))
+        cntriesForViz = unique(trim(unlist(strsplit(dyadsToViz, '-'))))
 
         # subset to config and time
         modConfig = dat[[input$configSelect]]
@@ -179,6 +181,7 @@ shinyServer(function(input, output, session) {
               rownames(paramMat) = ids
 
               # get distance calc
+              paramMat = paramMat[cntriesForViz,]
               distMat = distance(paramMat, method=distMethod, use.row.names=TRUE)
 
               # org
@@ -209,7 +212,6 @@ shinyServer(function(input, output, session) {
 
         # subset to user chosen pairs
         # chose countries to label
-        dyadsToViz = trim(unlist(strsplit(input$dyadVec, ',')))
         distData = distData[distData$dyad %in% dyadsToViz, ]
 
         # viz
