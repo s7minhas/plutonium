@@ -94,3 +94,18 @@ save(unDist, file=paste0(pathOut, 'unDist.rda'))
 save(tradeDist, file=paste0(pathOut, 'tradeDist.rda'))
 save(icewsDist, file=paste0(pathOut, 'icewsDist.rda'))
 ####
+
+load(paste0(pathOut, 'unDist.rda'))
+
+dist = unDist[unDist$config=='agree_k2_srm_lfm' & unDist$param=='U',]
+
+dist = dist[,c('Var1','Var2','year','dist','config','value')]
+dist$configDist = with(dist, paste(config, dist, sep='_'))
+
+slice = dist[,c('Var1','Var2','year','configDist','value')]
+
+wide = pivot_wider(slice, names_from=configDist, values_from=value)
+
+head(wide)
+
+cor(wide[,4:ncol(wide)])

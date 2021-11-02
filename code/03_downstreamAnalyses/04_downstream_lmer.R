@@ -1,13 +1,53 @@
-here::set_here()
-source(paste0(here::here(), "/setup.R"))
-dapth = paste0(pathDrop, "data/")
-load(paste0(dapth, "chiData.rda"))
+####
+rm(list=ls())
+pth = paste0(here::here(), '/')
 
+#
+source(paste0(pth, 'setup.R'))
+
+#
+loadPkg(c('lme4', 'glmnet'))
+####
+
+####
+load(paste0(pathIn, "modData.rda"))
+####
+
+cbind(names(modData))
 
 ###BaseModels
-bl1 = glm(econScores_tradeDepSend_lfm~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
-bl2 = glm(diplomScores_agree_lfm~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
-bl3 = glm(icewsScores_gov_lfm~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
+dvs = names(modData)[grepl('delta_',names(modData))]
+dvs = gsub('delta_','',dvs)
+ivs = c(
+  paste0('USf',2),
+  'gdp', 'pop', 'polity')
+ivs = paste0('lag1_',ivs)
+
+forms = lapply(dvs, function(dv){
+  formula(paste0(dv, '~', paste(ivs, collapse='+')))
+  })
+
+mods = lapply(forms, function(form){
+  glm(form, data=modData)
+  })
+names(mods) = dvs
+
+lapply(mods, summary)
+
+## bring back in beijdist geo var
+
+## take a look at delta why is it breaking
+
+## test out random effect structs and see how us distraction varies by them
+## geo groupings
+## pol groupings
+## material capability using the thing that ha eun found
+
+
+bl1 = glm(delta_agree_k2_srm_lfm~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
+bl2 = glm(delta_agree_k5_srm_lfm~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
+bl3 = glm(delta_tradeDepSend_k2_srm_lfm~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
+bl3 = glm(delta_tradeDepSend_k5_srm_lfm~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
 
 bt1 = glm(econScores_tradeDepSend~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
 bt2 = glm(diplomScores_agree~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
