@@ -2,7 +2,6 @@
 rm(list=ls())
 here::set_here()
 pth = paste0(here::here(), '/')
-dapth = paste0(pth, '03_downstreamAnalyses/')
 
 #
 source(paste0(pth, 'setup.R'))
@@ -16,8 +15,21 @@ load(paste0(pathIn, "dyadData.rda"))
 ####
 
 ####
+# subset to china as being cname2
+# idea here is that we want to measure the extent to
+# which countries in the system are sending similar
+# types of actions as china
+### in the case of agree: what this means is that country i
+### is likely to vote similarly to china
+### this interpretation can be confirmed by taking the correlation
+### between the u dist and v dist spaces, which in each case
+### of the ame params that we tested hovered around 0.99
+### in the case of trade: what this means is that country i
+### is likely to send trade to the same countries that
+### china is sending trade to
 chiData = dyadData[dyadData$cname2 == "CHINA",]
 chiData = chiData[chiData$cname1 != "CHINA",]
+####
 
 usLevel = read.csv(paste0(pathIn, 'main1_final.csv'))
 usLevel = usLevel[order(usLevel$year),]
