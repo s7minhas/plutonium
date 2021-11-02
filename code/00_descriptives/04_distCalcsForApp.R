@@ -96,21 +96,14 @@ save(icewsDist, file=paste0(pathOut, 'icewsDist.rda'))
 ####
 
 ####
-
-head(unDist)
-
-unique(unDist$config)
+library(tidyr)
 
 unSlice = unDist[unDist$config %in% c('agree_k2_srm_lfm','agree_k5_srm_lfm', 'agree_k8_srm_lfm'),]
 unSlice = unSlice[unSlice$dist!='euclidean',]
 
-library(tidyr)
-
 unWide = pivot_wider(unSlice, names_from = config, values_from=value)
 
 cor(unWide[unWide$dist=='cosine', c('agree_k2_srm_lfm','agree_k5_srm_lfm', 'agree_k8_srm_lfm')])
-
-unique(tradeDist$config)
 
 tconfigs = unique(tradeDist$config)[grepl('tradeDep',unique(tradeDist$config))]
 
@@ -120,7 +113,6 @@ tradeSlice = tradeSlice[tradeSlice$dist!='euclidean',]
 tradeWide = pivot_wider(tradeSlice, names_from = config, values_from=value)
 
 cor(tradeWide[tradeWide$dist=='cosine', tconfigs])
-
 
 ## k5 k2
 ## tradeDepSend agree
