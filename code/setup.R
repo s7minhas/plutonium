@@ -63,48 +63,6 @@ pasteVec = function(x, y, sep=''){
 stdz = function(x){ (x-mean(x,na.rm=TRUE))/sd(x,na.rm=TRUE) }
 cbindNumb = function(x){ cbind(x, 1:length(x)) }
 
-# ts helpers
-lagger<-function(variable, country, year, laglength){
-
-  country<-as.character(country)
-  laggedvar<-rep(NA,length(variable))
-
-  leadingNAs<-rep(NA,laglength)
-  countryshift<-c(leadingNAs, country[1:(length(country)-laglength)])
-
-  variableshift<-c(leadingNAs, variable[1:(length(variable)-laglength)])
-
-  replacementrefs<-country==countryshift
-  replacementrefs[is.na(replacementrefs)==T]<-FALSE
-  laggedvar[replacementrefs]<-variableshift[replacementrefs]
-
-  laggedvar
-
-} # close lagger function
-
-# function for lagging whole dataframes:
-multilagger<-function(X, country, year, laglength, relabel=T){
-
-  if(is.data.frame(X)==F) stop("X needs to be a dataframe")
-
-  laggedX<-X
-
-  for (i in 1:ncol(X)){
-
-    laggedX[,i]<-lagger(variable=X[,i], country=country, year=year, laglength=laglength)
-
-  } # close i loop
-
-  # now append the laglength to the variable names:
-  if (relabel==T){
-    suffix<-paste(".l",laglength,sep="")
-    names(laggedX)<-paste(names(X), suffix, sep="")
-  } # close if relabel==T condition
-
-  laggedX
-
-} # close multilagger function
-
 # Global params
 seed=6886
 set.seed(seed)
