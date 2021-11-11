@@ -129,6 +129,51 @@ for(dv in dvs){
 ####
 
 ####
+# get geo info from cshapes
+if(!file.exists(paste0(pathIn, 'geoInfo.rda'))){
+  geoMin = distlist( as.Date('2019-12-31'),
+    type = 'mindist' )
+  geoCap = distlist( as.Date('2019-12-31'),
+    type = 'capdist' )
+  geoCent = distlist( as.Date('2019-12-31'),
+    type = 'centdist' )
+  save(geoMin, geoCap, geoCent, file=paste0(pathIn, 'geoInfo.rda'))
+} else { load(paste0(pathIn, 'geoInfo.rda')) }
+
+# org
+geoData = cbind( geoMin, capdist=geoCap[,3], centdist=geoCent[,3])
+geoData = geoData[geoData$ccode1 != geoData$ccode2,]
+
+# subset to rows involving china
+geoData = geoData[geoData$ccode1==710,]
+
+# mod country labels
+cntryKey = data.frame(cntry=geoData$ccode2, stringsAsFactors=F)
+cntryKey$cname = cname(codelist$cow.name[match(cntryKey$cntry, codelist$gwn)])
+cntryKey$cname[cntryKey$cntry==340] = 'SERBIA'
+cntryKey$cname[cntryKey$cntry==816] = 'VIETNAM'
+geoData$cname2 = cntryKey$cname[match(geoData$ccode2, cntryKey$cntry)]
+geoData$cname1 = 'CHINA'
+
+# merge
+modData = cbind(modData, geoData[match(modData$cname1, geoData$cname2),3:5])
+####
+
+####
+# natural security index ... average across indicators from 2013-2017
+# https://www.newamerica.org/resource-security/reports/great-power-resource-competition-changing-climate/
+natSec = read.csv(paste0(pathIn, 'natural_security_index.csv'), stringsAsFactors=F)
+natSec$cname = cname(natSec$country)
+
+# merge
+vars = c(
+  'crit_cn', 'crit_us', 'metals_cn', 'metals_us',
+  'ag_cn', 'ag_us', 'energy_cn', 'energy_us',
+  'resources_cn', 'resources_us')
+modData = cbind(modData, natSec[match(modData$cname1,natSec$cname),vars])
+####
+
+####
 # add categorical version of polity
 modData$polCat3 = 'Anocracy'
 modData$polCat3[which(modData$polity <= -6)] = 'Autocracy'
