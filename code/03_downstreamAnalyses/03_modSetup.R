@@ -22,6 +22,8 @@ levelDVs = gsub('delta_','',deltaDVs)
 lagDVs = paste0('lag1_', levelDVs)
 
 # iv combos
+# f1 is about battle deaths in the mideast
+# f2 is about troop deployments and military spending
 ivs = c(
   'lag1_USf1', 'lag1_USf2',
   'lag1_polity', 'lag1_gdp',
