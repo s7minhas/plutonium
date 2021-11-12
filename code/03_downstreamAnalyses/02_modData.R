@@ -174,10 +174,26 @@ modData = cbind(modData, natSec[match(modData$cname1,natSec$cname),vars])
 ####
 
 ####
-# add categorical version of polity
-modData$polCat3 = 'Anocracy'
-modData$polCat3[which(modData$polity <= -6)] = 'Autocracy'
-modData$polCat3[which(modData$polity >= 6)] = 'Democracy'
+# add categorical version of vars that will be used for REs
+
+# create pol cat var
+modData$polCat3 = cut(modData$polity,
+  breaks=c(-Inf, -6, 5, Inf), lables=c('Autocracy','Anocracy', 'Democracy'))
+
+# create categories based on qt calcs
+modData$polCatLo = recodeQt(modData$polity, seq(0,1,.25))
+modData$polCatHi = recodeQt(modData$polity, seq(0,1,.1))
+
+# create categoricals from
+modData$minChinaCatLo = recodeQt(modData$crit_cn, seq(0,1,.25))
+modData$minChinaCatHi = recodeQt(modData$crit_cn, seq(0,1,.1))
+modData$metalsChinaCatLo = recodeQt(modData$metals_cn, seq(0,1,.25))
+modData$metalsChinaCatHi = recodeQt(modData$metals_cn, seq(0,1,.1))
+####
+
+####
+# restrict range
+modData = modData[modData$year>=2000,]
 ####
 
 ####

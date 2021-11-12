@@ -6,157 +6,76 @@ pth = paste0(here::here(), '/')
 source(paste0(pth, 'setup.R'))
 
 #
-loadPkg(c('lme4', 'glmnet'))
+loadPkg(c('lme4', 'doParallel', 'foreach'))
 ####
 
 ####
 load(paste0(pathIn, "modData.rda"))
+load(paste0(pathOut, 'modelInfo.rda'))
 ####
 
-cbind(names(modData))
+####
+# rescale indep vars
+vars = c(lagDVs, ivs)
+modData[,vars] = apply(modData[,vars], 2, scale)
+####
 
-###BaseModels
-dvs = names(modData)[grepl('delta_',names(modData))]
-dvs = gsub('delta_','',dvs)
-ivs = c(
-  paste0('USf',2),
-  'gdp', 'pop', 'polity')
-ivs = paste0('lag1_',ivs)
+####
+# run mods
+cores = 20
+cl = makeCluster(cores)
+registerDoParallel(cl)
+lmerMods = foreach(ii = 1:nrow(modsToRun), .packages=c('lme4')) %dopar% {
 
-forms = lapply(dvs, function(dv){
-  formula(paste0(dv, '~', paste(ivs, collapse='+')))
-  })
+  # pull out relev info for constructing modfel form
+  depvar = modsToRun$dv[ii]
+  ivs = ivList[[ modsToRun$ivs[ii] ]]
+  randeff = modsToRun$re[ii]
+  modType = modsToRun$type[ii]
+  inclLag = modsToRun$lagDV[ii]
 
-mods = lapply(forms, function(form){
-  glm(form, data=modData)
-  })
-names(mods) = dvs
+  # construct formula
+  form = paste0(depvar, '~', ivs)
+  if(inclLag){ form=paste0(form, '+', paste0('lag1_',depvar)) }
+  if(modType=='varInt'){
+    form = paste0(form, '+ (1|', randeff, ')') }
+  if(modType=='varSlope_f1'){
+    form = paste0(form, '+ (1 + lag1_USf1 |', randeff, ')') }
+  if(modType=='varSlope_f2'){
+    form = paste0(form, '+ (1 + lag1_USf2 |', randeff, ')') }
+  form = formula(form)
 
-lapply(mods, summary)
+  # run model
+  mod = lmer(form, data=modData)
 
-## bring back in beijdist geo var
+  # org fe and re results
+  feSumm = as.data.frame(summary(mod)$'coefficients')
+  feSumm = cbind(
+    grpvar='fixef',
+    term='fixef',
+    iv=rownames(feSumm),
+    feSumm)
+    rownames(feSumm) = NULL
+  reSumm = as.data.frame(ranef(mod))
+  names(reSumm) = c('grpvar','term','iv','Estimate', 'Std. Error')
+  reSumm = cbind(reSumm, 't value'=NA)
+  modSumm = rbind(feSumm, reSumm)
 
-## take a look at delta why is it breaking
+  # org for saving
+  out = list(
+    formula=form,
+    effects=modSumm,
+    depvar=depvar,
+    ivs=ivs,
+    randeff=randeff,
+    modType=modType,
+    inclLag=inclLag )
 
-## test out random effect structs and see how us distraction varies by them
-## geo groupings
-## pol groupings
-## material capability using the thing that ha eun found
+  #
+  return(out) }
+stopCluster(cl)
+####
 
-
-bl1 = glm(delta_agree_k2_srm_lfm~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
-bl2 = glm(delta_agree_k5_srm_lfm~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
-bl3 = glm(delta_tradeDepSend_k2_srm_lfm~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
-bl3 = glm(delta_tradeDepSend_k5_srm_lfm~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
-
-bt1 = glm(econScores_tradeDepSend~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
-bt2 = glm(diplomScores_agree~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
-bt3 = glm(icewsScores_gov~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
-
-###BaseModels + Region FEs
-r1 = glm(econScores_tradeDepSend_lfm~USf1.l1 + USf2.l1 + USf3.l1 + region, data = chiData)
-r2 = glm(diplomScores_agree_lfm~USf1.l1 + USf2.l1 + USf3.l1 + region, data = chiData)
-r3 = glm(icewsScores_gov_lfm~USf1.l1 + USf2.l1 + USf3.l1 + region, data = chiData)
-
-###BaseModels + LDV
-l1 = glm(econScores_tradeDepSend_lfm~USf1.l1 + USf2.l1 + USf3.l1 + econScores_tradeDepSend_lfm.l1, data = chiData)
-l2 = glm(diplomScores_agree_lfm~USf1.l1 + USf2.l1 + USf3.l1 + diplomScores_agree_lfm.l1, data = chiData)
-l3 = glm(icewsScores_gov_lfm~USf1.l1 + USf2.l1 + USf3.l1 + icewsScores_gov_lfm.l1, data = chiData)
-
-chiData$econDelta = chiData$econScores_tradeDepSend_lfm - chiData$econScores_tradeDepSend_lfm.l1
-chiData$diplomDelta = chiData$diplomScores_agree_lfm - chiData$diplomScores_agree_lfm.l1
-chiData$icewsDelta = chiData$icewsScores_gov_lfm - chiData$icewsScores_gov_lfm.l1
-
-###BaseModels Delta
-d1 = glm(econDelta~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
-d2 = glm(diplomDelta~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
-d3 = glm(icewsDelta~USf1.l1 + USf2.l1 + USf3.l1 , data = chiData)
-
-
-###BaseModels Delta
-d1 = glm(econDelta~USf1.l1 + USf2.l1 + USf3.l1 + polity.l1, data = chiData)
-d2 = glm(diplomDelta~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
-d3 = glm(icewsDelta~USf1.l1 + USf2.l1 + USf3.l1 , data = chiData)
-
-
-?glmnet
-useVars = c("USf1.l1", "USf2.l1", "USf3.l1", "polity.l1",  "GDP.l1", "pop.l1", "beijDist", "washDist", "IdealPointDistance")
-
-use = c(useVars, "econScores_tradeDepSend", "diplomScores_agree", "icewsScores_gov","econScores_tradeDepSend_lfm", "diplomScores_agree_lfm", "icewsScores_gov_lfm")
-regionMat = model.matrix(~chiData$region)
-regionMat = data.frame(regionMat)
-chiData = cbind(chiData, regionMat)
-
-regionVars = names(regionMat)
-
-
-lassoData = na.omit(chiData[,c(use, regionVars)])
-lasso1 = glmnet(lassoData[,c(useVars,regionVars)], y = lassoData$econScores_tradeDepSend, alpha = 1)
-
-
-###Control Model
-c1 = glm(econScores_tradeDepSend_lfm ~ USf1.l1 + USf2.l1 + USf3.l1 + polity.l1+GDP.l1+ pop.l1+beijDist+washDist + as.factor(region), data = chiData)
-c2 = glm(diplomScores_agree ~ USf1.l1 + USf2.l1 + USf3.l1 + polity.l1+GDP.l1+ pop.l1+beijDist+washDist + as.factor(region), data = chiData)
-c3 = glm(icewsScores_gov ~ USf1.l1 + USf2.l1 + USf3.l1 + polity.l1+GDP.l1+ pop.l1+beijDist+washDist + as.factor(region), data = chiData)
-
-cl1 = glm(econScores_tradeDepSend ~ USf1.l1 + USf2.l1 + USf3.l1  + econScores_tradeDepSend.l1+ polity.l1+GDP.l1+ pop.l1+beijDist+washDist + as.factor(region), data = chiData)
-cl2 = glm(diplomScores_agree ~ USf1.l1 + USf2.l1 + USf3.l1 +diplomScores_agree.l1+ polity.l1+GDP.l1+ pop.l1+beijDist+washDist + as.factor(region), data = chiData)
-cl3 = glm(icewsScores_gov ~ USf1.l1 + USf2.l1 + USf3.l1 + diplomScores_agree.l1 + polity.l1+GDP.l1+ pop.l1+beijDist+washDist + as.factor(region), data = chiData)
-
-
-plot_glmnet(lasso1, xvar="dev", label = 20, lwd=2, cex=2)
-
-
-source('~/Dropbox/lagger.r')
-chiData$econScores_tradeDepSend.l1 = lagger(chiData$econScores_tradeDepSend, chiData$cname1, chiData$year, 1)
-chiData$econDelta = chiData$econScores_tradeDepSend - chiData$econScores_tradeDepSend.l1
-chiData$econDelta = chiData$econScores_tradeDepSend_lfm - chiData$econScores_tradeDepSend_lfm.l1
-
-
-###BaseModels, FD
-fd1 = glm(econDelta~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
-fd2 = glm(econDelta_lfm~USf1.l1 + USf2.l1 + USf3.l1, data = chiData)
-
-#####BaseModels + Region FEs
-r1 = glm(econDelta~USf1.l1 + USf2.l1 + USf3.l1 + region, data = chiData)
-r2 = glm(econDelta_lfm~USf1.l1 + USf2.l1 + USf3.l1 + region, data = chiData)
-
-###ControlModels
-c1 = glm(econDelta ~ USf1.l1 + USf2.l1 + USf3.l1 + polity.l1+GDP.l1+ pop.l1+beijDist+washDist + IdealPointDistance + as.factor(region), data = chiData)
-c2 = glm(econDelta_lfm ~ USf1.l1 + USf2.l1 + USf3.l1 + polity.l1+GDP.l1+ pop.l1+beijDist+washDist + IdealPointDistance + as.factor(region), data = chiData)
-
-useVars = c("USf1.l1", "USf2.l1", "USf3.l1", "polity.l1",  "GDP.l1", "pop.l1", "beijDist", "IdealPointDistance")
-use = c(useVars, "econDelta")
-lasso3 = glmnet(lassoData[,c(1:8, 10:28)], y = lassoData$econDelta, alpha = 1)
-chiData$region2 = countrycode(chiData$cname1, "country.name", 'region23')
-regionMat = model.matrix(~chiData$region2)
-regionMat = data.frame(regionMat)
-chiData = cbind(chiData, regionMat)
-
-regionVars = names(regionMat)
-
-
-lassoData = na.omit(chiData[,c(use, regionVars[-1])])
-library(glmnet)
-library(plotmo)
-lasso2 = glmnet(lassoData[,c(useVars,regionVars[-1])], y = lassoData$econDelta, alpha = 1)
-plot_glmnet(lasso1, xvar="dev", label = 20, lwd=2, cex=2)
-plot_glmnet(lasso2, xvar="dev", label = 20, lwd=2, cex=2)
-
-save(lassoData, file = "forMD.rda")
-library(lme4)
-chiData$region2 = countrycode(chiData$cname1, "country.name", "region23")
-
-library(countrycode)
-c1 = lmer(econDelta ~ USf1.l1  + polity.l1+log(GDP.l1)+ log(pop.l1)+scale(beijDist)+scale(washDist) + IdealPointDistance + (1 |region2), data = chiData)
-c2 = lmer(econDelta_lfm ~ USf1.l1 + polity.l1+log(GDP.l1)+ log(pop.l1)+scale(beijDist)+scale(washDist) + IdealPointDistance  + (1|region2), data = chiData)
-ic1 = lmer(econDelta ~ polity.l1+log(GDP.l1)+ log(pop.l1)+scale(beijDist)+scale(washDist) + IdealPointDistance + (1 + USf1.l1 |region2), data = chiData)
-ic2 = lmer(econDelta_lfm ~ polity.l1+log(GDP.l1)+ log(pop.l1)+scale(beijDist)+scale(washDist) + IdealPointDistance  + (1 + USf1.l1 |region2), data = chiData)
-
-ic2 = lmer(econDelta_lfm ~ polity.l1+log(GDP.l1)+ log(pop.l1)+scale(beijDist)+scale(washDist) + IdealPointDistance  + (1 + USf2.l1 |region2), data = chiData)
-
-
-chiData$chinaRegions = chiData$region2 %in% c("Eastern Asia", "Australia and New Zealand", "South-Eastern Asia")
-cInter2 = lm(econDelta_lfm ~ USf1.l1*chinaRegions + polity.l1+log(GDP.l1)+ log(pop.l1)+scale(washDist) + scale(beijDist) + IdealPointDistance + region2, data = chiData)
-
-save(lassoData, chiData, file = "forMD.rda")
+####
+save(lmerMods, file=paste0(pathOut, 'lmerMods.rda'))
+####

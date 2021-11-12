@@ -62,6 +62,27 @@ pasteVec = function(x, y, sep=''){
 }
 stdz = function(x){ (x-mean(x,na.rm=TRUE))/sd(x,na.rm=TRUE) }
 cbindNumb = function(x){ cbind(x, 1:length(x)) }
+recodeQt = function(var, pseq){
+  qts = quantile(var, probs=pseq, na.rm=TRUE)
+  qts[1] = -Inf
+  qts = unique(qts)
+  qtLabs = paste0('cat_', 1:(length(qts)-1))
+  qtCat = cut(var, qts, qtLabs)
+  return(qtCat) }
+digs=3
+getCoef = function(x){
+  round(cbind(mu=fixef(x), sd=sqrt(diag(vcov(x)))),digs) }
+getCoefB = function(x, vars, int = FALSE){
+  out = cbind(
+    mu=apply(x[,vars], 2, mean) ,
+    sd=apply(x[,vars], 2, sd) )
+  if(int){
+    out = cbind(out,
+      qtLo95 = apply(x[,vars], 2, quantile, .025),
+      qtHi95 = apply(x[,vars], 2, quantile, .975) ) }
+  out = round( out, digs )
+  return(out) }
+
 
 # Global params
 seed=6886
