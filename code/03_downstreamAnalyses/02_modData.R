@@ -62,7 +62,6 @@ polity = polity[!polity$cnameYr %in% toDrop,]
 # merge with chiData
 chiData$cnameYr = paste0(chiData$cname1, chiData$year)
 chiData$polity = polity$polity2[match(chiData$cnameYr, polity$cnameYr)]
-chiData$region = countrycode(chiData$cname1, "country.name", "region")
 ####
 
 ####
@@ -112,7 +111,7 @@ codelist$cname = cname(codelist$cow.name)
 modData$region23 = codelist$region23[match(modData$cname1, codelist$cname)]
 
 # set up region codings
-modData$chinaRegions = modData$region2 %in% c(
+modData$chinaRegions = modData$region23 %in% c(
   "Eastern Asia", "Australia and New Zealand", "South-Eastern Asia")
 
 # log vars
