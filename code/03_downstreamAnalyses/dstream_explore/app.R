@@ -18,6 +18,16 @@ if(Sys.info()['user'] %in% c('maxgallop')){
     pathOut = paste0(pathDrop, 'results/')
     pathGraphics = paste0(pathDrop, 'graphics/') }
 
+
+if(Sys.info()['user'] %in% c('pjb15180')){
+  suf = paste0('C:/Users/', Sys.info()['user'], '/')
+  pathDrop = paste0(suf, 'Dropbox/plutonium/')
+  pathIn = paste0(pathDrop, 'data/')
+  pathOut = paste0(pathDrop, 'results/')
+  pathGraphics = paste0(pathDrop, 'graphics/') }
+
+
+
 if(Sys.info()['user'] %in% c('haeunchoi')){
     suf = paste0('/Users/', Sys.info()['user'], '/')
     pathDrop = paste0(suf, 'Dropbox/plutonium/')
