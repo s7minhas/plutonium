@@ -1,5 +1,4 @@
 ####
-
 pth = paste0(here::here(), '/')
 source(paste0(pth, 'setup.R'))
 dpth = paste0(pathDrop, 'data/')
@@ -10,6 +9,105 @@ pkgs = c(
   'lme4', 'rstanarm', 'knitr' )
 loadPkg(pkgs)
 ####
+
+####
+load(paste0(rpth, 'modelInfo.rda'))
+load(paste0(rpth, 'lmerMods.rda'))
+load(paste0(rpth, 'stanMods.rda'))
+####
+
+########################
+# get vec of final mods
+tmp=ls()
+
+####
+# mods with f1 iv and random country intercepts
+agree2_f1_cname_int = with(modsToRun, which(
+  dv=='agree_k2_srm_lfm' & ivs=='ivf1' &
+  lagDV==FALSE & re=='cname1' & type=='varInt' ))
+
+agree5_f1_cname_int = with(modsToRun, which(
+  dv=='agree_k5_srm_lfm' & ivs=='ivf1' &
+  lagDV==FALSE & re=='cname1' & type=='varInt' ))
+
+trade2_f1_cname_int = with(modsToRun, which(
+  dv=='tradeDepSend_k2_srm_lfm' & ivs=='ivf1' &
+  lagDV==FALSE & re=='cname1' & type=='varInt' ))
+
+trade5_f1_cname_int = with(modsToRun, which(
+  dv=='tradeDepSend_k5_srm_lfm' & ivs=='ivf1' &
+  lagDV==FALSE & re=='cname1' & type=='varInt' ))
+####
+
+####
+# mods with f2 iv and random country intercepts
+agree2_f2_cname_int = with(modsToRun, which(
+  dv=='agree_k2_srm_lfm' & ivs=='ivf2' &
+  lagDV==FALSE & re=='cname1' & type=='varInt' ))
+
+agree5_f2_cname_int = with(modsToRun, which(
+  dv=='agree_k5_srm_lfm' & ivs=='ivf2' &
+  lagDV==FALSE & re=='cname1' & type=='varInt' ))
+
+trade2_f2_cname_int = with(modsToRun, which(
+  dv=='tradeDepSend_k2_srm_lfm' & ivs=='ivf2' &
+  lagDV==FALSE & re=='cname1' & type=='varInt' ))
+
+trade5_f2_cname_int = with(modsToRun, which(
+  dv=='tradeDepSend_k5_srm_lfm' & ivs=='ivf2' &
+  lagDV==FALSE & re=='cname1' & type=='varInt' ))
+####
+
+####
+# mods with base iv and polCat rand effs with f1
+agree2_base_polCat_f1 = with(modsToRun, which(
+  dv=='agree_k2_srm_lfm' & ivs=='ivBase' &
+  lagDV==FALSE & re=='polCat3' & type=='varSlope_f1' ))
+
+agree5_base_polCat_f1 = with(modsToRun, which(
+  dv=='agree_k5_srm_lfm' & ivs=='ivBase' &
+  lagDV==FALSE & re=='polCat3' & type=='varSlope_f1' ))
+
+trade2_base_polCat_f1 = with(modsToRun, which(
+  dv=='tradeDepSend_k2_srm_lfm' & ivs=='ivBase' &
+  lagDV==FALSE & re=='polCat3' & type=='varSlope_f1' ))
+
+trade5_base_polCat_f1 = with(modsToRun, which(
+  dv=='tradeDepSend_k5_srm_lfm' & ivs=='ivBase' &
+  lagDV==FALSE & re=='polCat3' & type=='varSlope_f1' ))
+####
+
+####
+# mods with base iv and polCat rand effs with f2
+agree2_base_polCat_f2 = with(modsToRun, which(
+  dv=='agree_k2_srm_lfm' & ivs=='ivBase' &
+  lagDV==FALSE & re=='polCat3' & type=='varSlope_f2' ))
+
+agree5_base_polCat_f2 = with(modsToRun, which(
+  dv=='agree_k5_srm_lfm' & ivs=='ivBase' &
+  lagDV==FALSE & re=='polCat3' & type=='varSlope_f2' ))
+
+trade2_base_polCat_f2 = with(modsToRun, which(
+  dv=='tradeDepSend_k2_srm_lfm' & ivs=='ivBase' &
+  lagDV==FALSE & re=='polCat3' & type=='varSlope_f2' ))
+
+trade5_base_polCat_f2 = with(modsToRun, which(
+  dv=='tradeDepSend_k5_srm_lfm' & ivs=='ivBase' &
+  lagDV==FALSE & re=='polCat3' & type=='varSlope_f2' ))
+####
+
+# org
+finModVec = setdiff(ls(), c(tmp, 'tmp'))
+
+#
+stanModsFin = stanMods[sapply(finModVec, get)]
+lmerModsFin = lmerMods[sapply(finModVec, get)]
+
+#
+stanModsFin[[1]]$effects
+lmerModsFin[[1]]$effects
+########################
+
 
 ####
 # load data and results
