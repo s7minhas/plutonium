@@ -5,6 +5,7 @@ Given the forgoing meaures, our empirical approach to testing H1 and H2 is strai
 \begin{equation}
     \text{DV}_{i} = a + j\beta_{1}F_{1} + (1-j)\beta_{2}F_{2} + \beta_{3}F_{3} + e_{i}
 \end{equation}
+
 where j is an indicator variable for whether the model is using $F_{1}$ or $F_{2}$.
 
 \textcolor{blue}{We should indicate that we havea  vector of controls, and also be clearer about what we're doing with F3.}
@@ -18,22 +19,29 @@ We also include a number of country level controls that might influence a countr
 To account for other structural factors, we estimate our models within a hierarchical framework which allows for both the fixed effects discussed above, as well as random effects. In the first set of results, we rely on random effects for country, and later we look at random effects based on a state’s domestic political institutions.
 
 \subsection{Main Results}
-For our first pass at these models, we focus on the two largest factors of US constraint: 
+
+For our first pass at these models, we focus on the two largest factors of US constraint:
+
 \begin{itemize}
     \item $F_{1}$  US casualties
     \item $F_{2}$ US force commitments and military spending
 \end{itemize}
-We do not focus on the third factor – economic shocks – because of possible endogeneity – and leave this for future work.  
+
+We do not focus on the third factor – economic shocks – because of possible endogeneity – and leave this for future work.
+
 \textcolor{blue}{FIx later}
 
 In the first set of models depicted in figures \ref{x} and \ref{y} we see a marked divergence between our measures of diplomatic and economic alignment. As $F_1$ increases, denoting a higher level of US attention and resources devoted to the Middle East, states have a consistent increase in their diplomatic alignment with China. The opposite, however, seems to be the case for economic alignment, as US distraction seems to be associated with an aggregate move away from China. When we move from one measure of US distraction to another -- $F_2$ based on troop deployments and military spending, as seen in figures \ref{x} and \ref{x} -- we see a similar pattern – diplomatic alignment with China increases with our measures of US distraction, economic alignment does not.
 
 \textcolor{red}{SM: Include model results as in the word doc please.}
 
-For control variables, we see a similar division between the two types of dependent variable. Democracies are less likely to be aligned diplomatically with China, but more likely to be aligned economically, and the same is true for rich states. The distance to Beijing has a consistent positive effect across all four models, indicating that there is interestingly, closer alignment between China and more distant states. 
+For control variables, we see a similar division between the two types of dependent variable. Democracies are less likely to be aligned diplomatically with China, but more likely to be aligned economically, and the same is true for rich states. The distance to Beijing has a consistent positive effect across all four models, indicating that there is interestingly, closer alignment between China and more distant states.
 
 \subsection{Heterogeneous Effect}
+
 One possible explanation for these ambiguous results is that these models show the aggregate effect, but beneath the surface, different states react to US distraction in different ways. To examine this, we modify our hierarchical model to not just allow random intercepts, but also random slopes, and rather than using countries as our random effect, we group states using their polity scores. We use the canonical division into consolidated democracies (Polity Score >= 7), consolidated autocracies (< -6) and mixed regimes (all other states).In these models, we allow a random slope for F1 or F2 in each tranche of the polity score.
 
 \textcolor{red}{SM: More models as in the word doc here plz.}
-For F1  we find a similar effect across our dependent variables. There is a consistent positive effect of US distraction among autocracies, meaning that autocracies grow more aligned with China while the US is distracted, but as we move from consolidated autocracy to mixed regime, and to democracy, this effect shrinks, and in many cases changes direction, such that consolidated democracies, across both economic and diplomatic measures become less aligned with China when the US is more distracted. For F2, there is a consistent positive effect of US distraction for both autocracies and mixed regimes, but the effect again reverses itself in consolidated democracies. 
+
+
+For F1  we find a similar effect across our dependent variables. There is a consistent positive effect of US distraction among autocracies, meaning that autocracies grow more aligned with China while the US is distracted, but as we move from consolidated autocracy to mixed regime, and to democracy, this effect shrinks, and in many cases changes direction, such that consolidated democracies, across both economic and diplomatic measures become less aligned with China when the US is more distracted. For F2, there is a consistent positive effect of US distraction for both autocracies and mixed regimes, but the effect again reverses itself in consolidated democracies.

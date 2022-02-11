@@ -78,6 +78,9 @@ stanMods = stanMods[toKeep]
 lmerMods = lmerMods[toKeep]
 
 #
+save(lmerMods, stanMods, file=paste0(rpth, 'finMods.rda'))
+
+#
 names(stanMods[[ length(stanMods) ]])
 names(lmerMods[[ length(stanMods) ]])
 

@@ -21,6 +21,33 @@ modData[,vars] = apply(modData[,vars], 2, scale)
 ####
 
 ####
+cntrls = c('lag1_polity', 'lag1_gdp', 'capdist')
+kivs = paste0('lag1_USf',1:3)
+kivs = kivs[length(kivs)]
+ivs = c(kivs, cntrls)
+eff = 'cname1'
+dvs = c(
+  'agree_k2_srm_lfm',
+  'tradeDepSend_k2_srm_lfm')
+
+uniEffForms = lapply(dvs, function(dv){
+  form = paste0(
+    dv, '~' ,
+    paste(ivs, collapse='+'),
+    '+ (1|', eff,')'
+  )
+  formula(form)
+  })
+
+uniEffMods = lapply(uniEffForms, function(form){
+  lmer(form, data=modData)
+  })
+
+lapply(uniEffMods, summary)
+
+####
+
+####
 # run mods
 cores = 20
 cl = makeCluster(cores)
