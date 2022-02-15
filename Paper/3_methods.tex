@@ -96,10 +96,36 @@ With a measure like this, it is important to investigate whether it is giving us
 
 The latent factor model which underpins our measures of relationships maps each state into a k dimensional latent vector space. States that have their vectors pointed in similar directions are more likely to influence each other and common third parties, whereas states whose vectors point in opposite directions have limited influence on each other, and in many cases antipathy. We plot the overall distribution of the network in both 2000 and 2019 (for UN voting data) or 2020 (for trade data), in figures 5-8.
 
-\textcolor{red}{SM: Please include circle plots for both LFMs for 2000 and 2019/2020, with countries highlighted as in the word doc.}
+\begin{figure}[ht]
+	\begin{tabular}{cc}
+	\includegraphics[width=.45\textwidth]{un00.pdf} &
+	\includegraphics[width=.45\textwidth]{un19.pdf} \\
+	\end{tabular}
+	\caption{Visualization of multiplicative effects for our measure of diplomatic influence in 2000 (left) and 2019 (right). Each circle designates a country and the color corresponds to the legend at the center of the visualization. Countries that cluster together are those that were found by the model to have similar sending patterns, meaning that they tend to influence one another.}
+	\label{fig:unUV}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[ht]
+	\begin{tabular}{cc}
+	\includegraphics[width=.45\textwidth]{trade00.pdf} &
+	\includegraphics[width=.45\textwidth]{trade20.pdf} \\
+	\end{tabular}
+	\caption{Visualization of multiplicative effects for our measure of trade influence in 2000 (left) and 2020 (right). Each circle designates a country and the color corresponds to the legend at the center of the visualization. Countries that cluster together are those that were found by the model to have similar sending patterns, meaning that they tend to influence one another.}
+	\label{fig:tradeUV}
+\end{figure}
+\FloatBarrier
+
 
 There are a few immediate takeaways from these networks – first is that the diplomatic influence measure based on UN voting shows three pretty clear clusters: the US and Israel (and Canada in 2020) are relatively isolated, but generally close to a larger cluster with most of the other major European powers, along with Japan, Australia, and New Zealand. The third cluster contains the vast majority of the global South. This is true whether we are looking at a latent factor model with 2 or 5 dimensional latent factors. The network for trade in 2000 paints a somewhat different story. While we still see clustering of many of the major western powers, there is a much stronger role played by geography here – the US is close to many other states in the Americas, and Russia is close to many European states. We also, as one might expect, see much closer alignment between the US and China. In 2020, the geographic clustering remains, but Russia has drifted away from Europe, and US/China economic relations are somewhat less close. These figures show that the measures of diplomatic and economic influence correspond to many of our intuitions about influence in world politics, while also maintaining important and novel characteristics based on the data used to generate them.
 
 We also test the face validity of these measures by looking at how they characterize a trio of important relationships. We choose the relationship between the US and UK, which we expect to be generally close and amicable, and the US’s relations with its two major competitors China and Russia. As shown in figure 9, this measure captures the general tenor of the relationships – the US and UK have a consistently positive relationship, whereas the relationship the US has with both China and Russia, based on UN voting, is characterized as more adversarial – the time series interestingly points to generally positive relationships in the immediate aftermath of 9/11, which deteriorate precipitously starting in 2003 with the Iraq war, and while there are some marginal improvements, the relationship stays quite negative. On the other hand, as shown in figure 10, while our measure of economic influence pinpoints the positive US/UK relationship, and the negative US/Russia relationship, it finds that the US has a relationship with China that is at times even more closely aligned than that with the United Kingdom. This makes a degree of sense given that the volume of US/China trade dwarfs the trade in the so-called special relationship.
 
-\textcolor{red}{SM: please include the US/UK, US/China, US/Russia time series for our variables here as in the word doc.}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth]{distViz.pdf}
+\caption{ Cosine distance in latent factor space.
+}
+\label{fig:distViz}
+\end{figure}
+\FloatBarrier

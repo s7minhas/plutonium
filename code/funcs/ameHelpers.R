@@ -118,4 +118,143 @@ ggCirc = function(
 			)
 	return(ggCirc)
 }
+
+uvViz = function(
+  catSelect,
+  configSelect,
+  paramsToPlot,
+  timeSelect,
+	cntryVec
+){
+  # pick input
+  if(catSelect=='Trade'){ dat=tradeMods }
+  if(catSelect=='UN Voting'){ dat=unMods }
+
+  # subet to relev config, param, and time
+  dat = dat[[configSelect]][[char(timeSelect)]][c('YPM','U', 'V')]
+
+  # modify labels
+  ids=cntryKey$cowc[match(rownames(dat$YPM), cntryKey$cname)]
+  rownames(dat$YPM) = colnames(dat$YPM) = rownames(dat$U) = rownames(dat$V) = ids
+
+  # get data and break up
+  yhat = dat$YPM ; U = dat$U ; V = dat$V ; rm(dat)
+
+  # chose countries to label
+  toLabel = trim(unlist(strsplit(cntryVec, ',')))
+
+  # org data for circ plot
+  if(paramsToPlot == 'U and V'){
+    ggU = getDataForCirc(Y=yhat, U=U, V=V, vscale=.65,removeIsolates=FALSE)$uG }
+  if(paramsToPlot == 'U'){
+    ggU = getDataForCirc(Y=yhat, U=U, V=NULL, vscale=.65,removeIsolates=FALSE)$uG }
+  if(paramsToPlot == 'V'){
+    ggU = getDataForCirc(Y=yhat, U=NULL, V=V, vscale=.65,removeIsolates=FALSE)$uG }
+  ggU = unique(ggU)
+  ggU$ccols = cntryKey$ccols[match(ggU$actor,cntryKey$cowc)]
+  ggU$lab = ggU$actor
+  ggU$lab[!ggU$lab %in% toLabel] = ''
+  ggU$lPch = ggU$tPch ; ggU$lPch[ggU$lab==''] = 0
+
+  # viz
+  circViz = ggplot(ggU, aes(x=X1, y=X2, size=tPch, color=actor)) +
+      annotation_custom(mapForCirc, xmin=-.75, xmax=.75, ymin=-.75, ymax=.75) +
+      geom_point(alpha=.65) + scale_size(range=c(4,8)) +
+      ylab("") + xlab("") +
+      geom_label_repel(aes(label=lab, size=lPch), max.overlaps = Inf) +
+      scale_color_manual(values=ccols) +
+      theme_light(base_family="Source Sans Pro") +
+      theme(
+          legend.position = 'none',
+          panel.border = element_blank(), panel.grid=element_blank(),
+          axis.ticks = element_blank(), axis.line=element_blank(),
+          axis.text = element_blank() )
+  #
+  return(circViz)  }
+
+getDistData = function(
+  catSelect,
+  configSelect,
+  paramsToPlot,
+  distToPlot,
+  dyadVec
+){
+  if(catSelect=='Trade'){ dat=tradeMods }
+  if(catSelect=='UN Voting'){ dat=unMods }
+
+  # cntry pairs to calc dists for
+  dyadsToViz = trim(unlist(strsplit(dyadVec, ',')))
+  cntriesForViz = unique(trim(unlist(strsplit(dyadsToViz, '-'))))
+
+  # subset to config and time
+  modConfig = dat[[configSelect]]
+
+  # check number of selected params
+  numParams = (nchar(paramsToPlot)>2)+1
+
+  # iterate through time
+  distData = lapply(1:length(modConfig), function(tt){
+
+    # iterate through parameters
+    distDataParam = lapply(1:numParams, function(ii){
+
+      # org params
+      listParams = list()
+      if(paramsToPlot=='U'){
+        listParams[[1]] = modConfig[[tt]]$'U'
+        names(listParams) = 'U'}
+      if(paramsToPlot=='V'){
+        listParams[[1]] = modConfig[[tt]]$'V'
+        names(listParams) = 'V'}
+      if(paramsToPlot=='U and V'){
+        listParams[[1]] = modConfig[[tt]]$'U'
+        listParams[[2]] = modConfig[[tt]]$'V'
+        names(listParams) = c('U', 'V') }
+
+      # subset to relev param
+      paramMat = listParams[[ii]]
+
+      # iterate through distance metrics
+      distDataByMethod = lapply(distToPlot, function(distMethod){
+
+        # relabel id attrs in mats
+        ids=cntryKey$cowc[match(rownames(paramMat), cntryKey$cname)]
+        rownames(paramMat) = ids
+
+        # get distance calc
+        paramMat = paramMat[cntriesForViz,]
+        distMat = distance(paramMat, method=distMethod, use.row.names=TRUE)
+
+        # org
+        out = reshape2::melt(distMat)
+        out$year = num(names(modConfig)[tt])
+        out$param = names(listParams)[ii]
+        out$dist = distMethod
+        out$lab = with(out, paste0( param, '_', dist ))
+        return(out) })
+
+      # org
+      distDataByMethod = do.call('rbind', distDataByMethod)
+
+      # close iteration through distance metrics
+      return(distDataByMethod) })
+
+    # org
+    distDataParam = do.call('rbind', distDataParam)
+
+    # close iteration through params
+    return(distDataParam) })
+
+  #
+  distData = do.call('rbind', distData)
+
+  # org by dyad pair
+  distData$dyad = with(distData, paste0(Var1, '-', Var2))
+
+  # subset to user chosen pairs
+  # chose countries to label
+  distData = distData[distData$dyad %in% dyadsToViz, ]
+
+  #
+  return(distData) }
 ##################################################################
