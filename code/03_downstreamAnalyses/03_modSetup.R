@@ -1,12 +1,7 @@
 ####
 rm(list=ls())
 pth = paste0(here::here(), '/')
-
-#
 source(paste0(pth, 'setup.R'))
-
-#
-loadPkg(c('lme4', 'doParallel', 'foreach'))
 ####
 
 ####
@@ -15,60 +10,52 @@ load(paste0(pathIn, "modData.rda"))
 
 ####
 # org vars for data explore
-deltaDVs = names(modData)[grepl('delta_',names(modData))]
-levelDVs = gsub('delta_','',deltaDVs)
-
-# lagged dvs
-lagDVs = paste0('lag1_', levelDVs)
+levelDVs = c('agree_k2_srm_lfm', 'tradeDepSend_k2_srm_lfm')
 
 # iv combos
 # f1 is about battle deaths in the mideast
 # f2 is about troop deployments and military spending
+# f3 is about us econ
 ivs = c(
-  'lag1_USf1', 'lag1_USf2',
+  paste0('lag1','_USf', 1:3),
   'lag1_polity', 'lag1_gdp',
   'capdist' )
 
 # org ivs into general specs
 ivList = list(
-  ivAll = paste(ivs, collapse='+'),
-  ivf1 = paste(ivs[-2], collapse='+'),
-  ivf2 = paste(ivs[-1], collapse='+'),
-  ivBase = paste(ivs[-(1:2)], collapse='+') )
+  ivf1 = paste(ivs[-c(2:3)], collapse='+'),
+  ivf2 = paste(ivs[-c(1,3)], collapse='+'),
+  ivf3 = paste(ivs[-c(1:2)], collapse='+'),
+  ivBase = paste(ivs[-(1:3)], collapse='+') )
 
 # re vars
-reVars = c(
-  'cname1',
-  'region23', 'region', 'chinaRegions',
-  'polCat3', 'polCatLo', 'polCatHi',
-  'minChinaCatLo', 'minChinaCatHi',
-  'metalsChinaCatLo', 'metalsChinaCatHi' )
+reVars = c( 'cname1', 'polCat3' )
 ####
 
 ####
 # org mods to run
 modsToRun = expand.grid(
-  dv=c(deltaDVs, levelDVs),
+  dv=levelDVs,
   ivs=names(ivList),
   re=reVars,
-  type=c('varInt','varSlope_f1','varSlope_f2'),
-  lagDV=c(TRUE,FALSE), stringsAsFactors=FALSE )
+  type=c('varInt',paste0('varSlopef',1:3)),
+  stringsAsFactors=FALSE )
 
 # cleanup
 ## not running lag dv with delta models
-modsToRun = modsToRun[!(grepl('delta_',modsToRun$dv) & modsToRun$lagDV==TRUE),]
+vMods = with(modsToRun, which(ivs!='ivBase' & re=='cname1' & type=='varInt'))
+bMods = with(modsToRun, which(ivs=='ivBase' & re=='polCat3' & type!='varInt'))
+modsToRun = modsToRun[c(vMods, bMods),]
 
-## not using usf1 as iv when varying by slope
-modsToRun = modsToRun[!(modsToRun$type=='varSlope_f2' & modsToRun$ivs %in% c('ivf1','ivf2','ivAll')),]
-
-## not using usf2 as iv when varying by slope
-modsToRun = modsToRun[!(modsToRun$type=='varSlope_f1' & modsToRun$ivs %in% c('ivf1','ivf2','ivAll')),]
+# add short dv lab
+modsToRun$dvLab = unlist(lapply(strsplit(modsToRun$dv, '_'), function(x){x[1]}))
+modsToRun = modsToRun[,c('dv','dvLab','ivs','re','type')]
 ####
 
 ####
 save(
-  deltaDVs, levelDVs, lagDVs,
+  levelDVs,
   ivs, ivList, reVars,
   modsToRun,
-  file=paste0(pathOut, 'modelInfo.rda'))
+  file=paste0(pathOut, 'modelInfoFin.rda'))
 ####

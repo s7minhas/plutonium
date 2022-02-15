@@ -23,17 +23,28 @@ To account for other structural factors, we estimate our models within a hierarc
 For our first pass at these models, we focus on the two largest factors of US constraint:
 
 \begin{itemize}
-    \item $F_{1}$  US casualties
+    \item $F_{1}$ US casualties
     \item $F_{2}$ US force commitments and military spending
+    \item $F_{3}$ US economic shocks
 \end{itemize}
-
-We do not focus on the third factor – economic shocks – because of possible endogeneity – and leave this for future work.
-
-\textcolor{blue}{FIx later}
 
 In the first set of models depicted in figures \ref{x} and \ref{y} we see a marked divergence between our measures of diplomatic and economic alignment. As $F_1$ increases, denoting a higher level of US attention and resources devoted to the Middle East, states have a consistent increase in their diplomatic alignment with China. The opposite, however, seems to be the case for economic alignment, as US distraction seems to be associated with an aggregate move away from China. When we move from one measure of US distraction to another -- $F_2$ based on troop deployments and military spending, as seen in figures \ref{x} and \ref{x} -- we see a similar pattern – diplomatic alignment with China increases with our measures of US distraction, economic alignment does not.
 
-\textcolor{red}{SM: Include model results as in the word doc please.}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth]{agreeFixedDistract.pdf}
+\caption{Parameter estimates from hierarchical model on diplomatic similarity with random country effects. Points represent average value of parameters, thicker line represents the 90\% confidence interval, and thinner the 95\%.}
+\label{fig:agreeEst}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth]{tradeFixedDistract.pdf}
+\caption{Parameter estimates from hierarchical model on economic similarity with random country effects. Each column shows the results with a different distraction measure that is labeled in the facet on the top of the plots. Points represent average value of parameters, thicker line represents the 90\% confidence interval, and thinner the 95\%. }
+\label{fig:tradeEst}
+\end{figure}
+\FloatBarrier
 
 For control variables, we see a similar division between the two types of dependent variable. Democracies are less likely to be aligned diplomatically with China, but more likely to be aligned economically, and the same is true for rich states. The distance to Beijing has a consistent positive effect across all four models, indicating that there is interestingly, closer alignment between China and more distant states.
 
@@ -41,7 +52,20 @@ For control variables, we see a similar division between the two types of depend
 
 One possible explanation for these ambiguous results is that these models show the aggregate effect, but beneath the surface, different states react to US distraction in different ways. To examine this, we modify our hierarchical model to not just allow random intercepts, but also random slopes, and rather than using countries as our random effect, we group states using their polity scores. We use the canonical division into consolidated democracies (Polity Score >= 7), consolidated autocracies (< -6) and mixed regimes (all other states).In these models, we allow a random slope for F1 or F2 in each tranche of the polity score.
 
-\textcolor{red}{SM: More models as in the word doc here plz.}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth]{agreeVarDistract.pdf}
+\caption{Parameter estimates from hierarchical model on diplomatic similarity with varying effects of the distraction measures by polity categories. Top panel shows how the distraction measures vary by polity categories and bottom the fixed effects. Points represent average value of parameters, thicker line represents the 90\% confidence interval, and thinner the 95\%.}
+\label{fig:agreeVarEst}
+\end{figure}
+\FloatBarrier
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth]{tradeVarDistract.pdf}
+\caption{Parameter estimates from hierarchical model on economic similarity with varying effects of the distraction measures by polity categories. Top panel shows how the distraction measures vary by polity categories and bottom the fixed effects. Points represent average value of parameters, thicker line represents the 90\% confidence interval, and thinner the 95\%.}
+\label{fig:tradeVarEst}
+\end{figure}
+\FloatBarrier
 
 For F1  we find a similar effect across our dependent variables. There is a consistent positive effect of US distraction among autocracies, meaning that autocracies grow more aligned with China while the US is distracted, but as we move from consolidated autocracy to mixed regime, and to democracy, this effect shrinks, and in many cases changes direction, such that consolidated democracies, across both economic and diplomatic measures become less aligned with China when the US is more distracted. For F2, there is a consistent positive effect of US distraction for both autocracies and mixed regimes, but the effect again reverses itself in consolidated democracies.
