@@ -60,7 +60,8 @@ ggDistViz = ggplot(
     panel.border=element_blank(),
     strip.text.x = element_text(
       size = 9, color='white',
-      family="Source Sans Pro Semibold"),
+      family="Source Sans Pro Semibold",
+      angle=0, hjust=0.05),
   	strip.background = element_rect(fill = "#525252", color='#525252')
   )
 ggsave(ggDistViz,
