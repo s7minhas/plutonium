@@ -131,10 +131,10 @@ tradeVarDistract = tradeVarDistractRE/tradeVarDistractFixed
 
 ####
 # save
-ggsave(agreeFixedDistract, width=8, height=6,
+ggsave(agreeFixedDistract, width=8, height=5,
   file=paste0(pathPaper, 'agreeFixedDistract.pdf'),
   device=cairo_pdf)
-ggsave(tradeFixedDistract, width=8, height=6,
+ggsave(tradeFixedDistract, width=8, height=5,
   file=paste0(pathPaper, 'tradeFixedDistract.pdf'),
   device=cairo_pdf)
 ggsave(agreeVarDistract, width=8, height=8,
