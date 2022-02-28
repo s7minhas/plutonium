@@ -8,7 +8,7 @@ As noted above, we have developed a measure of US constraint to capture a variet
     \item US political or economic distraction caused by either foreign or domestic shocks.
 \end{enumerate}
 
-To population these categories, we relied on sixteen variables distributed across the following broader categories:
+To populate these categories, we rely on sixteen variables distributed across the following broader categories:
 
 \begin{table}[h]
 \centering
@@ -24,9 +24,7 @@ Economic variables   &  Trading Economics \\
 \caption{Variables for generation of US Distraction Index}
 \end{table}
 
-The main source of constraint that is incomplete in the above framework is domestic political crises (i.e., apart from a response to economic shocks, which is captured).\footnote{Prior work has shown that political crises of this sort are rare / not likely consequential \citep{frieden:2017} and we leave the inclusion of political measures to future work.}
-
-A simple latent variable model of the above variables produced three features, representing active US conflicts (F1), US defense spending / commitments (F2), and the economic shocks (F3). A PCA with three latent variables explained 89\% of the variance in the raw data.\footnote{A possible fourth factor, which we did not include, focuses on variance from GDP growth and changes in the stock market.}
+The main source of constraint that is incomplete in the above framework is domestic political crises (i.e., apart from a response to economic shocks, which is captured).\footnote{Prior work has shown that political crises of this sort are rare / not likely consequential \citep{frieden:2017} and we leave the inclusion of political measures to future work.} A simple latent variable model of the above variables produced three features, representing active US conflicts ($F_{1}$), US defense spending / commitments ($F_{2}$), and the economic shocks ($F_{3}$). A PCA with three latent variables explained 89\% of the variance in the raw data.\footnote{A possible fourth factor, which we did not include, focuses on variance from GDP growth and changes in the stock market.} Figure~\ref{fig:facViz} visualizes how the three factors have changed through time. They show considerable variance that tracks with our priors on United States military conflicts and economic shocks over the past two decades.
 
 % Scree plots / an examination of eigenvalues supported the use of three latent variables:
 % \begin{figure}[h]
@@ -36,12 +34,10 @@ A simple latent variable model of the above variables produced three features, r
 %     \label{fig:my_label}
 % \end{figure}
 
-Graphs of the three factors through time show considerable variance that tracks with our priors on United States military conflicts and economic shocks over the past two decades:
-
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1\textwidth]{facViz.pdf}
-    \caption{PCA Viz.}
+    \caption{Visualization of $F_{1}$, $F_{2}$, and $F_{3}$ over time.}
     \label{fig:facViz}
 \end{figure}
 \FloatBarrier
@@ -50,9 +46,9 @@ Graphs of the three factors through time show considerable variance that tracks 
 
 To test our theories, we require a measure of how closely states are aligned and how these relationships change over time. One way to do this would simply be to look at a raw measure of cooperation between states, but this has a number of issues. First, states have very different overall levels of cooperative activity – e.g., the fact that there is much more trade between the United States and China than between China and Mongolia does not mean that there is closer alignment between those two states. Rather, it means that the US and China trade more with everybody. Second, there would be difficulties of left censorship. If we take trade (for example) to be the consequence of a latent measure of economic alignment, it is important to distinguish between states that do not trade with each other because of antipathy versus neutrality. For example, the US has little with Cuba or Iran due to antipathy; it has almost no trade with Slovenia for quite different reasons. We believe that both of these issues can be ameliorated by treating measures of cooperation as a form of relational data using a network approach to infer our latent measure of alignment.
 
-We use two different raw measures of cooperation as input data: the balance of trade between states (as measured by the IMF) and similarity in states’ UN voting records. For the balance of trade, we take the volume trade between states for a given dyad and divide that by the total volume for one state in the dyad. These form the links in our network of economic alignment. For our measure of diplomatic alignment, we look at the percent of votes at the United Nations General Assembly in which states voted in the same way. We use these two networks to estimate state affinity using the Latent Factor Model.\footnote{See \citet{cranmer:etal:2015, cheng:minhas:2020, huhe:etal:2021, dorff:etal:2021} for other attempts to use the latent factor model to infer alignments in different contexts.}  % In particular, we take X years of balance of trade data / UN voting data and each of them forms one slice of our multilayer network.
+We use two different raw measures of cooperation as input data: the balance of trade between states (as measured by the IMF) and similarity in states' UN voting records. For the balance of trade, we take the volume of trade between states for a given dyad and divide that by the total volume for one state in the dyad. This gives us a directed measure of how dependent one state's trading portfolio is on another. These form the links in our network of economic alignment. For our measure of diplomatic alignment, we look at the percent of votes at the United Nations General Assembly in which states voted in the same way. We use these two networks to estimate state affinity using the Latent Factor Model.\footnote{See \citet{cranmer:etal:2015, cheng:minhas:2020, huhe:etal:2021, dorff:etal:2021} for other attempts to use the latent factor model to infer alignments in different contexts.}  % In particular, we take X years of balance of trade data / UN voting data and each of them forms one slice of our multilayer network.
 
-The latent factor model is a network model that is designed to account for three different orders of interdependencies in relational data. First, it accounts for the tendency of some actors to trade more and agree to more economic agreements by including sender and receiver random effects. Second it accounts for the fact that economic cooperation is often reciprocal in the composition of the error term. Finally, the area that sets the LFM apart from other network estimators is how it handles third order dependencies. Two particular types of third order dependencies which the LFM can handle are homophily – the tendency for actors that share an unobserved characteristic – to interact more with each other, and stochastic equivalence, the idea that actors which play similar roles in a network are more likely to cooperate with the same third party. The LFM handles these third order dependencies with a multiplicative random effect based on the Singular Value Decomposition.\footnote{This effect needs to be multiplicative because by multiplying random variables, we can preserve the third order residuals which would have 0 expectation if they were simply added.} This third order term is useful in allowing us to cope with left censoring in this data, since we can use their trade with common third parties to determine if they are in the same realm of the global economic network, or if their opposition runs deeper. The equations underlying the latent factor model are as follows:
+The latent factor model is a network model that is designed to account for three different orders of interdependencies in relational data. First, it accounts for the tendency of some actors to trade more and agree to more economic agreements by including sender and receiver random effects. Second it accounts for the fact that economic cooperation is often reciprocal in the composition of the error term. Finally, the area that sets the LFM apart from other network estimators is how it handles third order dependencies. Two particular types of third order dependencies which the LFM can handle are homophily – the tendency for actors that share an unobserved characteristic – to interact more with each other, and stochastic equivalence, the idea that actors which play similar roles in a network are more likely to cooperate with the same third party. The LFM handles these third order dependencies with a multiplicative random effect based on the Singular Value Decomposition.\footnote{This effect needs to be multiplicative because by multiplying random variables, we can preserve the third order residuals which would have 0 expectation if they were simply added.} This third order term is useful in allowing us to cope with left censoring in this data, since we can use their trade with common third parties to determine if they are in the same realm of the global economic network, or if their opposition runs deeper. We formulate the latent factor model as follows:
 
 \begin{align}
 	\begin{aligned}
@@ -64,23 +60,24 @@ The latent factor model is a network model that is designed to account for three
 	\end{aligned}
 \end{align}
 
+% Equation~\ref{eqn:srm} shows the prior distributions fo each of the parameters.
+%
+% \begin{align}
+% 	\begin{aligned}
+% 		\{ (a_{1}, b_{1}), \ldots, (a_{n}, b_{n}) \} &\simiid N(0,\Sigma_{ab}) \\
+% 		\{ (\epsilon_{ij}, \epsilon_{ji}) : \; i \neq j\} &\simiid N(0,\Sigma_{\epsilon}), \text{ where } \\
+% 		\Sigma_{ab} = \begin{pmatrix} \sigma_{a}^{2} & \sigma_{ab} \\ \sigma_{ab} & \sigma_{b}^2   \end{pmatrix} \;\;\;\;\; &\Sigma_{\epsilon} = \sigma_{\epsilon}^{2} \begin{pmatrix} 1 & \rho \\ \rho & 1  \end{pmatrix}
+% 	\label{eqn:srm}
+% 	\end{aligned}
+% \end{align}
 
-\begin{align}
-	\begin{aligned}
-		\{ (a_{1}, b_{1}), \ldots, (a_{n}, b_{n}) \} &\simiid N(0,\Sigma_{ab}) \\
-		\{ (\epsilon_{ij}, \epsilon_{ji}) : \; i \neq j\} &\simiid N(0,\Sigma_{\epsilon}), \text{ where } \\
-		\Sigma_{ab} = \begin{pmatrix} \sigma_{a}^{2} & \sigma_{ab} \\ \sigma_{ab} & \sigma_{b}^2   \end{pmatrix} \;\;\;\;\; &\Sigma_{\epsilon} = \sigma_{\epsilon}^{2} \begin{pmatrix} 1 & \rho \\ \rho & 1  \end{pmatrix}
-	\label{eqn:srm}
-	\end{aligned}
-\end{align}
-
-In particular, we argue that the $\mathbf{u_i}^{T}\mathbf{D}\mathbf{v_j}$ term, which is included in the model to capture third order dependencies, also is useful for us as a measure of economic alignment. We run an LFM without covariates on the economic data, and then take this term for every pair of countries in every year, as a measure of economic alignment and one with UN voting similarity as a measure of diplomatic alignment.\footnote{We ran models with both a 2 and a 5 dimensional latent factor space, and found the results to be relatively consistent, and so for the sake of clarity, we focus on the easier to interpret 2 dimensional results.}
+Our focus for measuring cooperation across economic and diplomatic dimensions is on the  $\mathbf{u_i}^{T}\mathbf{D}\mathbf{v_j}$ term, which is included in the model to capture third order dependencies. We run an LFM without covariates on both sets of cooperation data separately, and then take this term for every pair of countries in every year as a measure of alignment.\footnote{We ran models with both a 2 and a 5 dimensional latent factor space, and found the results to be relatively consistent, and so for the sake of clarity, we focus on the easier to interpret 2 dimensional results.}
 
 \subsection*{Face Validity}
 
 With a measure like this, it is important to investigate whether it is giving us leverage over the unobserved relationships that we are trying to estimate. We examine face validity in two ways – first by looking at the overall network of relationships uncovered, and then by looking in more detail at the time series of certain prominent relationships.
 
-The latent factor model which underpins our measures of relationships maps each state into a k dimensional latent vector space. States that have their vectors pointed in similar directions are more likely to influence each other and common third parties, whereas states whose vectors point in opposite directions have limited influence on each other, and in many cases antipathy. We plot the overall distribution of the network in both 2000 and 2019 (for UN voting data) or 2020 (for trade data), in figures \ref{fig:unUV} and \ref{fig:tradeUV}.
+The latent factor model which underpins our measures of relationships maps each state into a latent vector space. States that have their vectors pointed in similar directions are more likely to influence each other and common third parties, whereas states whose vectors point in opposite directions have limited influence on each other, and in many cases antipathy. We plot the overall distribution of the network in both 2000 and 2019 (for UN voting data) or 2020 (for trade data), in figures \ref{fig:unUV} and \ref{fig:tradeUV}.
 
 \begin{figure}[ht]
 	\begin{tabular}{cc}
@@ -102,15 +99,14 @@ The latent factor model which underpins our measures of relationships maps each 
 \end{figure}
 \FloatBarrier
 
-
 There are a few immediate takeaways from these networks – first is that the diplomatic influence measure based on UN voting shows three pretty clear clusters: the US and Israel (and Canada in 2020) are relatively isolated, but generally close to a larger cluster with most of the other major European powers, along with Japan, Australia, and New Zealand. The third cluster contains the vast majority of the global South. This is true whether we are looking at a latent factor model with 2 or 5 dimensional latent factors. The network for trade in 2000 paints a somewhat different story. While we still see clustering of many of the major western powers, there is a much stronger role played by geography here – the US is close to many other states in the Americas, and Russia is close to many European states. We also, as one might expect, see much closer alignment between the US and China. In 2020, the geographic clustering remains, but Russia has drifted away from Europe, and US/China economic relations are somewhat less close. These figures show that the measures of diplomatic and economic influence correspond to many of our intuitions about influence in world politics, while also maintaining important and novel characteristics based on the data used to generate them.
 
-We also test the face validity of these measures by looking at how they characterize a trio of important relationships. We choose the relationship between the US and UK, which we expect to be generally close and amicable, and the US’s relations with its two major competitors China and Russia. As shown in figure 9, this measure captures the general tenor of the relationships – the US and UK have a consistently positive relationship, whereas the relationship the US has with both China and Russia, based on UN voting, is characterized as more adversarial – the time series interestingly points to generally positive relationships in the immediate aftermath of 9/11, which deteriorate precipitously starting in 2003 with the Iraq war, and while there are some marginal improvements, the relationship stays quite negative. On the other hand, as shown in figure 10, while our measure of economic influence pinpoints the positive US/UK relationship, and the negative US/Russia relationship, it finds that the US has a relationship with China that is at times even more closely aligned than that with the United Kingdom. This makes a degree of sense given that the volume of US/China trade dwarfs the trade in the so-called special relationship.
+We also test the face validity of these measures by looking at how they characterize a three important dyads. We choose the relationship between the US and UK, which we expect to be generally close and amicable, and the US’s relations with its two major competitors China and Russia. As shown in Figure~\ref{fig:distViz}, this measure captures the general tenor of the relationships – the US and UK have a consistently positive relationship, whereas the relationship the US has with both China and Russia, based on UN voting, is characterized as more adversarial – the time series interestingly points to generally positive relationships in the immediate aftermath of 9/11, which deteriorate precipitously starting in 2003 with the Iraq war, and while there are some marginal improvements, the relationship stays quite negative. On the other hand, while our measure of economic influence pinpoints the positive US/UK relationship, and the negative US/Russia relationship, it finds that the US has a relationship with China that is at times even more closely aligned than that with the United Kingdom. This makes a degree of sense given that the volume of US/China trade dwarfs the trade in the so-called special relationship.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=1\textwidth]{distViz.pdf}
-\caption{ Cosine distance in latent factor space.
+\caption{ Level of alignment across diplimatic and economic typers of cooperation for selected dyads over time.
 }
 \label{fig:distViz}
 \end{figure}

@@ -1,26 +1,20 @@
 \section*{Regression Models}
 
-Given the forgoing meaures, our empirical approach to testing H1 and H2 is straight-forward.  The dependent variable (DV) is proximity of actors to China; our main independent variables (IVs) are United States constraint.  These latent factors are $F_{1}$ (Active US Conflicts), $F_{2}$ (US Defense Spending / Commitments) and $F_{3}$ (Economic Shocks).\footnote{Note that  $F_{1}$ and  $F_{2}$ have sufficient correlation that we run multiple models using either $F_{1}$ or $F_{2}$, rather than include them in a model together.}
+Given the forgoing meaures, our empirical approach to testing H1 and H2 is straight-forward.  The dependent variable (DV) is proximity of actors to China; our main independent variables (IVs) are United States constraint.  These latent factors are $F_{1}$ (Active US Conflicts), $F_{2}$ (US Defense Spending / Commitments) and $F_{3}$ (Economic Shocks).\footnote{Note that $F_{1}$, $F_{2}$, and $F_{3}$ have sufficient correlation that we run multiple models using the variables separately rather than including them together.}
 
 \begin{equation}
-    \text{DV}_{i} = a + j\beta_{1}F_{1} + (1-j)\beta_{2}F_{2} + \beta_{3}F_{3} + e_{i}
+    \text{DV}_{i} = a + j\beta_{1}F_{1} + (1-j)\beta_{2}F_{2} + \beta_{3}F_{3} + e_{i},
 \end{equation}
 
-where j is an indicator variable for whether the model is using $F_{1}$ or $F_{2}$.
+where $j$ is an indicator variable for whether the model is using $F_{1}$ or $F_{2}$.
 
-\textcolor{blue}{We should indicate that we havea  vector of controls, and also be clearer about what we're doing with F3.}
+Our unit of observation here is at the country-year with a sample of 118 countries measured annually between 2000 and 2020. The countries excluded from the analysis are 1) those countries where the IMF has no data on their trade flows, 2) the United States and China, since we are interested in the effects of US distraction on economic alignment with China. We have two dependent variables, one focused on the level of economic alignment with China and another on the level of diplomatic alignment with China. Based on our hypotheses H1 and H2, we test whether the level of alignment is a function of distraction or the demonstrated resolve of the United States.
 
-Our unit of observation here is at the country year level with a sample of 118 countries measured annually between 2000 and 2020. The countries excluded from the analysis are 1) those countries where the IMF has no data on their trade flows, 2) the United States and China, since we are interested in the effects of US distraction on economic alignment with China. To generate our dependent variable, we take our measure of a country’s economic alignment with China and we measure the change in it from one year to the next. Based on our hypotheses H1 and H2, we test whether this movement is a function of distraction or the demonstrated resolve of the United States.
-
-Our key independent variable, as discussed in the previous section, is our measures of US distraction based either on active US conflicts ($F_1$), US defense expenditures and force commitments ($F_2$), and economic crises ($F_3$). For each country-year observation, we include the value of US distraction in the previous year to see how it relates to that country’s alignment with China.
-
-We also include a number of country level controls that might influence a country’s closeness of economic alignment with China. Following the insights of the gravity model of trade, we control for a country’s population, their GDP, and the distance between their capital and Beijing. To account for political factors that might make a country more or less closely aligned with China, we include Polity’s measure of a country’s level of democracy (the intuition being that autocratic regimes will be closer to other autocracies, like China, and democracies will be less close, all else being equal).
-
-To account for other structural factors, we estimate our models within a hierarchical framework which allows for both the fixed effects discussed above, as well as random effects. In the first set of results, we rely on random effects for country, and later we look at random effects based on a state’s domestic political institutions.
+Our key independent variable, as discussed in the previous section, is our measures of US distraction based either on active US conflicts ($F_1$), US defense expenditures \& force commitments ($F_2$), and economic crises ($F_3$). For each country-year observation, we include the value of US distraction in the previous year to see how it relates to that country’s alignment with China. We also include a number of country level controls that might influence a country’s closeness of economic alignment with China. Following the insights of the gravity model of trade, we control for a country’s population, their GDP, and the distance between their capital and Beijing. To account for political factors that might make a country more or less closely aligned with China, we include Polity’s measure of a country’s level of democracy (the intuition being that autocratic regimes will be closer to other autocracies, like China, and democracies will be less close, all else being equal). To account for other structural factors, we estimate our models within a hierarchical framework which allows for both the fixed effects discussed above, as well as random effects. In the first set of results, we rely on random effects for country, and later we look at how the effect of our key independent variables vary based on a state’s domestic political institutions.
 
 \subsection{Main Results}
 
-For our first pass at these models, we focus on the two largest factors of US constraint:
+We focus on the three largest factors of US constraint:
 
 \begin{itemize}
     \item $F_{1}$ US casualties
@@ -28,12 +22,12 @@ For our first pass at these models, we focus on the two largest factors of US co
     \item $F_{3}$ US economic shocks
 \end{itemize}
 
-In the first set of models depicted in figures \ref{x} and \ref{y} we see a marked divergence between our measures of diplomatic and economic alignment. As $F_1$ increases, denoting a higher level of US attention and resources devoted to the Middle East, states have a consistent increase in their diplomatic alignment with China. The opposite, however, seems to be the case for economic alignment, as US distraction seems to be associated with an aggregate move away from China. When we move from one measure of US distraction to another -- $F_2$ based on troop deployments and military spending, as seen in figures \ref{x} and \ref{x} -- we see a similar pattern – diplomatic alignment with China increases with our measures of US distraction, economic alignment does not.
+In the first set of models depicted in Figures~\ref{fig:agreeEst} and \ref{fig:tradeEst} we see a marked divergence between our measures of diplomatic and economic alignment. As $F_1$ increases, denoting a higher level of US attention and resources devoted to the Middle East, states have a consistent increase in their diplomatic alignment with China (though our estimate of this result is measured with a high degree of uncertainty). The opposite, however, seems to be the case for economic alignment , as US distraction seems to be associated with an aggregate move away from China. When we move from one measure of US distraction to another -- $F_2$ based on troop deployments and military spending -- we see a similar pattern, diplomatic alignment with China increases with our measures of US distraction, economic alignment does not. The results using $F_3$ are mixed as well.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=1\textwidth]{agreeFixedDistract.pdf}
-\caption{Parameter estimates from hierarchical model on diplomatic similarity with random country effects. Points represent average value of parameters, thicker line represents the 90\% confidence interval, and thinner the 95\%.}
+\caption{Parameter estimates from hierarchical model on diplomatic similarity with random country effects. Each column shows the results with a different distraction measure that is labeled in the facet on the top of the plots. Points represent average value of parameters, thicker line represents the 90\% confidence interval, and thinner the 95\%. }
 \label{fig:agreeEst}
 \end{figure}
 \FloatBarrier
@@ -46,16 +40,16 @@ In the first set of models depicted in figures \ref{x} and \ref{y} we see a mark
 \end{figure}
 \FloatBarrier
 
-For control variables, we see a similar division between the two types of dependent variable. Democracies are less likely to be aligned diplomatically with China, but more likely to be aligned economically, and the same is true for rich states. The distance to Beijing has a consistent positive effect across all four models, indicating that there is interestingly, closer alignment between China and more distant states.
+For control variables, we see a similar division between the two types of dependent variable. Democracies are less likely to be aligned diplomatically with China, but more likely to be aligned economically, and the same is true for rich states. The distance to Beijing has a consistent positive effect across all models (though it is more precisely estimated when focusing on diplomatic alignment), indicating that there is interestingly, closer alignment between China and more distant states.
 
 \subsection{Heterogeneous Effect}
 
-One possible explanation for these ambiguous results is that these models show the aggregate effect, but beneath the surface, different states react to US distraction in different ways. To examine this, we modify our hierarchical model to not just allow random intercepts, but also random slopes, and rather than using countries as our random effect, we group states using their polity scores. We use the canonical division into consolidated democracies (Polity Score >= 7), consolidated autocracies (< -6) and mixed regimes (all other states).In these models, we allow a random slope for F1 or F2 in each tranche of the polity score.
+One possible explanation for these ambiguous results is that these models show the aggregate effect, but beneath the surface, different states react to US distraction in different ways. To examine this, we modify our hierarchical model to allow the effect of our US distraction variables to vary across types of political institutions. We measure political institutions using polity scores. We use the canonical division into consolidated democracies (Polity Score >= 7), consolidated autocracies (< -6) and mixed regimes (all other states).In these models, we allow a random slope for the three distraction proxies in each tranche of the polity score.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=1\textwidth]{agreeVarDistract.pdf}
-\caption{Parameter estimates from hierarchical model on diplomatic similarity with varying effects of the distraction measures by polity categories. Top panel shows how the distraction measures vary by polity categories and bottom the fixed effects. Points represent average value of parameters, thicker line represents the 90\% confidence interval, and thinner the 95\%.}
+\caption{Parameter estimates from hierarchical model on diplomatic similarity with varying effects of the distraction measures by polity categories. Top panel shows how the distraction measures vary by polity categories and bottom the fixed effects, each column again represents the results of one model. Points represent average value of parameters, thicker line represents the 90\% confidence interval, and thinner the 95\%.}
 \label{fig:agreeVarEst}
 \end{figure}
 \FloatBarrier
@@ -63,9 +57,9 @@ One possible explanation for these ambiguous results is that these models show t
 \begin{figure}[ht]
 \centering
 \includegraphics[width=1\textwidth]{tradeVarDistract.pdf}
-\caption{Parameter estimates from hierarchical model on economic similarity with varying effects of the distraction measures by polity categories. Top panel shows how the distraction measures vary by polity categories and bottom the fixed effects. Points represent average value of parameters, thicker line represents the 90\% confidence interval, and thinner the 95\%.}
+\caption{Parameter estimates from hierarchical model on economic similarity with varying effects of the distraction measures by polity categories. Top panel shows how the distraction measures vary by polity categories and bottom the fixed effects, each column again represents the results of one model. Points represent average value of parameters, thicker line represents the 90\% confidence interval, and thinner the 95\%.}
 \label{fig:tradeVarEst}
 \end{figure}
 \FloatBarrier
 
-For F1  we find a similar effect across our dependent variables. There is a consistent positive effect of US distraction among autocracies, meaning that autocracies grow more aligned with China while the US is distracted, but as we move from consolidated autocracy to mixed regime, and to democracy, this effect shrinks, and in many cases changes direction, such that consolidated democracies, across both economic and diplomatic measures become less aligned with China when the US is more distracted. For F2, there is a consistent positive effect of US distraction for both autocracies and mixed regimes, but the effect again reverses itself in consolidated democracies.
+For $F_{1}$, we find a similar effect across our dependent variables. There is a consistent positive effect of US distraction among autocracies, meaning that autocracies grow more aligned with China while the US is distracted, but as we move from consolidated autocracy to mixed regime, and to democracy, this effect shrinks, and in many cases changes direction, such that consolidated democracies, across both economic and diplomatic measures become less aligned with China when the US is more distracted. For $F_{2}$, there is a consistent positive effect of US distraction for both autocracies and mixed regimes, but the effect again reverses itself in consolidated democracies. Results for $F_{3}$, however, do not correspond to this trend and it is likely because in the timeframe that we are examining here periods of US economic crisis correspond with economic difficulties occurring worldwide.
