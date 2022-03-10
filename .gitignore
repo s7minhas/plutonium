@@ -9,10 +9,6 @@
 *.ps
 *.gz
 *.Rhistory
-*.xls
-*.xlsx
-*.csv
-*.Rdata
 *.pyc
 *.DS_Store
 *.Rapp.history

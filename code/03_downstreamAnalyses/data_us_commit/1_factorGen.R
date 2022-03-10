@@ -1,6 +1,7 @@
 ####
 rm(list=ls())
 pth = paste0(here::here(), '/')
+pth = paste0(pth, 'code/')
 source(paste0(pth, 'setup.R'))
 
 #
@@ -34,6 +35,8 @@ vars = c(
   'std_totalworld',
   'std_totalformil',
   'std_hostiledeaths' )
+
+summary(dat[,vars])
 
 #
 fData = dat[,vars]
