@@ -157,7 +157,6 @@ facViz = ggplot(ggData[ggData$variable %in% faVars[1:3],], aes(x=year, y=value))
       angle=0, hjust=0.05),
     strip.background = element_rect(fill = "#525252", color='#525252')
   )
-facViz
 ggsave(facViz,
   file=paste0(pathPaper, 'facViz.pdf'),
   width=8, height=4, device=cairo_pdf )
