@@ -1,0 +1,17 @@
+Variable,desc,Factor1,Factor2,Factor3,Uniqueness
+middleeast_per,"Kane, percentages",0.8819,0.3713,0.29,0.0003
+std_hostiledeaths,standardized variable,0.7271,0.3972,0.3857,0.1648
+formersovietunion_per,"Kane, percentages",0.6764,0.2991,-0.1117,0.4405
+std_defense_budget,standardized variable,0.6168,0.5572,-0.3913,0.156
+africa_per,"Kane, percentages",0.5921,-0.0428,-0.5096,0.3879
+perforeignmil,"Kane, percentages",0.5097,0.7291,0.4395,0.0155
+f_l_price_crises,"From Frieden, Lake, … Table I",0.2203,0.3098,0.0222,0.855
+f_l_stock_crises,"From Frieden, Lake, … Table I",0.1955,0.3114,0.0146,0.8646
+easterneurope_per,"Kane, percentages",-0.0494,-0.6243,0.4804,0.3769
+emp_rate,trading economics gdp growth,-0.0511,-0.4412,0.6872,0.3305
+std_totalformil,standardized variable,-0.1246,0.9285,0.342,0.0054
+gdp_growth,trading economics employment rate,-0.2912,-0.1836,0.1613,0.8555
+def_per_gdp,"world bank, percentage GDP spent on defense",-0.5158,0.8175,-0.1068,0.0543
+std_totalworld,standardized variable,-0.8046,0.5764,0.0271,0.0196
+westerneurope_per,"Kane, percentages",-0.8371,0.542,0.0473,0.0032
+asia_per,"Kane, percentages",-0.9106,0.318,-0.0059,0.0696
