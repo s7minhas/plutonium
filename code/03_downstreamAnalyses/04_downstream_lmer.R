@@ -13,6 +13,11 @@ load(paste0(pathOut, 'modelInfoFin.rda'))
 ####
 
 ####
+# exclude US
+modData = modData[modData$cname1 != 'UNITED STATES',]
+####
+
+####
 # rescale indep vars
 modData[,ivs] = apply(modData[,ivs], 2, scale)
 ####

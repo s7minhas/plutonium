@@ -57,6 +57,11 @@ modData$ivClean = varKey$clean[match(modData$iv, varKey$dirty)]
 ####
 
 ####
+# remove f3 due to lack of clarity
+modData = modData[!grepl('f3', modData$model),]
+####
+
+####
 # viz mods with fixed f1 params
 agreeFixedDistract = coefViz(
   coefProcess(
@@ -77,7 +82,7 @@ tradeFixedDistract = coefViz(
 # viz mods with varying f1 params
 modData$modLab[grepl('f1',modData$model)] = 'Fixed Effects with varying F1'
 modData$modLab[grepl('f2',modData$model)] = 'Fixed Effects with varying F2'
-modData$modLab[grepl('f3',modData$model)] = 'Fixed Effects with varying F3'
+# modData$modLab[grepl('f3',modData$model)] = 'Fixed Effects with varying F3'
 
 # fixed eff results
 agreeVarDistractFixed = coefViz(
@@ -104,7 +109,7 @@ reData = modData[
 reData$modLab = reData$model
 reData$modLab[grepl('f1',reData$model)] = 'Varying Slopes of F1\nby Polity Categories'
 reData$modLab[grepl('f2',reData$model)] = 'Varying Slopes of F2\nby Polity Categories'
-reData$modLab[grepl('f3',reData$model)] = 'Varying Slopes of F3\nby Polity Categories'
+# reData$modLab[grepl('f3',reData$model)] = 'Varying Slopes of F3\nby Polity Categories'
 
 # clean up vars
 reData$ivClean = reData$iv
