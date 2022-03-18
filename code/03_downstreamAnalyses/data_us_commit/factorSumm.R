@@ -1,7 +1,7 @@
 ####
 rm(list=ls())
 pth = paste0(here::here(), '/')
-pth = paste0(pth, 'code/')
+# pth = paste0(pth, 'code/')
 source(paste0(pth, 'setup.R'))
 
 #
@@ -45,28 +45,28 @@ screeViz = ggplot(ggData, aes(x=num, y=value), group=1) +
   )
 ggsave(screeViz,
   file=paste0(pathPaper, 'screeViz.pdf'),
-  width=8, height=4, device=cairo_pdf )
+  width=8, height=3, device=cairo_pdf )
 ####
 
 ####
 # visualize var loadings
 varKey = data.frame(dirty=loadDat$Variable, stringsAsFactors=FALSE)
 varKey$clean = c(
-	'% Forces in Middle East',
-	'Stdz. Deaths in Combat',
-	'% Forces in Former USSR',
+	'% Forces in\nMiddle East',
+	'Stdz. Deaths\nin Combat',
+	'% Forces in\nFormer USSR',
 	'Troop Levels',
 	'% Forces in Africa',
 	'% Forces Abroad',
 	'Price Crises',
 	'Stock Crises',
-	'% Forces in E. Europe',
+	'% Forces in\nE. Europe',
 	'Employment Rate',
-	'Stdz. Military Deaths (Foreign)',
+	'Stdz. Military\nDeaths (Foreign)',
 	'GDP Growth',
 	'Defense\nSpending/GDP',
-	'Stdz. Military Deaths (Total)',
-	'% Forces in W. Europe',
+	'Stdz. Military\nDeaths (Total)',
+	'% Forces in\nW. Europe',
 	'% Forces in Asia'
 )
 
@@ -82,15 +82,15 @@ ggData$var = factor(ggData$var,
 	'Defense\nSpending/GDP',
 	'Troop Levels',
 	'% Forces in Asia',
-	'% Forces in W. Europe',
-	'% Forces in E. Europe',
-	'% Forces in Former USSR',
-	'% Forces in Middle East',
+	'% Forces in\nW. Europe',
+	'% Forces in\nE. Europe',
+	'% Forces in\nFormer USSR',
+	'% Forces in\nMiddle East',
 	'% Forces in Africa',
 	'% Forces Abroad',
-	'Stdz. Military Deaths (Total)',
-	'Stdz. Military Deaths (Foreign)',
-	'Stdz. Deaths in Combat',
+	'Stdz. Military\nDeaths (Total)',
+	'Stdz. Military\nDeaths (Foreign)',
+	'Stdz. Deaths\nin Combat',
 	'Price Crises',
 	'Stock Crises',
 	'Employment Rate',
@@ -101,7 +101,7 @@ ggData$var = factor(ggData$var,
 #
 ggData$name[ggData$name=='Factor1'] = 'F1 (Active US Conflicts)'
 ggData$name[ggData$name=='Factor2'] = 'F2 (US Defense Spending)'
-ggData = ggData[ggData$name!='Factor3',]
+ggData$name[ggData$name=='Factor3'] = 'F3'
 
 #
 loadViz = ggplot(ggData, aes(x=var, y=value)) +
@@ -112,7 +112,7 @@ loadViz = ggplot(ggData, aes(x=var, y=value)) +
 	) +
   theme_light(base_family="Source Sans Pro") +
   theme(
-		axis.text.x=element_text(angle=45, hjust=1, size=8),
+		axis.text.x=element_text(angle=90, hjust=1, size=9),
     legend.position='none',
     axis.ticks=element_blank(),
     panel.border=element_blank(),
@@ -122,9 +122,10 @@ loadViz = ggplot(ggData, aes(x=var, y=value)) +
       angle=0, hjust=0.05),
     strip.background = element_rect(fill = "#525252", color='#525252')
   )
+loadViz
 ggsave(loadViz,
   file=paste0(pathPaper, 'loadViz.pdf'),
-  width=8, height=4, device=cairo_pdf )
+  width=8, height=6, device=cairo_pdf )
 ####
 
 ####

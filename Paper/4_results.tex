@@ -12,7 +12,7 @@ Our unit of observation here is at the country-year with a sample of 118 countri
 
 Our key independent variable, as discussed in the previous section, is our measures of US distraction based either on active US conflicts ($F_1$), US defense expenditures \& force commitments ($F_2$), and economic crises ($F_3$). For each country-year observation, we include the value of US distraction in the previous year to see how it relates to that country’s alignment with China. We also include a number of country level controls that might influence a country’s closeness of economic alignment with China. Following the insights of the gravity model of trade, we control for a country’s population, their GDP, and the distance between their capital and Beijing. To account for political factors that might make a country more or less closely aligned with China, we include Polity’s measure of a country’s level of democracy (the intuition being that autocratic regimes will be closer to other autocracies, like China, and democracies will be less close, all else being equal). To account for other structural factors, we estimate our models within a hierarchical framework which allows for both the fixed effects discussed above, as well as random effects. In the first set of results, we rely on random effects for country, and later we look at how the effect of our key independent variables vary based on a state’s domestic political institutions.
 
-\subsection{Main Results}
+\subsection{Empirical Results}
 
 We focus on the three largest factors of US constraint:
 
@@ -42,7 +42,14 @@ In the first set of models depicted in Figures~\ref{fig:agreeEst} and \ref{fig:t
 
 For control variables, we see a similar division between the two types of dependent variable. Democracies are less likely to be aligned diplomatically with China, but more likely to be aligned economically, and the same is true for rich states. The distance to Beijing has a consistent positive effect across all models (though it is more precisely estimated when focusing on diplomatic alignment), indicating that there is interestingly, closer alignment between China and more distant states.
 
-\subsection{Heterogeneous Effect}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth]{distViz.pdf}
+\caption{ Level of alignment across diplimatic and economic typers of cooperation for selected dyads over time.
+}
+\label{fig:distViz}
+\end{figure}
+\FloatBarrier
 
 One possible explanation for these ambiguous results is that these models show the aggregate effect, but beneath the surface, different states react to US distraction in different ways. To examine this, we modify our hierarchical model to allow the effect of our US distraction variables to vary across types of political institutions. We measure political institutions using polity scores. We use the canonical division into consolidated democracies (Polity Score >= 7), consolidated autocracies (< -6) and mixed regimes (all other states).In these models, we allow a random slope for the three distraction proxies in each tranche of the polity score.
 

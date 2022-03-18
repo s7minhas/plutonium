@@ -1,11 +1,10 @@
 \section*{Methods}
 
-As noted above, we have developed a measure of US constraint to capture a variety of mechanisms that might limit US action. In broad terms, we believe (based on SME input and prior research) that constraint is a function of three possible sources:
+As noted above, we have developed a measure of US constraint to capture a variety of mechanisms that might limit US action. In broad terms, we operationalize constraint as a function of three possible sources:
 
 \begin{enumerate}
     \item Active conflicts that the US is involved in with an emphasis on those conflicts that represent significant materiel commitment and US casualties
     \item US force commitments around the globe
-    \item US political or economic distraction caused by either foreign or domestic shocks.
 \end{enumerate}
 
 To populate these categories, we rely on sixteen variables distributed across the following broader categories:
@@ -15,24 +14,32 @@ To populate these categories, we rely on sixteen variables distributed across th
 \begin{tabular}{ll}
 Variables & Source \\
 \hline
-Defense spending  & World Bank, US DoD \\
-Troop levels, by region   & US DoD, Kane \\
-US Casualties   & US DoD, Kane  \\
-Market Crises   &  Frieden and Lake\\
-Economic variables   &  Trading Economics \\
+Defense spending  & \citealp{worldbank:2021}, \citealp{dod:2020} \\
+Troop levels, by region   & \citealp{dod:2020}, \citealp{kane:2016} \\
+US Casualties   & \citealp{dod:2020}, \citealp{kane:2016}  \\
+Market Crises   &  \citealp{frieden:etal:2017} \\
+Economic variables   &  \citealp{tradingeconomics:2021} \\
 \end{tabular}
 \caption{Variables for generation of US Distraction Index}
 \end{table}
 
-The main source of constraint that is incomplete in the above framework is domestic political crises (i.e., apart from a response to economic shocks, which is captured).\footnote{Prior work has shown that political crises of this sort are rare / not likely consequential \citep{frieden:2017} and we leave the inclusion of political measures to future work.} A simple latent variable model of the above variables produced three features, representing active US conflicts ($F_{1}$), US defense spending / commitments ($F_{2}$), and the economic shocks ($F_{3}$). A PCA with three latent variables explained 89\% of the variance in the raw data.\footnote{A possible fourth factor, which we did not include, focuses on variance from GDP growth and changes in the stock market.} Figure~\ref{fig:facViz} visualizes how the three factors have changed through time. They show considerable variance that tracks with our priors on United States military conflicts and economic shocks over the past two decades.
+The main source of constraint that is incomplete in the above framework is domestic political crises (i.e., apart from a response to economic shocks, which is captured).\footnote{Prior work has shown that political crises of this sort are rare / not likely consequential \citep{frieden:etal:2017} and we leave the inclusion of political measures to future work.} A simple latent variable model of the above variables produced two features, representing active US conflicts ($F_{1}$) and US defense spending / commitments ($F_{2}$). Figure~\ref{fig:screeViz} illustrates the cumulative proportion of variance accounted for by each of the factors in the top panel, and in the bottom the variance of each factor. A PCA with two latent variables explained over 75\% of the variance in the raw data.\footnote{A possible third factor, which we did not include has as its most component employment rate but the interpretation of that factor as representing economic difficulties faced by the US is not at all clear given the other factor loadings.}
 
-% Scree plots / an examination of eigenvalues supported the use of three latent variables:
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{screeViz.pdf}
+    \caption{Scree plot of constraint PCA.}
+    \label{fig:screeViz}
+\end{figure}
+
 % \begin{figure}[h]
 %     \centering
-%     \includegraphics{scree.png}
-%     \caption{Scree plot of constraint PCA}
-%     \label{fig:my_label}
+%     \includegraphics[width=1\textwidth]{loadViz.pdf}
+%     \caption{Loadings of constraint PCA}
+%     \label{fig:loadViz}
 % \end{figure}
+
+Figure~\ref{fig:facViz} visualizes how the three factors have changed through time. They show considerable variance that tracks with our priors on constraints resulting from United States military conflicts over the past two decades.
 
 \begin{figure}[ht]
     \centering
