@@ -78,8 +78,8 @@ mapData = do.call('rbind', lapply(cEff, function(eff){
 
 #
 mapData$eLab = mapData$dv
-mapData$eLab[mapData$dv=='agree'] = "Country Random Effects from China Diplomatic Influence Model"
-mapData$eLab[mapData$dv=='tradeDepSend'] = "Country Random Effects from China Trade Influence Model"
+mapData$eLab[mapData$dv=='agree'] = "Country Random Effects from China Diplomatic Alignment Model"
+mapData$eLab[mapData$dv=='tradeDepSend'] = "Country Random Effects from China Trade Alignment Model"
 
 #
 eMaps = ggplot(data = mapData) +
