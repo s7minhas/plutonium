@@ -27,7 +27,7 @@ unDist = getDistData(
   paramsToPlot='U',
   distToPlot='cosine',
   dyadVec=dyads)
-unDist$cat = 'Diplomatic Influence'
+unDist$cat = 'Diplomatic Alignment'
 
 tradeDist = getDistData(
   catSelect='Trade',
@@ -35,12 +35,12 @@ tradeDist = getDistData(
   paramsToPlot='U',
   distToPlot='cosine',
   dyadVec=dyads)
-tradeDist$cat = 'Trade Influence'
+tradeDist$cat = 'Trade Alignment'
 
 #
 distData = rbind(unDist, tradeDist)
 distData$cat = factor(distData$cat,
-	levels=c('Diplomatic Influence', 'Trade Influence'))
+	levels=c('Diplomatic Alignment', 'Trade Alignment'))
 ####
 
 ####

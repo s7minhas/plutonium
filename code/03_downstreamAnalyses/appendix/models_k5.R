@@ -117,12 +117,12 @@ varKey = data.frame(
   stringsAsFactors=FALSE )
 varKey$clean = c(
   '(Intercept)',
-  'US Distraction\nProxy',
+  'United States\nConstraint Proxy',
   'Polity',
   'GDP',
   'Capital Distance\nto China',
-  'US Distraction\nProxy',
-  'US Distraction\nProxy' )
+  'United States\nConstraint Proxy',
+  'United States\nConstraint Proxy' )
 varKey$clean = factor(
   varKey$clean,
   levels=rev(varKey$clean[c(2,3:5,1)]) )
@@ -208,13 +208,6 @@ tradeVarDistractRE = coefViz(
 agreeVarDistract = agreeVarDistractRE/agreeVarDistractFixed
 tradeVarDistract = tradeVarDistractRE/tradeVarDistractFixed
 ####
-
-
-agreeFixedDistract
-tradeFixedDistract
-agreeVarDistract
-tradeVarDistract
-
 
 ####
 # save

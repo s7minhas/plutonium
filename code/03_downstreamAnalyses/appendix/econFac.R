@@ -57,11 +57,6 @@ modData$ivClean = varKey$clean[match(modData$iv, varKey$dirty)]
 ####
 
 ####
-# remove f3 due to lack of clarity
-modData = modData[!grepl('f3', modData$model),]
-####
-
-####
 # viz mods with fixed f1 params
 agreeFixedDistract = coefViz(
   coefProcess(
@@ -82,7 +77,7 @@ tradeFixedDistract = coefViz(
 # viz mods with varying f1 params
 modData$modLab[grepl('f1',modData$model)] = 'Fixed Effects with varying F1'
 modData$modLab[grepl('f2',modData$model)] = 'Fixed Effects with varying F2'
-# modData$modLab[grepl('f3',modData$model)] = 'Fixed Effects with varying F3'
+modData$modLab[grepl('f3',modData$model)] = 'Fixed Effects with varying F3'
 
 # fixed eff results
 agreeVarDistractFixed = coefViz(
@@ -109,7 +104,7 @@ reData = modData[
 reData$modLab = reData$model
 reData$modLab[grepl('f1',reData$model)] = 'Varying Slopes of F1\nby Polity Categories'
 reData$modLab[grepl('f2',reData$model)] = 'Varying Slopes of F2\nby Polity Categories'
-# reData$modLab[grepl('f3',reData$model)] = 'Varying Slopes of F3\nby Polity Categories'
+reData$modLab[grepl('f3',reData$model)] = 'Varying Slopes of F3\nby Polity Categories'
 
 # clean up vars
 reData$ivClean = reData$iv
@@ -134,18 +129,24 @@ agreeVarDistract = agreeVarDistractRE/agreeVarDistractFixed
 tradeVarDistract = tradeVarDistractRE/tradeVarDistractFixed
 ####
 
+agreeFixedDistract
+tradeFixedDistract
+
+agreeVarDistract
+tradeVarDistract
+
 ####
 # save
 ggsave(agreeFixedDistract, width=8, height=4,
-  file=paste0(pathPaper, 'agreeFixedDistract.pdf'),
+  file=paste0(pathPaper, 'agreeFixedDistract_econ.pdf'),
   device=cairo_pdf)
 ggsave(tradeFixedDistract, width=8, height=4,
-  file=paste0(pathPaper, 'tradeFixedDistract.pdf'),
+  file=paste0(pathPaper, 'tradeFixedDistract_econ.pdf'),
   device=cairo_pdf)
 ggsave(agreeVarDistract, width=8, height=8,
-  file=paste0(pathPaper, 'agreeVarDistract.pdf'),
+  file=paste0(pathPaper, 'agreeVarDistract_econ.pdf'),
   device=cairo_pdf)
 ggsave(tradeVarDistract, width=8, height=8,
-  file=paste0(pathPaper, 'tradeVarDistract.pdf'),
+  file=paste0(pathPaper, 'tradeVarDistract_econ.pdf'),
   device=cairo_pdf)
 ####

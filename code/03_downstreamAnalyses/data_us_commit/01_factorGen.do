@@ -14,3 +14,7 @@ cor  f1_USdeaths_MIDEAST ff1
 cor  f2_DEFspend_FORcommits ff2
 
 cor  f3_UE ff3
+
+
+factor f_l_stock_crises f_l_price_crises  emp_rate gdp_growth, factor(3)
+scree
