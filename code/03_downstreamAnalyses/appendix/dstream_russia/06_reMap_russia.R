@@ -14,8 +14,8 @@ source(paste0(pathFuncs, 'modSummHelpers.R'))
 ####
 
 ####
-load(paste0(pathOut, 'modelInfoFin.rda'))
-load(paste0(pathOut, 'lmerModsFin.rda'))
+load(paste0(pathOut, 'modelInfoFin_russia.rda'))
+load(paste0(pathOut, 'lmerModsFin_russia.rda'))
 ####
 
 ####
@@ -103,6 +103,15 @@ eMaps = ggplot(data = mapData) +
 
 #
 ggsave(eMaps,
-	file=paste0(pathPaper, 'eMaps.pdf'),
+	file=paste0(pathPaper, 'eMaps_russia.pdf'),
 	width=8, height=6, device=cairo_pdf )
+
+# arrange horizontally
+eMaps2 = eMaps +
+	facet_wrap(~eLab, nrow=1)
+
+#
+ggsave(eMaps2,
+	file=paste0(pathPaper, 'eMapsv2_russia.pdf'),
+	width=8, height=4, device=cairo_pdf )
 ####

@@ -105,4 +105,13 @@ eMaps = ggplot(data = mapData) +
 ggsave(eMaps,
 	file=paste0(pathPaper, 'eMaps.pdf'),
 	width=8, height=6, device=cairo_pdf )
+
+# arrange horizontally
+eMaps2 = eMaps +
+	facet_wrap(~eLab, nrow=1)
+
+#
+ggsave(eMaps2,
+	file=paste0(pathPaper, 'eMapsv2.pdf'),
+	width=8, height=4, device=cairo_pdf )
 ####
