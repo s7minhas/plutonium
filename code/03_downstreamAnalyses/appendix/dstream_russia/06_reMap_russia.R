@@ -113,5 +113,5 @@ eMaps2 = eMaps +
 #
 ggsave(eMaps2,
 	file=paste0(pathPaper, 'eMapsv2_russia.pdf'),
-	width=8, height=4, device=cairo_pdf )
+	width=8, height=3, device=cairo_pdf )
 ####
