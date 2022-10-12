@@ -1,5 +1,5 @@
 ####
-pth = paste0(here::here(), '/')
+pth = paste0(here::here(), '/code/')
 source(paste0(pth, 'setup.R'))
 
 #
@@ -80,6 +80,9 @@ mapData = do.call('rbind', lapply(cEff, function(eff){
 mapData$eLab = mapData$dv
 mapData$eLab[mapData$dv=='agree'] = "Country Random Effects from China Diplomatic Alignment Model"
 mapData$eLab[mapData$dv=='tradeDepSend'] = "Country Random Effects from China Trade Alignment Model"
+
+#
+mapData = mapData[mapData$eLab=='Country Random Effects from China Diplomatic Alignment Model',]
 
 #
 eMaps = ggplot(data = mapData) +

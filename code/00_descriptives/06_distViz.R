@@ -1,6 +1,6 @@
 ###Visualization stuff
 rm(list=ls())
-pth = paste0(here::here(), '/')
+pth = paste0(here::here(), '/code/')
 source(paste0(pth, 'setup.R'))
 
 #
@@ -38,9 +38,10 @@ tradeDist = getDistData(
 tradeDist$cat = 'Trade Alignment'
 
 #
-distData = rbind(unDist, tradeDist)
-distData$cat = factor(distData$cat,
-	levels=c('Diplomatic Alignment', 'Trade Alignment'))
+# distData = rbind(unDist, tradeDist)
+# distData$cat = factor(distData$cat,
+# 	levels=c('Diplomatic Alignment', 'Trade Alignment'))
+distData = unDist
 ####
 
 ####
