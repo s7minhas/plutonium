@@ -1,6 +1,6 @@
 ###Visualization stuff
 rm(list=ls())
-pth = paste0(here::here(), '/code/')
+pth = paste0(here::here(), '/')
 source(paste0(pth, 'setup.R'))
 
 #
