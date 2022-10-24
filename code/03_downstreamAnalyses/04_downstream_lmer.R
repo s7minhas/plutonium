@@ -25,7 +25,7 @@ modData[,ivs] = apply(modData[,ivs], 2, scale)
 ####
 vars = c(
   'agree_k2_srm_lfm',
-  'tradeDepSend_k2_srm_lfm',
+  # 'tradeDepSend_k2_srm_lfm',
   'lag1_USf1',
   'lag1_USf2',
   'lag1_polity',
@@ -33,7 +33,8 @@ vars = c(
   'capdist' )
 slice = modData[,vars]
 names(slice) = c(
-  'Diplomatic Alignment', 'Economic Alignment', 
+  'Diplomatic Alignment', 
+  # 'Economic Alignment', 
   'F1 (Active US Conflicts)', 'F2 (US Defense Spending)',
   'Polity', 'GDP', 'Logged Capital Distance to China')
 

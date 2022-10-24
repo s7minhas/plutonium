@@ -68,6 +68,6 @@ ggDistViz = ggplot(
   )
 ggsave(ggDistViz,
   file=paste0(pathPaper, 'distViz.pdf'),
-  width=8, height=5,
+  width=8, height=4,
   device=cairo_pdf )
 ####
