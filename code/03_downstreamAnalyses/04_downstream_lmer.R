@@ -42,6 +42,9 @@ library(modelsummary)
 datasummary_skim(data = slice)
 ####
 
+ii=1 # dip, f1, int=cname, varInt
+ii=3 # dip, f2, int=cname, varInt
+ii=7 # dip, f1, int=?, varSlope by polCat
 
 ####
 # run mods
@@ -57,7 +60,7 @@ lmerMods = foreach(ii = 1:nrow(modsToRun), .packages=c('lme4')) %dopar% {
   modType = modsToRun$type[ii]
 
   # construct formula
-  form = paste0(depvar, '~', ivs)
+  form = paste0(depvar, '~', ivs, '+ factor(cname1) - 1')
   if(modType=='varInt'){
     form = paste0(form, '+ (1|', randeff, ')') }
   if(modType=='varSlopef1'){
