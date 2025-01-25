@@ -128,10 +128,14 @@ modData = do.call('rbind', modData)
 modData$modLab = modData$model
 modData$modLab[grepl('f1',modData$modLab)] = 'F1 (Active US Conflicts)'
 modData$modLab[grepl('f2',modData$modLab)] = 'F2 (US Defense Spending)'
+
+# calc t stat
+modData$`t value` = modData$`Estimate`/modData$`Std. Error`
 ####
 
 ####
-# drop all fixef labels that involve cname
+# drop all fixef labels that involve cname, 
+# dont need to show the results for the fixef
 modData = modData[!grepl('cname1', modData$iv),]
 
 # create variable key for fixef labels
@@ -139,19 +143,29 @@ varKey = data.frame(
   dirty=unique(modData$iv[modData$grpvar=='fixef']),
   stringsAsFactors=FALSE )
 varKey$clean = c(
-  '(Intercept)',
-  'United States\nConstraint Proxy',
   'Polity',
   'GDP',
-  'Capital Distance\nto China',
-  'United States\nConstraint Proxy',
-  'United States\nConstraint Proxy' )
+  'Capital Distance\nto China' )
 varKey$clean = factor(
   varKey$clean,
-  levels=rev(varKey$clean[c(2,3:5,1)]) )
+  levels=rev(varKey$clean) )
 
 # add cleaned variable to df
 modData$ivClean = varKey$clean[match(modData$iv, varKey$dirty)]
+####
+
+####
+# viz mods with varying f1 params
+modData$modLab[grepl('f1',modData$model)] = 'Fixed Effects with varying F1'
+modData$modLab[grepl('f2',modData$model)] = 'Fixed Effects with varying F2'
+
+# fixed eff results
+agreeVarDistractFixed = coefViz(
+  coefProcess(
+    modData[
+      modData$dv=='agree_k2_srm_lfm' &
+      modData$re=='polCat3' &
+      modData$grpvar=='fixef',]  ) )
 ####
 
 ####
@@ -165,7 +179,6 @@ reData = modData[
 reData$modLab = reData$model
 reData$modLab[grepl('f1',reData$model)] = 'Varying Slopes of F1\nby Polity Categories'
 reData$modLab[grepl('f2',reData$model)] = 'Varying Slopes of F2\nby Polity Categories'
-# reData$modLab[grepl('f3',reData$model)] = 'Varying Slopes of F3\nby Polity Categories'
 
 # clean up vars
 reData$ivClean = reData$iv
@@ -176,10 +189,16 @@ reData$ivClean = factor(
   reData$ivClean,
   levels=c('Democracy', 'Anocracy', 'Autocracy') )
 
-reData$`t value` = reData$`Estimate`/reData$`Std. Error`
-
 # get varying slope viz
 agreeVarDistractRE = coefViz(
   coefProcess(
     reData[reData$dv=='agree_k2_srm_lfm',] ) )
+####
+
+####
+agreeVarDistract = agreeVarDistractRE / agreeVarDistractFixed
+
+ggsave(agreeVarDistract, width=8, height=8,
+  file=paste0(pathPaper, 'agreeVarDistract_cname.pdf'),
+  device=cairo_pdf)
 ####
