@@ -46,10 +46,8 @@ names(slice) = c(
 ####
 
 ####
-# ii=1 # dip, f1, int=cname, varInt
-# ii=3 # dip, f2, int=cname, varInt
-# ii=7 # dip, f1, int=?, varSlope by polCat
-# ii=9 # dip, f1, int=?, varSlope by polCat
+# ii=7 # dip, f1, varSlope by polCat
+# ii=9 # dip, f2, varSlope by polCat
 toRun = c(7, 9)
 
 modsToRun = modsToRun[toRun,]
