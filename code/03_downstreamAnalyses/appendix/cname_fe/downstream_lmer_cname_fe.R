@@ -14,7 +14,7 @@ source(paste0(pathFuncs, 'modSummHelpers.R'))
 ####
 
 ####
-load(paste0(pathIn, "modData.rda"))
+load(paste0(pathIn, "modData_cname_test.rda"))
 load(paste0(pathOut, 'modelInfoFin.rda'))
 ####
 
@@ -31,7 +31,6 @@ modData[,ivs] = apply(modData[,ivs], 2, scale)
 ####
 vars = c(
   'agree_k2_srm_lfm',
-  # 'tradeDepSend_k2_srm_lfm',
   'lag1_USf1',
   'lag1_USf2',
   'lag1_polity',
@@ -40,7 +39,6 @@ vars = c(
 slice = modData[,vars]
 names(slice) = c(
   'Diplomatic Alignment', 
-  # 'Economic Alignment', 
   'F1 (Active US Conflicts)', 'F2 (US Defense Spending)',
   'Polity', 'GDP', 'Logged Capital Distance to China')
 ####
@@ -68,8 +66,6 @@ lmerMods = foreach(ii = 1:nrow(modsToRun), .packages=c('lme4')) %dopar% {
 
   # construct formula
   form = paste0(depvar, '~', ivs)
-  # if(modType=='varInt'){
-  #   form = paste0(form, '+ (1|', randeff, ')') }
   if(modType=='varSlopef1'){
     form = paste0(form, '+ factor(cname1) - 1 + (lag1_USf1 |', randeff, ')') }
   if(modType=='varSlopef2'){
