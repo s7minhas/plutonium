@@ -1,14 +1,27 @@
+# mac
 if(Sys.info()['user'] %in% c('sminhas')){
 	suf = '~/'
 	pathGit = paste0(suf, 'Research/plutonium/')
 	pathPaper = paste0(pathGit, 'Paper/')
 	pathCode = paste0(pathGit, 'code/')
 	pathFuncs = paste0(pathCode, 'funcs/')
-	pathDrop = paste0('/media/sminhas/localCloud/Dropbox/Research/plutonium/')
+	pathDrop = paste0('/Users/sminhas/Library/CloudStorage/Dropbox/Research/plutonium/')
 	pathIn = paste0(pathDrop, 'data/')
 	pathOut = paste0(pathDrop, 'results/')
 	pathGraphics = paste0(pathDrop, 'graphics/')
 }
+# linux
+# if(Sys.info()['user'] %in% c('sminhas')){
+# 	suf = '~/'
+# 	pathGit = paste0(suf, 'Research/plutonium/')
+# 	pathPaper = paste0(pathGit, 'Paper/')
+# 	pathCode = paste0(pathGit, 'code/')
+# 	pathFuncs = paste0(pathCode, 'funcs/')
+# 	pathDrop = paste0('/media/sminhas/localCloud/Dropbox/Research/plutonium/')
+# 	pathIn = paste0(pathDrop, 'data/')
+# 	pathOut = paste0(pathDrop, 'results/')
+# 	pathGraphics = paste0(pathDrop, 'graphics/')
+# }
 
 if(Sys.info()['user'] %in% c('maxgallop')){
 	suf = paste0('/Users/', Sys.info()['user'], '/')
