@@ -1,0 +1,413 @@
+\documentclass[12pt,pdflatex,authoryear]{elsarticle}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% PREAMBLE %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% word count
+%TC:incbib 
+
+% -------------------- defaults -------------------- %
+% load lots o' packages
+
+% references
+\usepackage{natbib}
+
+% Fonts
+\usepackage[default,oldstyle,scale=0.95]{opensans}
+\usepackage[T1]{fontenc}
+\usepackage{ae}
+
+% to colorize links in document. See color specification below
+\usepackage[pdftex,hyperref,x11names]{xcolor}
+% load the hyper-references package and set document info
+\usepackage[pdftex]{hyperref}
+
+% Generate some fake text
+
+\usepackage{blindtext}
+
+% layout control
+\usepackage{geometry}
+\geometry{verbose,tmargin=1.25in,bmargin=1.25in,lmargin=1.1in,rmargin=1.1in}
+\usepackage{parallel}
+\usepackage{parcolumns}
+\usepackage{fancyhdr}
+
+% math typesetting
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{relsize}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage[%
+decimalsymbol=.,
+digitsep=fullstop
+]{siunitx}
+
+% restricts float objects to be inserted before end of section
+% creates float barriers
+\usepackage[section]{placeins}
+
+% tables
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{longtable}
+
+% to adapt caption style
+\usepackage[font={small},labelfont=bf]{caption}
+
+% footnotes at bottom
+\usepackage[bottom]{footmisc}
+   \renewcommand{\footnotelayout}{\doublespacing} % set spacing in footnotes
+   \newlength{\myfootnotesep}
+   \setlength{\myfootnotesep}{\baselineskip}
+   \addtolength{\myfootnotesep}{-\footnotesep}
+   \setlength{\footnotesep}{\myfootnotesep} % set spacing between footnotes
+
+% to change enumeration symbols begin{enumerate}[(a)]
+\usepackage{enumerate}
+
+% to make enumerations and itemizations within paragraphs or
+% lines. f.i. begin{inparaenum} for (a) is (b) and (c)
+\usepackage{paralist}
+
+% graphics stuff
+\usepackage{subfig}
+\usepackage{graphicx}
+\usepackage[space]{grffile} % allows us to specify directories that have spaces
+\usepackage{placeins} % prevents floats from moving past a \FloatBarrier
+\usepackage{tikz}
+
+% sideway figures
+\usepackage{rotating}
+\usepackage{lscape}
+
+% Spacing
+\usepackage[doublespacing]{setspace}
+
+% -------------------------------------------------- %
+
+
+% -------------------- page template -------------------- %
+
+\setlength{\headheight}{15pt}
+\setlength{\headsep}{20pt}
+\pagestyle{fancyplain}
+
+\fancyhf{}
+
+\lhead{\fancyplain{}{}}
+%\chead{\fancyplain{}{Situation Selection at the ICC}}
+\rhead{\fancyplain{}{}}
+\rfoot{\fancyplain{}{\thepage}}
+
+% ----------------------------------------------- %
+
+% -------------------- customizations -------------------- %
+
+% easy commands for number propers
+\newcommand{\first}{$1^{\text{st}}$}
+\newcommand{\second}{$2^{\text{nd}}$}
+\newcommand{\third}{$3^{\text{rd}}$}
+\newcommand{\nth}[1]{${#1}^{\text{th}}$}
+
+% easy command for boldface math symbols
+\newcommand{\mbs}[1]{\boldsymbol{#1}}
+
+% command for R package font
+\newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
+
+% approx iid
+\newcommand\simiid{\stackrel{\mathclap{\normalfont\mbox{\tiny{iid}}}}{\sim}}
+
+% -------------------------------------------------------- %
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% DOCUMENT %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% remove silly elsevier preprint note
+\makeatletter
+\def\ps@pprintTitle{%
+ \let\@oddhead\@empty
+ \let\@evenhead\@empty
+ \def\@oddfoot{}%
+ \let\@evenfoot\@oddfoot}
+
+
+\makeatother
+
+\begin{document}
+
+% saying hello ----------------------------------------------- %
+\thispagestyle{empty}
+\begin{frontmatter}
+
+\title{Decisive or Distracted: the Effects of United States Constraint on Security Networks}
+
+\author[potsdam]{Ha Eun Choi}
+\ead{choi@uni-potsdam.edu}
+\author[duke]{Scott de Marchi}
+\ead{demarchi@duke.edu}
+\author[strath]{Max Gallop}
+\ead{gallop@strathclyde.edu}
+\author[msu]{Shahryar Minhas}
+\ead{minhassh@msu.edu}
+
+\address[potsdam]{Department of Political Science, University of Potsdam}
+\address[duke]{Department of Political Science, Duke University}
+\address[strath]{Department of Political Science, Strathclyde University}
+\address[msu]{Department of Political Science, Michigan State University}
+
+
+\begin{abstract}
+\singlespacing{
+The rise of China as a global power has been a prominent feature in international politics. Simultaneously, the United States has been engaged in ongoing conflicts in the Middle East and South Asia for the past two decades, requiring a significant commitment of resources, focus, and determination. This paper investigates how third-party countries react to the United States' preoccupation with these conflicts, particularly in terms of diplomatic cooperation and alignment. We introduce a measure of US distraction and utilize network-based indicators to assess diplomatic cooperation or alignment. Our study tests the hypothesis that when the US is distracted, other states are more likely to cooperate with its principal rival, China. Our findings support this hypothesis, revealing that increased cooperation with China is more probable during periods of US distraction. However, a closer examination of state responses shows that democracies generally distance themselves from China under these circumstances, while non-democracies move closer.}
+
+\vspace{5mm}
+\noindent \textbf{Keywords}: security networks, U.S. foreign policy, latent variable models, network analysis, measurement models
+
+\vspace{5mm}
+\noindent \textbf{Word Count}: 7,963
+\end{abstract}
+
+ \tnotetext[t1]{\noindent Alphabetical order signifies equal authorship, all mistakes are our own. Replication data for this article can be found at \url{https://doi.org/10.7910/DVN/EGLKEI}. Additional replication material and instructions are available at \url{https://github.com/s7minhas/plutonium}. Shahryar Minhas acknowledges support from the NSF, Award 2017180.}
+
+ % \tnotetext[t1]{\noindent Alphabetical order signifies equal authorship, all mistakes are our own. Replication material and instructions will be made available at \url{https://github.com/XXXX}. XXXX acknowledges support from the NSF, Award XXXX.}
+
+\end{frontmatter}
+% ----------------------------------------------- %
+
+\newpage\setcounter{page}{1}
+
+The fall of Syria's Bashar al-Assad regime on the 8th of December 2024 was a shocking and welcome piece of geopolitical news that brought an end to 13 years of fighting. Assad's position had seemed stable following Russian direct military intervention in the conflict in 2015, as rebel groups were unable to make real progress without incurring devastating Russian airstrikes. But, in the face of a renewed offensive by opposition forces in December, additional Russian support was not forthcoming, and instead Syria's leader fled to Moscow. This reversal of fortune can be explained, in large part, by shifting Russian priorities and resources -- ``after Mr. Putin invaded Ukraine in 2022, Syria plummeted down the Kremlin's priority list ... Warplanes that Russia may have otherwise sent to reprise the brutal bombing campaigns were instead committed to Ukraine."\footnote{New York Times, \url{https://www.nytimes.com/2024/12/08/world/europe/russia-syria-assad-putin.html}.} 
+
+These events highlight the interdependent, and contingent nature of international cooperation. Resources are finite, and states are at times forced to make hard choices in the face of scarcity. Russia's decision to abandon Syria and focus resources on Ukraine demonstrates the trade-offs states face in stark terms.\footnote{Foreign Affairs, \url{https://www.foreignaffairs.com/russia/putin-chose-ukraine-over-syria}.} Smaller states observe the decisions major powers make in cases like this, and while the initial intervention in Syria bolstered Russia and Putin's reputations, failure will likely have the opposite effect. An observer of Russian and Eurasian politics, Eugene Rumer commented on Russia's behavior at the end of the Syrian Civil War ``What good is Russia as a partner if it cannot save its oldest client in the Middle East from a ragtag band of militias?"\footnote{The New York Times, \url{https://www.nytimes.com/2024/12/08/world/europe/russia-syria-assad-putin.html}.}
+
+There are thus two dynamics in play here. Major powers are aware of the reputational consequences of removing support from allies and seek (all else equal) to maintain credible commitments and support their partners. Resources and attention, however, are not unlimited and shocks (either domestic or interstate) may occur, forcing states into choices that risk their hard-won reputations. Our expectation is that smaller states, in making choices about which power to align with, observe the actions of major powers and update their strategies accordingly.
+
+We look at these dynamics in the context of two of the largest stories in international politics in the past two decades. First, China's ascent during this time period along with an assertive Russian foreign policy has given rise to a more competitive landscape in terms of state alignments. China, in particular,  has emerged as a formidable competitor to the United States, both militarily and through diplomatic efforts such as its Belt and Road initiative—a policy focused on foreign investment in developing countries.
+
+Second, the United States focused considerable resources during this time period on wars in Iraq and Afghanistan. This also consumed a great deal of \emph{attention} and (more recently) generated disputes over the ability of the United States military to prepare for conventional conflicts while at the same time fighting counterinsurgencies and engaging in nation-building \citep{tammen2006impact}.\footnote{See, for example, \url{https://apps.dtic.mil/sti/citations/ADA554328}. Crucially, however, the United States is distinct from the Russian example in Ukraine and Syria, largely because the resource burden of its commitments in the Middle East -- while serious -- are not crippling.}
+
+We contend that examining states' alignment choices over the last two decades with major powers is incomplete without considering both dynamics simultaneously: the rise of Chinese power alongside the burdensome commitments of the United States.\footnote{We also consider Russian power during this time period, which is relevant given the cooperation between China and Russia.} While there are certainly other factors that constrain U.S. foreign policy, such as leadership preferences or economic interdependencies, we center our analysis here on military commitments. Conflicts such as those in Iraq and Afghanistan were unambiguous drains on the U.S. capacity to respond to additional crises. They also offer clear empirical measures (e.g., troop levels, casualty figures) through which third parties can infer U.S. bandwidth. Although policy preferences or isolationist leadership styles might similarly affect U.S. engagement, they are more challenging to measure consistently over time and are not the focus of our work here.\footnote{We leave a fuller exploration of what role these leadership-centered factors may play as an avenue for future research.}
+
+Our investigation into the changing alignment of states in the international system is driven by the belief that studying these dynamics offer valuable insight into conflict and cooperation between states. Empirical studies focusing solely on interstate conflict faces have always faced challenges; conflict is relatively rare, different time periods are not directly comparable, issues of selection abound, and much of our data is geographically limited. \footnote{See \citep{demarchi:etal:2004, gartzke2009bargaining, jenke:gelpi:2017, metzger:jones:2018}, and \citep{bowlsby:etal:2020} for an overview of these issues. In short, making empirical claims about the likelihood of conflict between states in the current international system requires addressing two competing problems: either we broaden the sample and inappropriately group non-IID observations together, or we can limit our sample to a particular context but end up with geographically limited and rare event data. In short, there are no easy solutions to the challenges of studying conflict.}
+
+Here, we explore the other side of the coin: cooperation between states, specifically the decision of states to align with either the United States or China. Following Keohane (1984), we define cooperation as ``when actors adjust their behavior to the actual or anticipated preferences of others.'' Although the causal mechanisms leading to war and cooperation are likely distinct, previous research has demonstrated that, all else being equal, states engaged in cooperative relationships are much less likely to participate in military conflict \citep{bailey:etal:2015, gallop:minhas2021}. By examining the causes of cooperation between states, we can bypass the statistical issues involved in studying interstate conflict directly and concentrate on the more abundant data generated by decisions states make over who they align with. Genuine year-to-year variance in state relationships enables us to examine a broader set of mechanisms that explain cooperation. Further, understanding how states connect with one another on cooperative dimensions can shed light on changes in the capacity of major actors—such as the United States and China—to influence the international system.
+
+To assess these dynamics, we create a novel empirical measure of US distraction and commitment and examine how fluctuations in the United States' focus impact other states' alignment with either the US or China. We pay particular attention to differences between democratic and non-democratic regimes, as our intuition suggests that non-democratic regimes may be especially inclined to align more closely with China during periods of United States distraction -- a finding that adds evidence to the prior research on this topic \citep{werner1997opposites, voeten2004resisting, binder2022frenemies}.
+
+In our examination of the link between conflict and cooperation, we contribute to an extensive literature on state alignment in international relations. The realist tradition, based on structural factors and emphasizing the role of power in explaining alignment, has proposed various arguments: states may align themselves against more powerful states in the system to ensure their survival \citep{waltz:1979}; against more threatening or proximate states, or those perceived as having aggressive intentions \citep{waltz:2010}; or with more powerful states to maximize their benefit from future conflicts \citep{schweller:1994}. Generally, states with similar regimes, particularly democratic states, are more likely to align, whether through economic cooperation \citep{remmer:1998, mansfield:etal:2000, mansfield:etal:2002} or military alliances \citep{gibler:sarkees:2004, leeds:2003, kinne:2018, walt:1997, beek2024hierarchy}. Previous research has also explored the effects of power on state alignment, including the potential of foreign aid and trade to purchase policy alignment \citep{bdm:smith:2007, alesina:dollar:2000}, military sales and transfers serving the same purpose, and Nye's concept of soft power making a state's policies more appealing to third parties \citep{nye:1990}. In the specific case of alignment with China, studies have demonstrated that trade with China has led to policy alignment on economic issues, but not necessarily on political and diplomatic issues \citep{kastner:2016}; studies have also shown that in diplomatic contexts like the UN, most states align more closely with China and Russia than the United States, but this is least true for members of NATO \citep{nurullayev:papa:2023}. However, the question of whether a \emph{realignment} in the international system vis-`a-vis China occurred during the two-decade period in which the United States' focus was on South Asia and the Middle East has not received adequate attention.
+
+One of the significant challenges each of these theories faces is that we cannot directly measure alignment but must infer it from observable behaviors. We rely on the fact that, just as alliances \citep{warren:2010, cranmer:etal:2015a}, multinational military exercises \citep{galambos:2024}  and conflict \citep{maoz:2012a, ward:etal:2007} occur in networks between states, so does cooperation. Crucially, these networks capture how changes in one relationship can reverberate across many others. Consider, for example, how Russia’s preoccupation with the war in Ukraine led it to scale back material support for the Assad regime in Syria --- an adjustment that other Middle Eastern states interpreted not just as a Russia --- Syria matter, but also as a signal about Russia's broader reliability as a security partner. To systematically capture these wider ripple effects, we employ a latent factor model (LFM) to measure how states relate to each other in a network context \citep{hoff:etal:2013, minhas:etal:2019}. Our approach uses cooperative interactions as inputs, projects them onto a lower-dimensional space that describes the overall cooperation between states, and positions actors closer together if they frequently cooperate or have high level of cooperation with the same third parties. Substantively, this parallels other techniques that estimate a reduced-dimensional map --- such as ideal points for for legislators \citep{poole:rosenthal:1985} or topic models for text \citep{roberts:etal:2016, de2021policy} --- but it does so while explicitly accounting for the underlying interdependencies across the entire system of states.
+
+In developing our measure of cooperation, we aim to capture specific patterns that often occur when reducing the dimensionality of a network. One such pattern is stochastic equivalence. Stochastic equivalence refers to the idea that there are communities of nodes in a network, and actors within a community act similarly towards those in other communities. Thus, the community membership of an actor provides us with information on how that actor will act towards others in the network. Put more concretely, a pair of actors $ij$ are stochastically equivalent if the probability of i relating to, and being related to, by every other actor is the same as the probability for $j$ \citep{anderson:etal:1992}. For example, in an international cooperation network, we might see relatively isolated rogue states, like North Korea and Iran, as being stochastically equivalent, because they have limited cooperation with states like China and Russia, and generally conflictual relations with wealthy Western states \citep{hafner-burton:etal:2009}.\footnote{North Korea and Iran are distinct in many respects, but they share certain exclusionary patterns of alignment with respect to major Western powers, illustrating how states can be stochastically equivalent even without directly resembling each other in all dimensions of foreign policy.} Similarly, close allies of the United States (for example Canada and the United Kingdom) will exhibit high degrees of stochastic equivalence, likely to cooperate with other affluent Western states, and direct conflictual acts towards said rogue states. This concept speaks to the assertion that we can learn something about how an actor will interact with an entire network based on, for example, the existing set of relationships that they are enmeshed in. 
+
+Another dependence pattern that often manifests in networks is homophily -- the tendency of actors to form transitive links. The presence of homophily in a network implies that actors may cluster together because they share some latent attribute. In the context of clustering in alliance relationships, we are likely to find that states like the United States, United Kingdom, and Germany may cluster together because of shared liberal norms. We would overlook salient information if we did not use, for example, the United Kingdom's behavior towards third parties, when trying to understand whether those third parties aligned with the United States. Doing so is likely to paint an incomplete picture of the cooperative networks and alignment patterns that states have with one another.
+
+The LFM accounts for these higher-order dependence patterns and ensures that similarity in alignment is likely to be transitive. For example, if the United States aligns with the United Kingdom, and the United Kingdom aligns with France, the United States and France should also be aligned. Furthermore, the most useful feature of the LFM for our purpose is that it summarizes the interdependencies between actors in a relational k-dimensional latent vector space. From this vector space, we can both understand how states in the system are tied to others in the system and ask more specific questions about the dominance of particular actors in the system, such as China.
+
+Our plan for the rest of the article is straightforward. First, we will outline the two competing theories for how the United States' constraint could affect relationships in the international system. Second, we will establish our measure of the level of constraint of the United States during the period from 2000 to 2020. Third, we will detail the LFM and output measures for this time period. Lastly, we will present the results of our downstream regressions that detail the impact on cooperation as a function of constraint.
+
+\section*{Theoretical Intuition}
+
+Constraints on the United States, represented by military entanglements and shocks, could have different effects on how states align with the United States' main rival, China. On one hand, we could consider the United States' attention and resources as limited. When the United States is preoccupied (e.g., with conflicts in Afghanistan or Iraq), it may have less capacity and flexibility to address crises in East Asia. We refer to this theory as the ``Distraction Model.''
+
+An alternative perspective focuses on reputation and credibility, suggesting that by investing resources and making sacrifices in contexts like Iraq or Afghanistan, the United States demonstrates its determination and commitment to act elsewhere. We refer to this theory as the ``Credibility Model.''
+
+\subsection*{Distraction Model}
+
+The basic insight of the Distraction Model is that both resources and attention are finite \citep{deutsch:singer:1964, haass:2008, bilmes:2013}. While the United States is a historically rich and powerful country, each successive conflict or intervention depletes available resources, particularly in an increasingly multipolar world. All else being equal, the United States may be less likely to engage in a second (or third, etc.) conflict while it is, for instance, involved in Iraq and Afghanistan. This has significant implications for third-party behavior, particularly if they are considering actions contrary to the interests of the United States. For instance, a state developing illicit weapons systems, invading a neighboring state, or merely aligning more closely with the United States' strategic rivals may face fewer consequences while the United States is distracted.
+
+Our focus lies on third-party actors and their relationship with China (i.e., a United States adversary). The intuition here, is that many states are in hierarchical relations with the United States (see \citealt{organski:1968} or \citealt{beardsley:etal:2020} for a more recent example), and that weakening those relations to pursue closer ties to China risks a coercive response from the dominant state, but this response is less likely to be forthcoming when the US has less free resources and bandwidth. We are not including the entire spectrum of hostile actions that third parties might undertake. When applied to our measurement of state affinity, this logically leads to our first hypothesis:
+
+\emph{Distraction Model Hypothesis: When the United States is more distracted, states will align more closely with China}
+
+\subsection*{Credibility Model}
+
+The Credibility Model is rooted in a long history of research about resolve \citep{schelling:1966, walter:2006, crescenzi:2007, gibler:2008, weisiger:yarhi-milo:2015}. The theory's driving concept is that we cannot directly determine a state's willingness to undertake costly actions (such as kinetic military actions or coercive economic measures) to achieve a goal, as the ratio of the cost of these actions to their benefit is unobservable. However, we can infer states' willingness to pursue costly actions by examining their past behavior. 
+
+Existing studies have examined the conditions under which states make inferences about reputation. For instance, in the context of North Korea-United States relations, the United States repeatedly refrained from using force in response to provocations, which diminished its reputation for resolve \citep{jackson_rival_2016}. Importantly, the inference is not confined to the dyadic relationship \citep{crescenzi_friends_2018}. Signals from state A directed at state B can also shape how state C perceives A’s resolve. In simple terms, if the United States demonstrates a willingness to bear substantial costs to achieve desirable political outcomes in one context, third-party actors should update their beliefs about the United States' willingness to bear costs in other contexts. 
+
+At the same time, credibility is a relational concept that combines capabilities, interests, and reputation for resolve \citep{mercer_reputation_2018} to evaluate “an actor’s record of keeping commitments” \citep{jervis_redefining_2021}[p.428]. Studies indicate that states with greater capabilities and power \citep{morrow_capabilities_1989, press_calculating_2005} and those with higher stakes in a situation are perceived as more resolute \citep{arreguin-toft_how_2005}. The United States military engagements in the Middle East highlight its substantial capabilities—both in terms of military resources and logistical power to sustain prolonged operations—while reflecting high stakes, such as ensuring regional stability, securing energy resources, countering terrorism, and maintaining alliances.
+
+It is important to note that credibility and resolve are context-dependent: states are more willing to incur high costs to avoid conquest by a genocidal tyrant than they would be to secure lower tariffs on agricultural goods. The discussion surrounding reputation and resolve then leads to a contrasting perspective on how third parties will react to United States constraint – as previously mentioned, we are focused on third-party relations with China:
+
+\emph{Credibility Model Hypothesis: When the United States is constrained due to military commitments, they will have demonstrated more resolve, and states will be less willing to align closely with China.}
+
+\section*{Methods}
+
+To test the competing dynamics of the Distraction and Credibility models, we develop a measure of ``constraint'' that captures limits on the United States' capacity or, alternatively, shifts external perceptions of its resolve. Our focus here is on conflict-based variables drawn primarily from the scale of active U.S. military engagements, deployments, and associated casualties.\footnote{There are, of course, other sources of constraint and commitment in the interstate system. State leaders may promote isolationist or outreach policies, economic initiatives, trade agreements, and military on military contact; all of these likely have an impact and could serve as measures. We plan on investigating these dynamics in future work. In particular, the discontinuities created by recent shifts toward more isolationist policies in the United States or outreach policies by China are likely to be a fruitful avenue for further research.} The main advantage of focusing on conflict-based variables is that they are readily observable indicators of expenditures of national resources and attention and also have substantial variance across the time period of interest.\footnote{Political crises may also have an impact, but these are rare and unlikely to be systematically consequential \citep{frieden:etal:2017}.}
+
+Under the Distraction Model, constraints such as overseas conflicts and extensive force commitments reduce the United States' bandwidth to engage elsewhere, making it more difficult to respond to states shifting their alignment. Under the Credibility Model, these same commitments demonstrate the United States' willingness to bear costs, thereby bolstering its reputation for resolve. In this way, the very factors that might signify reduced capacity can also be interpreted as heightened credibility, depending on the perspective taken.
+
+Broadly speaking, we operationalize U.S. constraints as a function of two potential sources:
+
+\begin{enumerate}
+    \item Active conflicts the United States is involved in, especially those with high material commitments and U.S. casualties;
+    \item U.S. force commitments around the globe, including troop deployments and defense expenditures.
+\end{enumerate}
+
+We argue that each of these sources can plausibly indicate both distraction and credibility, which is why we treat them collectively as measures of U.S. constraints.\footnote{See Table S1 in the SI for details.} A simple latent variable model of the categories produced two features, representing active US conflicts ($F_{1}$) and US defense spending/commitments ($F_{2}$).\footnote{A scree plot for the distraction index is shown in Figure S1 of the SI. Over 75\% of the variance is explained by a PCA with the latent variables. Additionally, Figure S2 provides a discussion of the variable weights for each factor.} Figure~\ref{fig:facViz} visualizes how the two factors have changed over time. 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.9\textwidth]{facViz.png}
+    \caption{Visualization of $F_{1}$ and $F_{2}$ over time.}
+    \label{fig:facViz}
+\end{figure}
+\FloatBarrier
+
+They display considerable variance that aligns with our priors on constraints resulting from United States military conflicts over the past two decades: the measure of distraction based on military spending declines sharply following the end of the Cold War, rises dramatically after the 9/11 attacks, and then gradually diminishes as the US starts allocating less attention and resources to the wars in Afghanistan and Iraq; the measure based on active US conflicts increases as the Cold War ends and the US begins fighting several small wars during the 1990s, peaks during the wars in Iraq and Afghanistan, and then decreases to a still relatively high equilibrium in the 2010s.
+
+\subsection*{Measuring Alignment}
+
+We also need a measure of how closely states are aligned and how these relationships change over time. One approach would be to simply examine a raw measure of cooperation between states, but this presents several problems. First, states vary in their overall levels of voting participation at the UN --- a higher co-voting rate between the United States and France, for instance, does not necessarily reflect deeper political alignment than a lower rate between France and a smaller or less engaged country. Rather, the United States and France might both regularly vote ``Yes" on widely supported resolutions, inflating their co-voting score. Second, abstentions and low voting participation can mask genuine disagreement versus mere disinterest: a pair of states may rarely vote in tandem not out of antagonism, but because one or both frequently abstain on certain resolutions. By treating co-voting patterns as a form of relational data, we can better distinguish low co-voting driven by actual contention from low co-voting born of ambivalence or passive engagement. A network approach thus allows us to capture these higher-order interdependencies --- such as clustering, transitivity, and indirect ties --- when inferring a latent measure of alignment from UN voting behavior. Both of these issues can be addressed by treating measures of cooperation as a form of relational data and employing a network approach to infer our latent measure of alignment. A network approach enables us to capture the different orders of interdependencies in relational data, which will be discussed in more detail in this section.
+
+Our raw measure of cooperation is based on the similarity in states' UN voting records \citep{voeten:2013}. We examine the percentage of votes at the United Nations General Assembly in which states voted the same way.\footnote{In our aggregation procedure, any resolution that passes or fails with overwhelming support (e.g., beyond 95\% ``Yes'') contributes almost uniformly to each $y_{ij}$ entry, leaving little variation to separate pairs of states. Because our latent factor model is estimated by maximizing a likelihood sensitive to cross-dyad differences, these near-unanimous votes exert negligible ``pull'' in determining states' positions. We show in the Appendix that the LFM continues to recover the underlying latent structure even when such low-discriminatory votes are present, paralleling item-response theory (IRT), where consensus items offer scant information for distinguishing among respondents.} Although we operationalize alignment primarily through UN co-voting behavior, we view ``alignment'' as a broader phenomenon encompassing cooperation on policy. Diplomatic cooperation --- like cosponsoring UN resolutions --- provides a tangible indicator of alignment, but states can also align through defense cooperation, trade agreements, or foreign policy stances (e.g., joining a U.S.-led coalition or building deeper ties with China). Hence, while our empirical measure relies on voting data for systematic, globally comparable coverage, we acknowledge that alignment extends beyond diplomatic interactions to include economic and military domains as well. Our focus on co-voting thus captures one crucial dimension of foreign policy coordination, especially relevant for understanding how states navigate superpower competition when the United States is ``distracted.'' We use this longitudinal network of voting data to estimate state affinity via a Latent Factor Model (LFM).\footnote{See \citet{cranmer:etal:2015, cheng:minhas:2020, huhe:etal:2021, dorff:etal:2021} for other attempts to use network models to infer alignments in different contexts. We also acknowledge the well-documented limitations of UN General Assembly voting data. States may vote strategically, align with larger coalitions for reasons beyond sincere policy affinity, or abstain to signal nuanced positions. Despite these caveats, UN General Assembly roll-call votes remain one of the few systematically recorded sources of global political behavior over time and have been shown to correlate robustly with broader patterns of foreign-policy alignment \citep[e.g.,][]{voeten:2013}. Furthermore, since our Latent Factor Model leverages \emph{relative} differences in voting, near-unanimous or highly strategic votes tend to contribute minimal discriminatory power and thus have a limited effect on the final spatial estimates.}
+
+The LFM is a network model designed to account for three different orders of interdependencies in relational data. First, it considers the tendency of some actors to be both the initiator and target of conflict and cooperation by including sender and receiver random effects. Second, it accounts for the fact that cooperation is often reciprocal through the composition of the error term. Finally, the aspect that sets the LFM apart from other network estimators is how it addresses third-order dependencies. Two specific types of third-order dependencies that the LFM can handle are homophily – the tendency for actors sharing an unobserved characteristic to interact more with each other – and stochastic equivalence, the notion that actors playing similar roles in a network are more likely to cooperate with the same third party. Stochastic equivalence differs from homophily in that actors close to one another in a network do not necessarily interact more. Instead, actors within the same group in a network share similar relationship patterns with actors in other groups, such as a connection to a common actor.
+
+The LFM manages these third-order dependencies with a multiplicative random effect based on matrix decomposition procedures.\footnote{This effect needs to be multiplicative because, by multiplying random variables, we can preserve the third-order residuals, which would have zero expectation if they were simply added.} This third-order term is valuable for coping with left censoring in the data, since we can use common or contrasting voting patterns with third parties at the United Nations to ascertain whether states truly share alignment in the broader diplomatic network, or if their divergence extends further. We formulate the Latent Factor Model as follows:
+
+\begin{align}
+	\begin{aligned}
+		y_{ij} \;=\; f(\theta_{ij}) &\text{, where } \\
+		\theta_{ij} \;=\;& \bm\beta_{0} + a_{i} + b_{j} + \epsilon_{ij} \\
+		& + \mathbf{u}_{i}^{\top} \mathbf{D} \mathbf{v}_{j}   \\
+	\label{eqn:ame}
+	\end{aligned}
+\end{align}
+
+Our focus for measuring cooperation is on the $\mathbf{u_i}^{T}\mathbf{D}\mathbf{v_j}$ term, which is included in the model to capture third-order dependencies. This captures the tendency of states to not only cooperate with each other but also to cooperate with similar third parties. Put simply, it allows us to quantify indirect ties. At its core, the $\mathbf{u_i}^{T}\mathbf{D}\mathbf{v_j}$ term is similar to conducting a singular value decomposition (SVD) of a network after accounting for the general propensity of actors to form a tie ($\beta_{0}$) and variation in how active some are in sending or receiving ties through a set of random effect terms ($a_{i}$ and $b_{j}$, respectively).\footnote{These random effect terms are drawn from a multivariate normal distribution as follows: $\{(a_{1}, b_{1}), \ldots, (a_{n}, b_{n})\} \simiid N(0,\Sigma_{ab})$. They are drawn in this way because, in networks, we often find that actors who are more likely to be sending a high degree of ties may also be more likely to be receiving a high degree of ties.} To estimate the $\mathbf{u_i}^{T}\mathbf{D}\mathbf{v_j}$ term, we need to specify a dimension for the multiplicative effects. If we choose one dimension, we could write this term in vector notation as: $\theta_{ij} = d_{1} (u_{i,1} \times v_{j,1})$. Here, if we find, for example, that $u_{USA} \approx u_{Canada}$, this would imply that the United States and Canada send ties to similar third parties, meaning they are stochastically equivalent to one another in terms of their sending relationships. Additionally, if $u_{USA} \approx v_{Canada}$ and $d_{1}>0$, this implies that the United States is likely to send a tie to Canada due to homophily, which indicates that there is some latent nodal attribute Canada and the United States share that makes a tie between them more likely. We take the multiplicative effects term for every pair of countries in every year as a measure of alignment.\footnote{We ran models with both a 2 and a 5-dimensional latent factor space, and found the results to be relatively consistent, and so for the sake of clarity, we focus on the easier-to-interpret 2-dimensional results. In the SI, we have included a section showing that our results are consistent with a 5-dimensional latent factor space; these results are shown in Section A.2.}
+
+\subsection*{Face Validity}
+
+We turn to descriptives statistics of our measure, first, by looking at the overall network of relationships uncovered, and then by looking in more detail at the time series of certain prominent relationships. Our model maps each state into a latent vector space and we visualize this for our measure of Alignment for 2000 and 2019 in Figure~\ref{fig:unTradeUV}.  
+
+\begin{figure}[ht]
+	\begin{tabular}{cc}
+	\textbf{2000} & \textbf{2019} \\
+	\includegraphics[width=.45\textwidth]{un00.png} & 
+	\includegraphics[width=.45\textwidth]{un19.png} \\
+	\end{tabular}
+	\caption{Visualization of multiplicative effects for our measure of alignment. Figure on left figure shows the results for 2000 and the right for 2019. Each circle designates a country and the color corresponds to the legend at the center of the visualization. Countries that are closer together are those that share indirect ties.}
+    \label{fig:unTradeUV}
+\end{figure}
+\FloatBarrier
+
+States with their vectors pointed in similar directions are more likely to influence each other and common third parties, whereas states whose vectors point in opposite directions have limited influence on each other. There are a few immediate takeaways from these networks. First, the diplomatic alignment measure based on UN voting shows three discernible clusters: the US and Israel (and Canada in 2019) are relatively isolated but generally close to a larger cluster with most of the other major European powers, along with Japan, Australia, and New Zealand. The third cluster contains the vast majority of the Global South.\footnote{This is true whether we are looking at a latent factor model with 2 or 5-dimensional latent factors.} These figures show that the measures of diplomatic alignment correspond to many of our intuitions about influence in world politics while also maintaining important and novel characteristics based on the data used to generate them.
+
+We also test the face validity of these measures by looking at how they characterize three important dyads. We choose the relationship between the US and UK, which we expect to be generally close and amicable, and the US's relations with its two major competitors, China and Russia. As shown in Figure~\ref{fig:distViz}, this measure captures the general tenor of the relationships—the US and UK have a consistently positive relationship, whereas the relationship the US has with both China and Russia, based on UN voting, is characterized as more adversarial. The time series interestingly points to generally positive relationships in the immediate aftermath of 9/11, which deteriorate precipitously starting in 2003 with the Iraq war. While there are some marginal improvements, the relationships remain quite negative.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.9\textwidth]{distViz.png}
+    \caption{ Level of diplomatic alignment for selected dyads over time.}
+    \label{fig:distViz}
+\end{figure}
+\FloatBarrier
+
+\section*{Regression Models}
+
+Given the measure described in the previous section, our empirical approach to testing H1 and H2 is straightforward. The dependent variable (DV) is the affinity of actors to China as measured by our network-based approach using UN voting data. Higher values on this measure indicate that states are more diplomatically aligned, while lower values indicate the opposite.\footnote{While some models allow node-level covariates to shape the latent factor estimates in a single, integrated framework \citep{austin:etal:2013, olivella:etal:2022, minhas:hoff:2024}, we adopt a two-stage approach --- first estimating each state's latent alignment position, then regressing those positions on external predictors --- for the sake of both clarity and computational simplicity. This approach mirrors what others have done in the networks literature when working with analogous types of models: \citet{weschle:2018, marrs:etal:2020, huhe:etal:2021}.} Our unit of observation here is the country-year, with a sample of 118 countries measured annually between 2000 and 2020.\footnote{Although we focus specifically on how closely states align with China, the underlying LFM leverages the \emph{entire} co-voting network rather than a unidimensional distance-to-China metric. By factorizing the full matrix of co-voting rates, we capture higher-order dependencies (e.g., block structures and stochastic equivalences) that shape states' voting behavior in ways a single-actor measure might miss.}
+
+Our key independent variable is our measures of US distraction, which we measure through active US conflicts ($F_1$) and US defense expenditures \& force commitments ($F_2$).\footnote{Note that $F_{1}$ and $F_{2}$ have sufficient correlation that we run models using the variables separately rather than including them together.} For each country-year observation, we include the value of US distraction in the previous year to see how it relates to that country's alignment with China. 
+
+We also include several country-level controls that might influence how closely a country is aligned to China diplomatically. Specifically, we control for a country's population, their GDP, and the distance between their capital and Beijing. To address political factors that might make a country more or less closely aligned with China, we include Polity's measure of a country's level of democracy (the intuition being that autocratic regimes will be closer to other autocracies, like China, and democracies will be less close, all else being equal). To consider other structural factors, we estimate our models within a hierarchical framework. In the first set of results, we rely on random effects for the country, and later we examine how the effect of our key independent variables varies based on a state's domestic political institutions.\footnote{Figure S3 of the SI provides descriptive statistics for each of the variables used in this analysis.}
+
+\subsection*{Empirical Results}
+
+In the first set of models depicted in Figure~\ref{fig:agreeTradeEst}, we see results that generally conform to the distraction hypothesis. As $F_1$ increases (listed as ``United States Constraint Proxy''), denoting a higher level of US attention and resources devoted to the Middle East and South Asia, states consistently experience an increase in their diplomatic alignment with China (though our estimate of this result is measured with a high degree of uncertainty). When we move to the left panel in which we are proxying US constraint with troop deployments and military spending, $F_2$, we see a similar pattern, diplomatic alignment with China increases with our measures of US distraction.
+
+\begin{figure}[ht]
+% \centering
+\includegraphics[width=.9\textwidth]{agreeFixedDistract.png}  \\
+\caption{Parameter estimates from hierarchical model on diplomatic alignment with random country effects. Each column shows the results with a different distraction measure that is labeled in the facet on the top of the plots. Points represent average value of parameters, thicker line represents the 90\% confidence interval, and thinner the 95\%. }
+\label{fig:agreeTradeEst}
+\end{figure}
+\FloatBarrier
+
+For control variables, results are generally consistent with our expectations. Democracies are less likely to be aligned diplomatically with China, and the same is true for rich states. The distance to Beijing has a consistent positive effect across all models, indicating that there is closer alignment between China and more distant states, on average, which might speak to the wariness that some of China's neighbors feel with regards to its growing importance.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth]{eMapsv2.png}
+\caption{ Country Random Effect Estimates, where the lower values in red indicate less alignment with China and higher values in blue indicate greater alignment. Countries in grey are those that were ommitted from the model.
+}
+\label{fig:eMaps}
+\end{figure}
+\FloatBarrier
+
+One possible explanation for the relatively high levels of uncertainty is that these models show the aggregate effect, but beneath the surface, different states react to US distraction in different ways. To understand whether or not we can find evidence of variation in how countries are responding to China, we visualize the country random effect estimates from the diplomatic alignment models in Figure~\ref{fig:eMaps}. For both measures of alignment, we see notable variation in country random effect estimates.
+
+While Figure \ref{fig:eMaps} shows substantial heterogeneity in countries' responses to US distraction, we now move towards examining this heterogeneity in a more systematic way. The most obvious and commonly used division in the study of international conflict and cooperation is to divide states based on their domestic political institutions. Diplomatic behavior of states occurs within and is conditioned by political institutions. Therefore, we might expect a common stimulus, like US distraction, to lead to different reactions when decisions are made by a hereditary autocrat than when they are the purview of a democratically elected legislature or executive.
+
+We thus modify our hierarchical model to allow the effect of our US distraction variables to vary across types of political institutions. We measure political institutions using polity scores, relying on the canonical division into consolidated democracies (Polity Score $\geq$ 7), consolidated autocracies (< -6), and mixed regimes (all other states). In these models, we allow a random slope for the two distraction proxies in each tranche of the polity score. These results are shown in Figure~\ref{fig:agreeVarEst}.\footnote{In the Appendix, we replicate these results using a specification with country fixed effects. The results there corroborate our main findings that autocracies and anocracies tend to increase their diplomatic alignment with China when the U.S. is more distracted, while democracies are less inclined to do so.}
+
+For $F_1$, both autocracies and mixed regimes (anocracies) show a positive relationship between U.S. distraction and alignment with China, whereas consolidated democracies become less aligned with China when the U.S. is more distracted. A similar pattern emerges for $F_2$, where non-democratic regimes again respond positively to U.S. constraint, in contrast to democracies. Taken together, these results suggest that U.S. distraction fosters greater alignment with China among regimes outside the democratic core.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\textwidth]{agreeVarDistract.png}
+\caption{Parameter estimates from hierarchical model on diplomatic alignment with varying effects of the distraction measures by polity categories. Top panel shows how the distraction measures vary by polity categories and bottom the fixed effects, each column again represents the results of one model. Points represent average value of parameters, thicker line represents the 90\% confidence interval, and thinner the 95\%.}
+\label{fig:agreeVarEst}
+\end{figure}
+\FloatBarrier
+
+\subsection*{Alignment with Russia}
+
+In the SI, we present in more detail an additional set of models that focus on alignment with Russia. These results are similar to the results on alignment with China --- both our measures of constraint are associated with closer diplomatic alignment with Russia. When we look at the heterogeneous effect of constraint conditioned by regime type, we find similar patterns --- constraint has the greatest impact in moving autocracies towards Russia, less impact on anocracies, and the least on democracies. The substantive similarity in results between our models of alignment with Russia and China increases our confidence in the robustness and generalizability of these dynamics, and highlights the importance of considering both constraint and domestic political institutions in order to understand cooperative behavior.
+
+% \clearpage
+\section*{Conclusion}
+
+In this paper, we develop a theory of how constraints faced by the United States have realigned cooperation networks in the international system. Specifically, during times of U.S. distraction, we find that states are more likely to cooperate with China, and this effect is especially pronounced for non-democratic countries. To arrive at this finding, we not only introduced factor-based measures of U.S. distraction but also employed a network-based approach to gauge how cooperation with China has evolved across the diplomatic domains. Our distraction measures reveal substantial fluctuations over time, and we provide face validity checks for our latent measures of cooperation.
+
+The implications of our study underscore how shifts in diplomatic cooperation --- including realignments toward China --- can occur outside the domain of military conflict and may be missed by analyses that focus narrowly on war or crisis behavior. China's capacity to exert influence has grown most notably when the United States is heavily committed elsewhere, underlining how occupation- and conflict-related costs extend beyond the immediate ``blood and treasure." These burdens spill into diplomatic and economic realms, thereby prompting some states --- particularly those with authoritarian regimes --- to recalibrate their external ties toward Beijing in search of alternative diplomatic guarantees.
+
+A further implication emerges when considering potential changes in U.S. foreign policy under the Trump administration that are less centered on supporting or partnering exclusively with other democracies. Our findings suggest that if Washington continues down a path of more transactional or interest-based relationships, rather than democracy-centered alignment, this could recalibrate existing patterns of cooperation. On the one hand, a U.S. administration that places less emphasis on promoting democratic norms might remove an obstacle to engaging more deeply with authoritarian states, potentially drawing some non-democracies back into the U.S. orbit. On the other hand, these same non-democracies may see a continued or even accelerated opening to align with China if they perceive U.S. commitments as inconsistent or subject to sudden recalculation. Such flexibility in U.S. policy could thus reinforce the finding that states weigh U.S. capacity and attention --- rather than shared governance models --- when forging partnerships.  
+
+These findings also raise a fundamental question about the enduring role of U.S. institutional commitments to democracy in shaping alignment patterns when the United States is heavily engaged elsewhere. While our results indicate that autocracies are especially likely to gravitate toward China under U.S. distraction, they also suggest that democratic regimes remain less inclined to defect --- perhaps reflecting the residual power of shared political norms and long-term credibility commitments. If so, this would offer a compelling case where ``institutions matter" in a tangible way, by helping the U.S. preserve alliances even as its bandwidth for global engagement contracts. Future research might further parse how the erosion or amplification of these liberal commitments, including their soft-power dimensions, affects the realignment calculus of third-party states. 
+
+Although we focus here on conflict-based engagements, isolationist or non-interventionist leadership choices could yield a similar effect. States may interpret a deliberate policy of retrenchment much like a militarily overstretched U.S., concluding that Washington is less likely to intervene abroad and thus seeking alternative alignments. We currently lack a consistent measure of these leadership-driven nuances across our timeframe, however, producing such a measure would provide an important avenue to furthering this research.
+
+Ultimately, our work highlights the utility of studying alignment networks in order to illuminate dynamics of both cooperation and conflict. As the United States' foreign engagements shift, it can trigger realignment elsewhere in ways that later shape its ability to respond to major-power competition, most notably with China. Understanding these relational patterns --- and how they vary with both U.S. distraction and evolving policy priorities --- offers a clearer view of how diplomatic alignments are formed, sustained, and recalibrated in an increasingly multipolar world.
+
+% appendix
+\clearpage
+\input{pluto_si}
+
+% End headings as required by BJPolS
+\clearpage
+
+\section*{Supplementary Material}
+Supplementary material for this article can be found at [Production team to insert link].
+
+\section*{Data Availability Statement}
+Replication data for this article can be found at \citet{choi:etal:2025:dataverse}.
+
+\section*{Acknowledgements}
+We thank the editor and anonymous reviewers for their valuable feedback and suggestions. We also thank seminar participants at Michigan State University, Duke University, and Strathclyde University for helpful comments on earlier drafts of this paper.
+
+\section*{Financial Support}
+This work was supported by the National Science Foundation (SM, Award 2017180). HC, SD, and MG received no specific grant from any funding agency, commercial or not-for-profit sectors.
+
+\section*{Competing Interests}
+None.
+
+% Bib stuff
+\clearpage
+% \singlespacing
+\bibliography{master}
+
+% \bibliographystyle{elsarticle-harv}\biboptions{authoryear}
+\bibliographystyle{apsr}
+
+\end{document}

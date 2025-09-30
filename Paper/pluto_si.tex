@@ -1,0 +1,200 @@
+\renewcommand{\thefigure}{A\arabic{figure}}
+\setcounter{figure}{0}
+\renewcommand{\thetable}{A.\arabic{table}}
+\setcounter{table}{0}
+\renewcommand{\thesection}{A.\arabic{section}}
+\setcounter{section}{0}
+
+\textbf{Appendix}
+
+\tableofcontents
+\clearpage
+
+\singlespacing
+
+\section{Construction of US distraction index}
+
+In this section, we provide further details on the construction of our US distraction index.
+
+\subsection{Variables used to generate US distraction index}
+
+Here we list out the sources for the variables that we use to generate our US distraction index. 
+
+\begin{table}[h]
+\centering
+\caption{Variables for generation of US Distraction Index}
+\begin{tabular}{ll}
+Variables & Source \\
+\hline
+Defense spending  & \citealp{worldbank:2021}, \citealp{dod:2020} \\
+Troop levels, by region   & \citealp{dod:2020}, \citealp{kane:2016} \\
+US Casualties   & \citealp{dod:2020}, \citealp{kane:2016}  \\
+Market Crises   &  \citealp{frieden:etal:2017} \\
+Economic variables   &  \citealp{tradingeconomics:2021} \\
+\end{tabular}
+\label{tab:facCats}
+\end{table}
+\FloatBarrier
+
+\clearpage
+\subsection{Scree plot for US distraction index}
+
+Figure~\ref{fig:screeViz} illustrates the cumulative proportion of variance accounted for by each of the factors in the top panel, and in the bottom the variance of each factor. A PCA with two latent variables explained over 75\% of the variance in the raw data.\footnote{A possible third factor, which we did not include, has the employment rate as its most salient component. The interpretation of this factor as "economic shocks" is not, however, clear given the other factor loadings and we accordingly leave economic causes of constraint to future work.}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{screeViz.png}
+    \caption{Scree plot of constraint PCA.}
+    \label{fig:screeViz}
+\end{figure}
+\FloatBarrier
+
+\clearpage
+\subsection{Factor Loadings}
+
+Figure~\ref{fig:loadViz} below shows factor loadings of each component variable for three latent factors, representing active US conflicts ($F_{1}$), US defense spending / commitments ($F_{2}$), and US economic shocks ($F_{3}$). 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{loadViz.png}
+    \caption{Loadings of constraint PCA}
+    \label{fig:loadViz}
+\end{figure}
+
+\clearpage
+\subsection{Descriptive Statistics}
+
+
+Here we show descriptive statistics for each of the variables used in our analysis of how countries aligned towards China during times of US distraction. 
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{descTable_china.png}
+    \caption{Descriptive Statistics}
+    \label{fig:descTable_china}
+\end{figure}
+
+\clearpage
+\section{Results when measuring alignment against Russia}
+
+Here we visualize the results of the model when focusing on how alignment with respect to Russia instead of China. Figure~\ref{fig:agreeEst_russia} shows the parameter estimates for our diplomatic alignment model with random country effects. Figure~\ref{fig:agreeVarEst_russia} shows the parameter estimates for our diplomatic alignment model with varying effects of the distraction measures by polity categories. 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth]{agreeFixedDistract_russia.png}
+\caption{Parameter estimates from hierarchical model on diplomatic similarity with random country effects. Each column shows the results with a different distraction measure that is labeled in the facet on the top of the plots. Points represent average value of parameters, thicker line represents the 90\% confidence interval, and thinner the 95\%. }
+\label{fig:agreeEst_russia}
+\end{figure}
+\FloatBarrier
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth]{agreeVarDistract_russia.png}
+\caption{Parameter estimates from hierarchical model on diplomatic similarity with varying effects of the distraction measures by polity categories. Top panel shows how the distraction measures vary by polity categories and bottom the fixed effects, each column again represents the results of one model. Points represent average value of parameters, thicker line represents the 90\% confidence interval, and thinner the 95\%.}
+\label{fig:agreeVarEst_russia}
+\end{figure}
+\FloatBarrier
+
+When we estimate a model allowing the effect of distraction to be conditional on political institutions.  Across our two measures of distraction, autocracies are most prone to move towards Russia when the US distracted, democracies least prone, and anocracies in the middle.  
+
+\clearpage
+\section{Varying the Dimensionality of the Multiplicative Effect}
+
+Here we visualize the results of the model with varying degree of the dimension of the multiplicative effects ($K$=5). Figure~\ref{fig:agreeEst_k5} shows the parameter estimates for our diplomatic alignment model with random country effects. Figure~\ref{fig:agreeVarEst_k5} shows the parameter estimates for our diplomatic alignment model with varying effects of the distraction measures by polity categories. Our results are consistent with a 2 dimensional latent factor space. 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth]{agreeFixedDistract_k5.png}
+\caption{Parameter estimates from hierarchical model on diplomatic similarity with random country effects. Each column shows the results with a different distraction measure that is labeled in the facet on the top of the plots. Points represent average value of parameters, thicker line represents the 90\% confidence interval, and thinner the 95\%. }
+\label{fig:agreeEst_k5}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth]{agreeVarDistract_k5.png}
+\caption{Parameter estimates from hierarchical model on diplomatic similarity with varying effects of the distraction measures by polity categories. Top panel shows how the distraction measures vary by polity categories and bottom the fixed effects, each column again represents the results of one model. Points represent average value of parameters, thicker line represents the 90\% confidence interval, and thinner the 95\%.}
+\label{fig:agreeVarEst_k5}
+\end{figure}
+\FloatBarrier
+
+\clearpage
+\section{Country Fixed Effects Robustness Check}
+
+In addition to the model results presented in Figure 6, we estimate another with country fixed effects to account for any time-invariant heterogeneity (e.g., geography, shared history, cultural ties). This ensures that our main findings are not driven by stable country-level features that might correlate with alignment decisions. Figure~\ref{fig:agreeVarEst_cname} shows the coefficient estimates from this fixed-effects version. 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.9\textwidth]{agreeVarDistract_cname.png}
+    \caption{Parameter estimates from hierarchical models of diplomatic alignment with varying effects of the distraction measures by regime type \emph{and} country fixed effects. The top panel shows the coefficients for our distraction measures interacted with polity categories, and the bottom panel shows the fixed effects. Points represent posterior means; thicker lines indicate 90\% credible intervals, and thinner lines 95\%.}
+    \label{fig:agreeVarEst_cname}
+\end{figure}
+\FloatBarrier
+
+\noindent Across these fixed-effects models, we continue to observe that:
+
+\begin{enumerate}
+    \item \emph{Higher U.S. Distraction $\longrightarrow$ More Alignment with China (Autocracies/Anocracies).} States with less democratic institutions remain most responsive to U.S. constraint.
+    \item \emph{Democracies Resist Closer Alignment with China.} Our results for fully democratic regimes remain consistent with the baseline, showing a weaker or even negative relationship between U.S. distraction and alignment with China.
+\end{enumerate}
+
+These core dynamics align closely with our primary analyses, suggesting that our conclusions are robust to the inclusion of country-specific intercepts. 
+
+\clearpage
+\section{Simulation Study for Latent Factor Measurement}
+
+In this appendix, we conduct a small-scale simulation to experiment with our use of the LFM when only \emph{aggregated} co-voting rates (rather than individual-level vote choices) are observed. This is meant to help understand how individual votes might plausible arise from latent positions and whether the LFM can recover those positions from the aggregated data.
+
+In many legislative and judicial roll call models (e.g. IRT, NOMINATE, or Martin–Quinn), there is a well-defined mapping from an actor's latent ``ideal point'' to their vote choice on each item. In our setting, however, we only provide as an input to the LFM the fraction of times each pair of states cast the same vote in the United Nations. This simulation shows a scenario in which
+
+\begin{enumerate}
+    \item Each state \emph{and} each resolution is placed in a low-dimensional latent space.
+    \item The probability that a state votes ``Yes'' on a given resolution depends on the dot product of their respective latent coordinates.
+    \item We aggregate these yes/no outcomes across resolutions to form a matrix of co-voting rates between every pair of states, akin to our main data setup.
+    \item Finally, we fit the LFM to the aggregated data and assess whether the recovered latent positions align (up to rotation/reflection) with the known true coordinates.
+\end{enumerate}
+
+If we find that the estimated latent positions align closely with the known ``true'' coordinates, it indicates that this procedure can effectively uncover higher-order structure in the data---despite relying only on a \emph{similarity matrix} summarizing the fraction of co-votes between pairs of actors.
+
+\subsection{Data-Generating Process for Votes}
+
+We simulate $n=50$ states and $m=300$ resolutions (``votes''), each situated in a 2D latent space:
+
+\begin{enumerate}
+    \item \emph{True State Positions} $(\mathbf{U}_{\text{true}})$: We draw a $50 \times 2$ matrix from a normal distribution. Each row represents a state's ``foreign-policy orientation'' in this 2D space.
+    \item \emph{Resolution Positions}: Similarly, we assign each of the $300$ resolutions a 2D coordinate. Intuitively, a resolution's location might capture its ideological or policy dimension.
+    \item \emph{Vote Generation}: For state $i$ and resolution $m$, the probability of a ``Yes'' vote is 
+    \[
+        \text{Pr}(\text{Yes}_{i,m}) = \Phi\bigl(\beta_0 + \langle \mathbf{U}_{\text{true}, i},\, \mathbf{IssuePositions}_m \rangle \bigr),
+    \]
+    where $\Phi(\cdot)$ is the cumulative distribution function of the normal distribution, $\beta_0$ is an intercept, and $\langle\cdot\rangle$ denotes the dot product.
+    We then draw a Bernoulli random variable to determine whether state $i$ votes ``Yes'' or ``No.'' 
+\end{enumerate}
+
+After simulating all $300$ resolutions, we construct a $50 \times 50$ co-voting matrix $\mathbf{Y}$ where
+
+\[
+    Y_{ij} = \text{fraction of votes on which $i$ and $j$ both vote ``Yes'' or both vote ``No''}.
+\]
+
+We set $Y_{ii} = \text{NA}$.
+
+We next fit the LFM to our simulated co-voting matrix using a normal model for continuous outcomes in $[0,1]$. Because the co-voting data are symmetric, we set the model to estimate a single latent position per actor. The result is a set of estimated coordinates for each state, which we compare to the true latent positions via a Procrustes transform (aligning rotations and reflections). This yields correlation measures indicating how well the recovered latent space matches the data-generating structure.
+
+\subsection{Assessing Recovery of the True Positions}
+
+Since any latent factor model is invariant to rotation, reflection, or translation, we apply a Procrustes transform to align the estimated positions, \(\hat{\mathbf{U}}\), with the known true positions, \(\mathbf{U}_{\text{true}}\). We then compute correlations along each dimension:
+
+\[
+    \rho_{\text{dim1}} \;=\; \mathrm{corr}\bigl(\mathbf{U}_{\text{true}}[,1],\, \hat{\mathbf{U}}_{\text{aligned}}[,1]\bigr), 
+    \quad
+    \rho_{\text{dim2}} \;=\; \mathrm{corr}\bigl(\mathbf{U}_{\text{true}}[,2],\, \hat{\mathbf{U}}_{\text{aligned}}[,2]\bigr),
+\]
+
+and an overall correlation by flattening the matrices into vectors. We find strong absolute correlations (e.g., \(\lvert\rho\rvert \ge 0.85\)), indicating that the LFM successfully recovers the underlying structure from the aggregated co-voting matrix.
+
+This simulation thus demonstrates a coherent ``first-principles'' path from \emph{individual-level vote choices} to an aggregated \emph{similarity matrix}, and then back to \emph{latent positions}. Even though the LFM does \emph{not} observe individual votes, it accurately recovers the 2D structure that generated those votes once we transform them into a co-voting measure. This outcome strengthens our empirical strategy, suggesting that a similar process may hold in real-world UN voting: modeling \(\mathbf{Y}\) via an LFM can capture higher-order positioning in joint decision-making contexts.```
+
+

@@ -24,3 +24,9 @@
 *.nav
 *.fls
 *.spl
+*.rda
+*.xlsx
+*.csv
+*.xls
+*.RData
+*.rdata
