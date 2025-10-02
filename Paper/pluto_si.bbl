@@ -1,0 +1,26 @@
+\begin{thebibliography}{xx}
+
+\harvarditem[Frieden et~al.]{Frieden, Lake, Nicholson \harvardand\ Ranganath}{2017}{frieden:etal:2017}
+Frieden, Jeffry~A., David~A. Lake, Michael Nicholson \harvardand\ Aditya Ranganath. 2017.
+\newblock ``Economic Crisis and Political Change in the {U}nited {S}tates, 1900 to the Present.'' {\em Unpublished manuscript, University of California, San Diego} .
+
+\harvarditem{Kane}{2016}{kane:2016}
+Kane, Tim. 2016.
+\newblock ``The decline of {A}merican engagement: {P}atterns in {US} troop deployments.'' {\em Economics working paper} 16101.
+
+\harvarditem{{Trading Economics}}{2021}{tradingeconomics:2021}
+{Trading Economics}. 2021.
+\newblock ``Trading Economics Data.''.
+\newline\harvardurl{\url{https://tradingeconomics.com/}}
+
+\harvarditem{{US Department of Defense}}{2020}{dod:2020}
+{US Department of Defense}. 2020.
+\newblock ``National Defense Budget Estimates for Fiscal Year 2021.'' {\em Office of the Under Secretary of Defense (Comptroller)} .
+\newline\harvardurl{\url{https://comptroller.defense.gov/Portals/45/Documents/defbudget/fy2021/FY21_Green_Book.pdf}}
+
+\harvarditem{{World Bank}}{2021}{worldbank:2021}
+{World Bank}. 2021.
+\newblock ``World Bank Open Data.''.
+\newline\harvardurl{\url{https://data.worldbank.org/}}
+
+\end{thebibliography}

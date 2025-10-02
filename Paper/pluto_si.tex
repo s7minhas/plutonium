@@ -1,3 +1,187 @@
+\documentclass[12pt,pdflatex,authoryear]{elsarticle}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% PREAMBLE %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% word count
+%TC:incbib
+
+% -------------------- defaults -------------------- %
+% load lots o' packages
+
+% references
+\usepackage{natbib}
+
+% Fonts
+\usepackage[default,oldstyle,scale=0.95]{opensans}
+\usepackage[T1]{fontenc}
+\usepackage{ae}
+
+% to colorize links in document. See color specification below
+\usepackage[pdftex,hyperref,x11names]{xcolor}
+% load the hyper-references package and set document info
+\usepackage[pdftex]{hyperref}
+
+% Generate some fake text
+
+\usepackage{blindtext}
+
+% layout control
+\usepackage{geometry}
+\geometry{verbose,tmargin=1.25in,bmargin=1.25in,lmargin=1.1in,rmargin=1.1in}
+\usepackage{parallel}
+\usepackage{parcolumns}
+\usepackage{fancyhdr}
+
+% math typesetting
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{relsize}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage[%
+decimalsymbol=.,
+digitsep=fullstop
+]{siunitx}
+
+% restricts float objects to be inserted before end of section
+% creates float barriers
+\usepackage[section]{placeins}
+
+% tables
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{longtable}
+
+% to adapt caption style
+\usepackage[font={small},labelfont=bf]{caption}
+
+% footnotes at bottom
+\usepackage[bottom]{footmisc}
+   \renewcommand{\footnotelayout}{\doublespacing} % set spacing in footnotes
+   \newlength{\myfootnotesep}
+   \setlength{\myfootnotesep}{\baselineskip}
+   \addtolength{\myfootnotesep}{-\footnotesep}
+   \setlength{\footnotesep}{\myfootnotesep} % set spacing between footnotes
+
+% to change enumeration symbols begin{enumerate}[(a)]
+\usepackage{enumerate}
+
+% to make enumerations and itemizations within paragraphs or
+% lines. f.i. begin{inparaenum} for (a) is (b) and (c)
+\usepackage{paralist}
+
+% graphics stuff
+\usepackage{subfig}
+\usepackage{graphicx}
+\usepackage[space]{grffile} % allows us to specify directories that have spaces
+\usepackage{placeins} % prevents floats from moving past a \FloatBarrier
+\usepackage{tikz}
+
+% sideway figures
+\usepackage{rotating}
+\usepackage{lscape}
+
+% Spacing
+\usepackage[doublespacing]{setspace}
+
+% -------------------------------------------------- %
+
+
+% -------------------- page template -------------------- %
+
+\setlength{\headheight}{15pt}
+\setlength{\headsep}{20pt}
+\pagestyle{fancyplain}
+
+\fancyhf{}
+
+\lhead{\fancyplain{}{}}
+%\chead{\fancyplain{}{Situation Selection at the ICC}}
+\rhead{\fancyplain{}{}}
+\rfoot{\fancyplain{}{\thepage}}
+
+% ----------------------------------------------- %
+
+% -------------------- customizations -------------------- %
+
+% easy commands for number propers
+\newcommand{\first}{$1^{\text{st}}$}
+\newcommand{\second}{$2^{\text{nd}}$}
+\newcommand{\third}{$3^{\text{rd}}$}
+\newcommand{\nth}[1]{${#1}^{\text{th}}$}
+
+% easy command for boldface math symbols
+\newcommand{\mbs}[1]{\boldsymbol{#1}}
+
+% command for R package font
+\newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
+
+% approx iid
+\newcommand\simiid{\stackrel{\mathclap{\normalfont\mbox{\tiny{iid}}}}{\sim}}
+
+% -------------------------------------------------------- %
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% DOCUMENT %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% remove silly elsevier preprint note
+\makeatletter
+\def\ps@pprintTitle{%
+ \let\@oddhead\@empty
+ \let\@evenhead\@empty
+ \def\@oddfoot{}%
+ \let\@evenfoot\@oddfoot}
+
+
+\makeatother
+
+\begin{document}
+
+% saying hello ----------------------------------------------- %
+\thispagestyle{empty}
+\begin{frontmatter}
+
+\title{Decisive or Distracted: the Effects of United States Constraint on Security Networks --- Supplementary Materials}
+
+\author[potsdam]{Ha Eun Choi}
+\ead{choi@uni-potsdam.edu}
+\author[duke]{Scott de Marchi}
+\ead{demarchi@duke.edu}
+\author[strath]{Max Gallop}
+\ead{gallop@strathclyde.edu}
+\author[msu]{Shahryar Minhas}
+\ead{minhassh@msu.edu}
+
+\address[potsdam]{Department of Political Science, University of Potsdam}
+\address[duke]{Department of Political Science, Duke University}
+\address[strath]{Department of Political Science, Strathclyde University}
+\address[msu]{Department of Political Science, Michigan State University}
+
+
+\begin{abstract}
+\singlespacing{
+This document contains supplementary materials for ``Decisive or Distracted: the Effects of United States Constraint on Security Networks.'' It includes additional details on the construction of the US distraction index, robustness checks with alternative model specifications, results for alignment with Russia, sensitivity analyses with varying dimensionality of the latent factor model, and simulation studies validating our measurement approach.}
+
+\vspace{5mm}
+\noindent \textbf{Keywords}: security networks, U.S. foreign policy, latent variable models, network analysis, measurement models
+
+\end{abstract}
+
+ \tnotetext[t1]{\noindent Alphabetical order signifies equal authorship, all mistakes are our own. Replication data for this article can be found at \url{https://doi.org/10.7910/DVN/EGLKEI}. Additional replication material and instructions are available at \url{https://github.com/s7minhas/plutonium}. Shahryar Minhas acknowledges support from the NSF, Award 2017180.}
+
+\end{frontmatter}
+% ----------------------------------------------- %
+
+\newpage\setcounter{page}{1}
+
+% Appendix content
 \renewcommand{\thefigure}{A\arabic{figure}}
 \setcounter{figure}{0}
 \renewcommand{\thetable}{A.\arabic{table}}
@@ -18,7 +202,7 @@ In this section, we provide further details on the construction of our US distra
 
 \subsection{Variables used to generate US distraction index}
 
-Here we list out the sources for the variables that we use to generate our US distraction index. 
+Here we list out the sources for the variables that we use to generate our US distraction index.
 
 \begin{table}[h]
 \centering
@@ -52,7 +236,7 @@ Figure~\ref{fig:screeViz} illustrates the cumulative proportion of variance acco
 \clearpage
 \subsection{Factor Loadings}
 
-Figure~\ref{fig:loadViz} below shows factor loadings of each component variable for three latent factors, representing active US conflicts ($F_{1}$), US defense spending / commitments ($F_{2}$), and US economic shocks ($F_{3}$). 
+Figure~\ref{fig:loadViz} below shows factor loadings of each component variable for three latent factors, representing active US conflicts ($F_{1}$), US defense spending / commitments ($F_{2}$), and US economic shocks ($F_{3}$).
 
 \begin{figure}[h]
     \centering
@@ -65,7 +249,7 @@ Figure~\ref{fig:loadViz} below shows factor loadings of each component variable 
 \subsection{Descriptive Statistics}
 
 
-Here we show descriptive statistics for each of the variables used in our analysis of how countries aligned towards China during times of US distraction. 
+Here we show descriptive statistics for each of the variables used in our analysis of how countries aligned towards China during times of US distraction.
 
 
 \begin{figure}[h]
@@ -78,7 +262,7 @@ Here we show descriptive statistics for each of the variables used in our analys
 \clearpage
 \section{Results when measuring alignment against Russia}
 
-Here we visualize the results of the model when focusing on how alignment with respect to Russia instead of China. Figure~\ref{fig:agreeEst_russia} shows the parameter estimates for our diplomatic alignment model with random country effects. Figure~\ref{fig:agreeVarEst_russia} shows the parameter estimates for our diplomatic alignment model with varying effects of the distraction measures by polity categories. 
+Here we visualize the results of the model when focusing on how alignment with respect to Russia instead of China. Figure~\ref{fig:agreeEst_russia} shows the parameter estimates for our diplomatic alignment model with random country effects. Figure~\ref{fig:agreeVarEst_russia} shows the parameter estimates for our diplomatic alignment model with varying effects of the distraction measures by polity categories.
 
 \begin{figure}[ht]
 \centering
@@ -97,12 +281,12 @@ Here we visualize the results of the model when focusing on how alignment with r
 \end{figure}
 \FloatBarrier
 
-When we estimate a model allowing the effect of distraction to be conditional on political institutions.  Across our two measures of distraction, autocracies are most prone to move towards Russia when the US distracted, democracies least prone, and anocracies in the middle.  
+When we estimate a model allowing the effect of distraction to be conditional on political institutions.  Across our two measures of distraction, autocracies are most prone to move towards Russia when the US distracted, democracies least prone, and anocracies in the middle.
 
 \clearpage
 \section{Varying the Dimensionality of the Multiplicative Effect}
 
-Here we visualize the results of the model with varying degree of the dimension of the multiplicative effects ($K$=5). Figure~\ref{fig:agreeEst_k5} shows the parameter estimates for our diplomatic alignment model with random country effects. Figure~\ref{fig:agreeVarEst_k5} shows the parameter estimates for our diplomatic alignment model with varying effects of the distraction measures by polity categories. Our results are consistent with a 2 dimensional latent factor space. 
+Here we visualize the results of the model with varying degree of the dimension of the multiplicative effects ($K$=5). Figure~\ref{fig:agreeEst_k5} shows the parameter estimates for our diplomatic alignment model with random country effects. Figure~\ref{fig:agreeVarEst_k5} shows the parameter estimates for our diplomatic alignment model with varying effects of the distraction measures by polity categories. Our results are consistent with a 2 dimensional latent factor space.
 
 \begin{figure}[ht]
 \centering
@@ -123,7 +307,7 @@ Here we visualize the results of the model with varying degree of the dimension 
 \clearpage
 \section{Country Fixed Effects Robustness Check}
 
-In addition to the model results presented in Figure 6, we estimate another with country fixed effects to account for any time-invariant heterogeneity (e.g., geography, shared history, cultural ties). This ensures that our main findings are not driven by stable country-level features that might correlate with alignment decisions. Figure~\ref{fig:agreeVarEst_cname} shows the coefficient estimates from this fixed-effects version. 
+In addition to the model results presented in Figure 6, we estimate another with country fixed effects to account for any time-invariant heterogeneity (e.g., geography, shared history, cultural ties). This ensures that our main findings are not driven by stable country-level features that might correlate with alignment decisions. Figure~\ref{fig:agreeVarEst_cname} shows the coefficient estimates from this fixed-effects version.
 
 \begin{figure}[ht]
     \centering
@@ -140,7 +324,7 @@ In addition to the model results presented in Figure 6, we estimate another with
     \item \emph{Democracies Resist Closer Alignment with China.} Our results for fully democratic regimes remain consistent with the baseline, showing a weaker or even negative relationship between U.S. distraction and alignment with China.
 \end{enumerate}
 
-These core dynamics align closely with our primary analyses, suggesting that our conclusions are robust to the inclusion of country-specific intercepts. 
+These core dynamics align closely with our primary analyses, suggesting that our conclusions are robust to the inclusion of country-specific intercepts.
 
 \clearpage
 \section{Simulation Study for Latent Factor Measurement}
@@ -165,12 +349,12 @@ We simulate $n=50$ states and $m=300$ resolutions (``votes''), each situated in 
 \begin{enumerate}
     \item \emph{True State Positions} $(\mathbf{U}_{\text{true}})$: We draw a $50 \times 2$ matrix from a normal distribution. Each row represents a state's ``foreign-policy orientation'' in this 2D space.
     \item \emph{Resolution Positions}: Similarly, we assign each of the $300$ resolutions a 2D coordinate. Intuitively, a resolution's location might capture its ideological or policy dimension.
-    \item \emph{Vote Generation}: For state $i$ and resolution $m$, the probability of a ``Yes'' vote is 
+    \item \emph{Vote Generation}: For state $i$ and resolution $m$, the probability of a ``Yes'' vote is
     \[
         \text{Pr}(\text{Yes}_{i,m}) = \Phi\bigl(\beta_0 + \langle \mathbf{U}_{\text{true}, i},\, \mathbf{IssuePositions}_m \rangle \bigr),
     \]
     where $\Phi(\cdot)$ is the cumulative distribution function of the normal distribution, $\beta_0$ is an intercept, and $\langle\cdot\rangle$ denotes the dot product.
-    We then draw a Bernoulli random variable to determine whether state $i$ votes ``Yes'' or ``No.'' 
+    We then draw a Bernoulli random variable to determine whether state $i$ votes ``Yes'' or ``No.''
 \end{enumerate}
 
 After simulating all $300$ resolutions, we construct a $50 \times 50$ co-voting matrix $\mathbf{Y}$ where
@@ -188,13 +372,21 @@ We next fit the LFM to our simulated co-voting matrix using a normal model for c
 Since any latent factor model is invariant to rotation, reflection, or translation, we apply a Procrustes transform to align the estimated positions, \(\hat{\mathbf{U}}\), with the known true positions, \(\mathbf{U}_{\text{true}}\). We then compute correlations along each dimension:
 
 \[
-    \rho_{\text{dim1}} \;=\; \mathrm{corr}\bigl(\mathbf{U}_{\text{true}}[,1],\, \hat{\mathbf{U}}_{\text{aligned}}[,1]\bigr), 
+    \rho_{\text{dim1}} \;=\; \mathrm{corr}\bigl(\mathbf{U}_{\text{true}}[,1],\, \hat{\mathbf{U}}_{\text{aligned}}[,1]\bigr),
     \quad
     \rho_{\text{dim2}} \;=\; \mathrm{corr}\bigl(\mathbf{U}_{\text{true}}[,2],\, \hat{\mathbf{U}}_{\text{aligned}}[,2]\bigr),
 \]
 
 and an overall correlation by flattening the matrices into vectors. We find strong absolute correlations (e.g., \(\lvert\rho\rvert \ge 0.85\)), indicating that the LFM successfully recovers the underlying structure from the aggregated co-voting matrix.
 
-This simulation thus demonstrates a coherent ``first-principles'' path from \emph{individual-level vote choices} to an aggregated \emph{similarity matrix}, and then back to \emph{latent positions}. Even though the LFM does \emph{not} observe individual votes, it accurately recovers the 2D structure that generated those votes once we transform them into a co-voting measure. This outcome strengthens our empirical strategy, suggesting that a similar process may hold in real-world UN voting: modeling \(\mathbf{Y}\) via an LFM can capture higher-order positioning in joint decision-making contexts.```
+This simulation thus demonstrates a coherent ``first-principles'' path from \emph{individual-level vote choices} to an aggregated \emph{similarity matrix}, and then back to \emph{latent positions}. Even though the LFM does \emph{not} observe individual votes, it accurately recovers the 2D structure that generated those votes once we transform them into a co-voting measure. This outcome strengthens our empirical strategy, suggesting that a similar process may hold in real-world UN voting: modeling \(\mathbf{Y}\) via an LFM can capture higher-order positioning in joint decision-making contexts.
 
+% Bib stuff
+\clearpage
+% \singlespacing
+\bibliography{master}
 
+% \bibliographystyle{elsarticle-harv}\biboptions{authoryear}
+\bibliographystyle{apsr}
+
+\end{document}

@@ -142,10 +142,6 @@ Jervis, Robert, Keren Yarhi-Milo \harvardand\ Don Casler. 2021.
 \newblock ``Redefining the debate over reputation and credibility in international security: {Promises} and {Limits} of {New} {Scholarship}.'' {\em World Politics} 73(1):167--203.
 \newblock Publisher: Cambridge University Press.
 
-\harvarditem{Kane}{2016}{kane:2016}
-Kane, Tim. 2016.
-\newblock ``The decline of {A}merican engagement: {P}atterns in {US} troop deployments.'' {\em Economics working paper} 16101.
-
 \harvarditem{Kastner}{2016}{kastner:2016}
 Kastner, Scott~L. 2016.
 \newblock ``Buying influence? Assessing the political effects of China’s international trade.'' {\em Journal of Conflict Resolution} 60(6):980--1007.
@@ -243,16 +239,6 @@ Schweller, Randall~L. 1994.
 Tammen, Ronald~L. 2006.
 \newblock ``The impact of Asia on world politics: China and India options for the United States.'' {\em International Studies Review} 8(4):563--580.
 
-\harvarditem{{Trading Economics}}{2021}{tradingeconomics:2021}
-{Trading Economics}. 2021.
-\newblock ``Trading Economics Data.''.
-\newline\harvardurl{\url{https://tradingeconomics.com/}}
-
-\harvarditem{{US Department of Defense}}{2020}{dod:2020}
-{US Department of Defense}. 2020.
-\newblock ``National Defense Budget Estimates for Fiscal Year 2021.'' {\em Office of the Under Secretary of Defense (Comptroller)} .
-\newline\harvardurl{\url{https://comptroller.defense.gov/Portals/45/Documents/defbudget/fy2021/FY21_Green_Book.pdf}}
-
 \harvarditem{Voeten}{2004}{voeten2004resisting}
 Voeten, Erik. 2004.
 \newblock ``Resisting the lonely superpower: Responses of states in the United Nations to US dominance.'' {\em The Journal of Politics} 66(3):729--754.
@@ -299,10 +285,5 @@ Werner, Suzanne \harvardand\ Douglas Lemke. 1997.
 \harvarditem{Weschle}{2018}{weschle:2018}
 Weschle, Simon. 2018.
 \newblock ``Quantifying political relationships.'' {\em American Political Science Review} 112(4):1090--1095.
-
-\harvarditem{{World Bank}}{2021}{worldbank:2021}
-{World Bank}. 2021.
-\newblock ``World Bank Open Data.''.
-\newline\harvardurl{\url{https://data.worldbank.org/}}
 
 \end{thebibliography}
