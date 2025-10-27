@@ -7,7 +7,7 @@ The code directory is organized into three main directories:
   - 02_[]: Each of these scripts processes raw data on alliances (02_atop.R), trade agreements (02_desta.R), etc that will be fed into our network models
   - 03_buildFrame.R: In this script, we merge together the various data inputs into a directed-dyad-year data.frame object.
   - 04_[]: These scripts organize the data into a format that will be readable to the network models that we will use for preference estimation.
-- **02_runMLTR**: contains the scripts necessary to run and then extract relevant estimates from the network models. The key input for the scripts in this directory is **frame.rda** from the **data** directory and all of the outputs are in **results**.
+- **02_simMeasure**: contains the scripts necessary to run and then extract relevant estimates from the network models. The key input for the scripts in this directory is **frame.rda** from the **data** directory and all of the outputs are in **results**.
   - 01_runLFM.R: This script generates economic, diplomatic, and ICEWS preference indices between countries over time using a latent factor model.
   - 01_runMLTR_ML.R: This script generates the same preference indices using the multilinear tensor regression (MLTR) model estimated via maximum likelihood. The ML version is run mostly for testing purposes, the results from this estimation procedure do not show up in the proposal document.
   - 01_runMLTR.R: This script parallels the above but employs a Bayesian estimation of the MLTR framework.
