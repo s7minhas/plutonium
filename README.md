@@ -1,73 +1,163 @@
-## Replication instructions for the project
+# When the Hegemon is Distracted: US Foreign Policy Attention and Global Realignment toward China
 
-The code directory is organized into three main directories:
+Authors
+---
+[Ha Eun Choi](https://www.haeunchoi.com/)
+[Max Gallop](https://www.strath.ac.uk/staff/gallopmaxmr/)
+[Scott de Marchi](https://scholars.duke.edu/person/scott.demarchi)
+[Shahryar Minhas](http://s7minhas.com/)
 
-- **01_prepData**: contains the scripts necessary to process data downloaded from the variables that feed into the network preference generation models. The inputs and outputs from this directory are all included in the **data** directory.
-  - 01_buildSample.R: Steps for building the sample utilized in this analysis
-  - 02_[]: Each of these scripts processes raw data on alliances (02_atop.R), trade agreements (02_desta.R), etc that will be fed into our network models
-  - 03_buildFrame.R: In this script, we merge together the various data inputs into a directed-dyad-year data.frame object.
-  - 04_[]: These scripts organize the data into a format that will be readable to the network models that we will use for preference estimation.
-- **02_simMeasure**: contains the scripts necessary to run and then extract relevant estimates from the network models. The key input for the scripts in this directory is **frame.rda** from the **data** directory and all of the outputs are in **results**.
-  - 01_runLFM.R: This script generates economic, diplomatic, and ICEWS preference indices between countries over time using a latent factor model.
-  - 01_runMLTR_ML.R: This script generates the same preference indices using the multilinear tensor regression (MLTR) model estimated via maximum likelihood. The ML version is run mostly for testing purposes, the results from this estimation procedure do not show up in the proposal document.
-  - 01_runMLTR.R: This script parallels the above but employs a Bayesian estimation of the MLTR framework.
-  - 02_[]: In these scripts, we extract the preference measurements from each of the models and organize into a directed-dyad-year data.frame object that we will use in the downstream analyses.
-- **03_downstreamAnalyses**: contains the scripts and associated data files to conduct the downstream analysis described in our proposal. This directory takes as inputs **frame.rda** from the **data** directory and modeling output from the **results** directory.
-  - 01_mergeDyadFiles.R: Simply merges together the various model outputs as well as inputs.
-  - 02_systemLevel.R: Conducts the simple downstream analysis described in the proposal.
-  - main1_final.csv: This is the only file here that is not generated using the scripts in this archive. This file contains variables that we use to proxy US distraction and the files that it is built from are contained in the **03_downstreamAnalyses/data_us_commit** directory.
-  - aggData.csv: This file contains the dataset that we use for our downstream analysis. The associated codebook is labeled data_dictionary.xlsx.
+Abstract
+---
 
-Other files/directories included in this archive:
+This paper examines how US foreign policy distraction affects global realignment patterns toward China. Using latent factor models (LFM) to measure diplomatic alignment through UN voting data, I demonstrate that periods of heightened US military engagement and defense spending correspond with shifts in global diplomatic alignments. The analysis reveals heterogeneous effects across regime types, with democracies and autocracies responding differently to US distraction. These findings contribute to our understanding of how great power competition shapes international relations in a multipolar world.
 
-- **setup.R**:
-  - Workspace setup code that is called at the top of each script in the project
-- **data**:
-  - Storage of all inputs used in the network models.
-- **Funcs/mltrFuncs**:
-  - Various scripts that are necessary to estimate the MLTR model
-- **results**:
-  - Output files from the network models
+Publication Outlet
+---
 
-## Path management
+British Journal of Political Science
 
-The **here** library is used to manage paths in this project. The .here file is located at the root directory of the project.
+## Replication instructions for the paper
 
-## Setup information
+The base directory of the replication archive contains all scripts necessary to produce the figures shown in the paper. The archive includes the following subdirectories (note that these files are also available on Github at [https://github.com/s7minhas/plutonium](https://github.com/s7minhas/plutonium)):
 
-All of the analyses reported are run with the following specification (further information on packages used in the analysis is included at the end of the README):
+- **data**: Contains all data files used in the analysis including UN voting data, US constraint measures, and country characteristics
+- **results**: Contains results from model runs including LFM estimates and regression outputs
+- **graphics**: Contains PDF and high-resolution PNG files (600 DPI) for all figures in the manuscript and appendix
+- **funcs**: Contains R scripts with helper functions for data processing and visualization
+- **appendix**: Contains code for robustness checks and supplementary analyses
+- **appendix/dstream_russia**: Contains complete pipeline for Russia alignment robustness check
+
+Replicating the figures in the **main** text will take approximately 4-6 hours on a standard laptop, with the LFM estimation being the most computationally intensive component (2-3 hours).
+
+#### Setup information
+
+All analyses reported in the manuscript and appendix use the following specification (further information on packages used in the analysis is included at the end of the README):
+
+##### R information
 
 ```
-R version 4.0.3 (2020-10-10)
-Platform: x86_64-w64-mingw32/x64 (64-bit)
-Running under: Windows 10 x64 (build 19042)
+R version 4.0.0 or higher
+Platform: x86_64
+Required RAM: 8GB minimum (16GB recommended)
 
-Matrix products: default
-locale:
-[1] LC_COLLATE=English_United States.1252  LC_CTYPE=English_United States.1252
-[3] LC_MONETARY=English_United States.1252 LC_NUMERIC=C
-[5] LC_TIME=English_United States.1252
-
-locale:
-[1] C
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base
-
-loaded via a namespace (and not attached):
-[1] compiler_4.0.3 tools_4.0.3
+Key packages:
+- amen 1.4 (latent factor models)
+- lme4 1.1-37 (mixed effects models)
+- lmerTest 3.1-3 (p-values for lmer)
+- countrycode 0.16 (country code standardization)
+- cshapes 2.0 (country shapes and distances)
 ```
 
-## R package build notes
+#### Reproducing figures in the manuscript
 
-Below I provide the version of each of the libraries that the project relies on (each library was built using R 4.0.3). Additionally, please note that I use a tailored version of [Peter Hoff's AMEN package](http://pdhoff.github.io/amen/). Installing the version of AMEN that is used in this analysis can be done with the `devtools` package by running the following command in an R session: `devtools::install_github('s7minhas/amen')`. Also please note that the version of countrycode used in this work is much older than the current version available on CRAN.
+**Quick Start:** To replicate all analyses and figures at once, simply run:
 
-|                    |               |                |                  |
-|:-------------------|:--------------|:---------------|:-----------------|
-|abind: 1.4-5        |amen: 1.4      |Cairo: 1.5-12   |countrycode: 0.16 |
-|doParallel: 1.0.15  |dplyr: 0.8.5   |extrafont: 0.17 |foreach: 1.5.0    |
-|ggplot2: 3.3.0      |ggplot2: 3.3.0 |here: 1.0.1     |imfr: 0.1.9.1     |
-|RColorBrewer: 1.1-2 |readr: 1.3.1   |reshape2: 1.4.4 |tidyr: 1.0.2      |
-|tidyverse: 1.3.0    |WDI: 2.7.0     |                |                  |
+```bash
+bash run_replication.sh
+```
 
-If you find any errors or have any further questions, please address them to me via email at minhassh@msu.edu.
+This will automatically execute all scripts in the correct order, handle dependencies, and generate all figures. The complete replication takes approximately 4-6 hours.
+
+**Manual Execution:** If you prefer to run scripts individually, all paths are managed through `setup.R` which sets the working directory and defines path shortcuts (dpth for data/, rpth for results/, gpth for graphics/). Scripts should be run in numerical order. Note: `04_larVarMapLegend.R` should be run early as it generates `graphics/mapCol.rda` which is required by scripts 03, 05, and 06.
+
+**Important Notes on Script Execution:**
+- All graphics are generated in both PDF format and high-resolution PNG format (600 DPI) suitable for publication
+
+##### Main Analysis Pipeline
+
+- **01_factor_score.R**: Generates US constraint factor scores from defense and conflict data. Inputs: `data/main_constraint_1.dta`, `data/factResults.csv`. Outputs: `graphics/facViz.pdf/.png`, `graphics/screeViz.pdf/.png` (600 DPI).
+
+- **01_run_lfm_un.R**: Estimates latent factor models on UN voting data using the amen package. This is the most computationally intensive step (2-3 hours). Input: `data/arrList_lfm.rda`. Output: `results/unMods.rda`.
+
+- **02_org_lfm_results.R**: Organizes and reduces LFM outputs for downstream analysis. Input: `results/unMods.rda`. Output: `results/modsForApp.rda`.
+
+- **03_distCalcsForApp.R**: Calculates dyadic distances between countries based on LFM positions. Inputs: `results/modsForApp.rda`, `graphics/mapCol.rda`. Output: `results/unDist.rda`.
+
+- **04_larVarMapLegend.R**: Creates map legend for network visualizations. Input: `data/frame.rda`. Outputs: `graphics/mapLeg.png`, `graphics/mapCol.rda`.
+
+- **05_uvPlots.R**: Generates UN voting network visualizations for 2000 and 2019. Inputs: `results/modsForApp.rda`, `graphics/mapCol.rda`. Outputs: `graphics/un00.pdf/.png`, `graphics/un19.pdf/.png` (600 DPI).
+
+- **06_distViz.R**: Creates dyadic distance trend visualizations showing alignment over time. Inputs: `results/modsForApp.rda`, `graphics/mapCol.rda`. Output: `graphics/distViz.pdf/.png` (600 DPI).
+
+- **07_merge_undist_to_frame.R**: Merges UN voting distances with country-year panel data. Inputs: `data/frame.rda`, `results/unDist.rda`. Output: `data/dyadData.rda`.
+
+- **08_make_model_data.R**: Prepares final regression dataset combining all covariates. Inputs: `data/dyadData.rda`, `data/wbData.rda`, `data/p5v2018.csv`, `data/natural_security_index.csv`, `data/main1_final.csv`, `data/codelist.rda`, `data/geoInfo.rda`. Output: `data/modData.rda`.
+
+- **09_mod_setup.R**: Configures model specifications for mixed-effects regression. Input: `data/modData.rda`. Output: `results/modelInfoFin.rda`.
+
+- **10_downstream_lmer.R**: Runs mixed-effects regression models using lme4. Inputs: `data/modData.rda`, `results/modelInfoFin.rda`. Output: `results/lmerModsFin.rda`.
+
+- **11_mod_summ.R**: Generates coefficient plots from regression results. Inputs: `results/modelInfoFin.rda`, `results/lmerModsFin.rda`. Outputs: `graphics/agreeFixedDistract.pdf/.png`, `graphics/agreeVarDistract.pdf/.png` (600 DPI).
+
+- **12_reMap.R**: Creates spatial maps showing regression effects across countries. Inputs: `results/modelInfoFin.rda`, `results/lmerModsFin.rda`. Outputs: `graphics/eMaps.pdf/.png`, `graphics/eMapsv2.pdf/.png` (600 DPI).
+
+#### Reproducing figures in the appendix
+
+All scripts necessary to reproduce appendix figures are located in the `appendix/` directory.
+
+- **factLoadings.R**: Visualizes factor loadings from constraint analysis. Inputs: `data/main_constraint_1.dta`, `data/factLoadings.csv`. Output: `graphics/loadViz.pdf/.png` (600 DPI).
+
+- **lfm_irt_sim.R**: Simulation study validating LFM-IRT model properties. Generates synthetic data and tests model recovery. Output: Simulation results (not saved).
+
+- **models_cname_fe.R**: Country name fixed effects robustness check. Inputs: `data/modData_cname_test.rda`, `results/modelInfoFin.rda`. Output: `graphics/agreeVarDistract_cname.pdf/.png` (600 DPI).
+
+- **models_k5.R**: Robustness check using k=5 latent dimensions instead of k=2. Inputs: `data/modData.rda`, `results/modelInfoFin.rda`. Outputs: `graphics/agreeFixedDistract_k5.pdf/.png`, `graphics/agreeVarDistract_k5.pdf/.png` (600 DPI).
+
+##### Russia Alignment Robustness (appendix/dstream_russia/)
+
+Complete pipeline examining alignment toward Russia instead of China:
+
+- **01_modData_Russia.R**: Prepares data with Russia as focal country. Inputs: `data/dyadData.rda`, `data/wbData.rda`, `data/codelist.rda`, `data/main1_final.csv`, `data/p5v2018.csv`, `data/natural_security_index.csv`, `data/geoInfo.rda`. Output: `data/modData_russia.rda`.
+
+- **02_modSetup_Russia.R**: Configures model specifications for Russia analysis. Input: `data/modData_russia.rda`. Output: `results/modelInfoFin_russia.rda`.
+
+- **03_downstream_lmer_russia.R**: Runs mixed-effects models for Russia alignment. Inputs: `data/modData_russia.rda`, `results/modelInfoFin_russia.rda`. Output: `results/lmerModsFin_russia.rda`.
+
+- **04_modSumm_russia.R**: Generates coefficient plots for Russia models. Inputs: `results/modelInfoFin_russia.rda`, `results/lmerModsFin_russia.rda`. Outputs: `graphics/agreeFixedDistract_russia.pdf/.png`, `graphics/agreeVarDistract_russia.pdf/.png` (600 DPI).
+
+- **05_reMap_russia.R**: Creates spatial maps for Russia alignment effects. Inputs: `results/modelInfoFin_russia.rda`, `results/lmerModsFin_russia.rda`. Outputs: `graphics/eMaps_russia.pdf/.png`, `graphics/eMapsv2_russia.pdf/.png` (600 DPI).
+
+#### Key Data Files
+
+**Input Data (data/):**
+
+- `arrList_lfm.rda`: UN voting arrays prepared for LFM estimation
+- `p5v2018.csv`: Polity V democracy scores
+- `natural_security_index.csv`: US national security strategy indicators
+- `main_constraint_1.dta`: US constraint factors (F1: Active conflicts, F2: Defense spending)
+- `main1_final.csv`: Main analysis dataset
+- `factResults.csv`, `factLoadings.csv`: Factor analysis outputs
+- `frame.rda`, `codelist.rda`, `geoInfo.rda`, `wbData.rda`: Supporting datasets
+
+**Generated Results (results/):**
+
+- `unMods.rda`: Raw LFM estimation output
+- `modsForApp.rda`: Processed LFM results
+- `unDist.rda`: Dyadic distances from LFM positions
+- `lmerModsFin.rda`, `modelInfoFin.rda`: Main regression results
+- `lmerModsFin_russia.rda`, `modelInfoFin_russia.rda`: Russia robustness results
+
+**Generated Graphics Data (graphics/):**
+
+- `mapCol.rda`: Color mapping data for network visualizations (generated by 04_larVarMapLegend.R)
+
+#### R package requirements
+
+The `amen` package must be installed from GitHub:
+
+```r
+devtools::install_github('s7minhas/amen')
+```
+
+Run `00_install_pkgs.R` to install all required packages. Key packages and versions:
+
+|                |                   |                 |                  |
+|:---------------|:------------------|:----------------|:-----------------|
+|amen 1.4        |lme4 1.1-37        |lmerTest 3.1-3   |ggplot2 4.0.0     |
+|tidyverse 2.0.0 |Cairo 1.6-2        |haven 2.5.5      |reshape2 1.4.4    |
+|countrycode 0.16|WDI 2.7.9          |gridExtra 2.3    |cshapes 2.0       |
+|extrafont 0.19  |RColorBrewer 1.1-3 |scales 1.1.1     |patchwork 1.1.1   |
+|here 1.0.1      |network 1.17.1     |doParallel 1.0.15|foreach 1.5.2     |
+
+If you find any errors or have any further questions, please address them to Shahryar Minhas at minhassh@msu.edu.
